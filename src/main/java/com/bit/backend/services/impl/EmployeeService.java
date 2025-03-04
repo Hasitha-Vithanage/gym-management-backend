@@ -5,7 +5,6 @@ import com.bit.backend.entities.EmployeeEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.EmployeeMapper;
 import com.bit.backend.repositories.EmployeeRepository;
-import com.bit.backend.repositories.FormDemoRepository;
 import com.bit.backend.services.EmployeeServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,12 +18,10 @@ public class EmployeeService implements EmployeeServiceI {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
-    private final FormDemoRepository formDemoRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, FormDemoRepository formDemoRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
-        this.formDemoRepository = formDemoRepository;
     }
 
     // addEmployeeEntity method

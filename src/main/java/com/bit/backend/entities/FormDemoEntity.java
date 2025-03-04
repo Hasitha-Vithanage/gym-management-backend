@@ -7,8 +7,6 @@ import jakarta.persistence.*;
 @Table(name = "form_demo")
 public class FormDemoEntity {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
