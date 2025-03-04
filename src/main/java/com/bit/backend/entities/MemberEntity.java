@@ -36,8 +36,8 @@ public class MemberEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "emergancyContact")
-    private String emergancyContact;
+    @Column(name = "emergencyContactNumber")
+    private String emergencyContactNumber;
 
     @Column(name = "bloodType")
     private String bloodType;
@@ -57,7 +57,7 @@ public class MemberEntity {
     public MemberEntity() {
     }
 
-    public MemberEntity(Long id, String memberNo, String firstName, String lastName, String nic, LocalDate dateOfBirth, String address, String phoneNumber, String email, String emergancyContact, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory) {
+    public MemberEntity(Long id, String memberNo, String firstName, String lastName, String nic, LocalDate dateOfBirth, String address, String phoneNumber, String email, String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory) {
         this.id = id;
         this.memberNo = memberNo;
         this.firstName = firstName;
@@ -67,7 +67,7 @@ public class MemberEntity {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.emergancyContact = emergancyContact;
+        this.emergencyContactNumber = emergencyContactNumber;
         this.bloodType = bloodType;
         this.joinedDate = joinedDate;
         this.gender = gender;
@@ -147,12 +147,12 @@ public class MemberEntity {
         this.email = email;
     }
 
-    public String getEmergancyContact() {
-        return emergancyContact;
+    public String getEmergencyContactNumber() {
+        return emergencyContactNumber;
     }
 
-    public void setEmergancyContact(String emergancyContact) {
-        this.emergancyContact = emergancyContact;
+    public void setEmergencyContactNumber(String emergencyContactNumber) {
+        this.emergencyContactNumber = emergencyContactNumber;
     }
 
     public String getBloodType() {

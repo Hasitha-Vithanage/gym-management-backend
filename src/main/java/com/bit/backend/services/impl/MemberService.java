@@ -7,6 +7,9 @@ import com.bit.backend.repositories.MemberRepository;
 import com.bit.backend.services.MemberServiceI;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class MemberService implements MemberServiceI {
 
@@ -26,5 +29,12 @@ public class MemberService implements MemberServiceI {
         MemberEntity savedItem = memberRepository.save(memberEntity);
         MemberDto savedDto = memberMapper.toMemberDto(savedItem);
         return savedDto;
+    }
+
+    @Override
+    public List<MemberDto> getMember() {
+        List<MemberEntity> memberEntities = memberRepository.findAll();
+        List<MemberDto> memberDtoList = memberMapper.toMemberDto(memberEntities);
+        return memberDtoList;
     }
 }

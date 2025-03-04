@@ -12,6 +12,7 @@ public class MemberDto {
     private String address;
     private String phoneNumber;
     private String email;
+    private String nic;
     private String emergencyContactNumber;
     private String bloodType;
     private LocalDate joinedDate;
@@ -22,7 +23,7 @@ public class MemberDto {
     public MemberDto() {
     }
 
-    public MemberDto(long id, String memberNo, String firstName, String lastName, LocalDate dateOfBirth, String address, String phoneNumber, String email, String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory) {
+    public MemberDto(long id, String memberNo, String firstName, String lastName, LocalDate dateOfBirth, String address, String phoneNumber, String email, String nic, String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory) {
         this.id = id;
         this.memberNo = memberNo;
         this.firstName = firstName;
@@ -31,6 +32,7 @@ public class MemberDto {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.nic = nic;
         this.emergencyContactNumber = emergencyContactNumber;
         this.bloodType = bloodType;
         this.joinedDate = joinedDate;
@@ -101,6 +103,14 @@ public class MemberDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNic() {
+        return nic;
+    }
+
+    public void setNic(String nic) {
+        this.nic = nic;
     }
 
     public String getEmergencyContactNumber() {
