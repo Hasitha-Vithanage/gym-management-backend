@@ -2,13 +2,16 @@ package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.entities.MemberEntity;
+import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.MemberMapper;
 import com.bit.backend.repositories.MemberRepository;
 import com.bit.backend.services.MemberServiceI;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberService implements MemberServiceI {
@@ -36,5 +39,34 @@ public class MemberService implements MemberServiceI {
         List<MemberEntity> memberEntities = memberRepository.findAll();
         List<MemberDto> memberDtoList = memberMapper.toMemberDto(memberEntities);
         return memberDtoList;
+    }
+
+    @Override
+    public MemberDto updateMember(long id, MemberDto memberDto) {
+        System.out.println("In the updateMemberEntity method");
+
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
+
+        if (!optionalMemberEntity.isPresent()) {
+            throw new AppException("Member Does Not Exist", HttpStatus.BAD_REQUEST);
+        }
+
+        MemberEntity newMemberEntity = memberMapper.toMemberEntity(memberDto);
+        newMemberEntity.setId(id);
+        MemberEntity savedItem = memberRepository.save(newMemberEntity);
+        MemberDto savedDto = memberMapper.toMemberDto(savedItem);
+        return savedDto;
+    }
+
+    @Override
+    public MemberDto deleteMember(long id) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
+        if (!optionalMemberEntity.isPresent()) {
+            throw new AppException("Member Does Not Exist", HttpStatus.BAD_REQUEST);
+        }
+
+        memberRepository.deleteById(id);
+        MemberDto deletedDto = memberMapper.toMemberDto(optionalMemberEntity.get());
+        return deletedDto;
     }
 }

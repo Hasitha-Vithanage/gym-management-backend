@@ -3,10 +3,7 @@ package com.bit.backend.controllers;
 import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.services.MemberServiceI;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -30,5 +27,17 @@ public class MemberController {
     public ResponseEntity<List<MemberDto>> getAllMembers() {
         List<MemberDto> memberDtoList = memberServiceI.getMember();
         return ResponseEntity.ok().body(memberDtoList);
+    }
+
+    @PutMapping("/member/{id}")
+    public ResponseEntity<MemberDto> updateMember(@PathVariable long id, @RequestBody MemberDto memberDto) {
+        MemberDto memberDtoResponse = memberServiceI.updateMember(id, memberDto);
+        return ResponseEntity.ok().body(memberDtoResponse);
+    }
+
+    @DeleteMapping("/member/{id}")
+    public ResponseEntity<MemberDto> deleteMember(@PathVariable long id) {
+        MemberDto memberDto = memberServiceI.deleteMember(id);
+        return ResponseEntity.ok().body(memberDto);
     }
 }

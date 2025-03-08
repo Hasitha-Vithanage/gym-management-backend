@@ -9,4 +9,6 @@ public interface MemberServiceI {
 
     MemberDto addMemberEntity(MemberDto memberDto);
     List<MemberDto> getMember();
+    MemberDto updateMember(long id, MemberDto memberDto);
+    MemberDto deleteMember(long id);
 }
