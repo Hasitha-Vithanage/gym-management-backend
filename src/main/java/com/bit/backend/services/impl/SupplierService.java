@@ -1,8 +1,6 @@
 package com.bit.backend.services.impl;
 
-import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.SupplierDto;
-import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.entities.SupplierEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.SupplierMapper;
