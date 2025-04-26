@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface SupplierServiceI {
     SupplierDto addSupplierEntity(SupplierDto supplierDto);
-    List<SupplierDto> getSupplier();
     SupplierDto updateSupplier(long id, SupplierDto supplierDto);
+    List<SupplierDto> getSupplier();
+    List<SupplierDto>getSuppliers();
     SupplierDto deleteSupplier(long id);
 }

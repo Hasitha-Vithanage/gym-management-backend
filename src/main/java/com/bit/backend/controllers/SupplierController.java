@@ -1,6 +1,5 @@
 package com.bit.backend.controllers;
 
-import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.SupplierDto;
 import com.bit.backend.services.SupplierServiceI;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,12 @@ public class SupplierController {
     public ResponseEntity<SupplierDto> addSupplier(@RequestBody SupplierDto supplierDto) {
         SupplierDto supplierDtoResponse = supplierServiceI.addSupplierEntity(supplierDto);
         return ResponseEntity.created(URI.create("/suppliers" + supplierDtoResponse.getSupplierName())).body(supplierDtoResponse);
+    }
+
+    @GetMapping("/equipments/get-suppliers")
+    public ResponseEntity<List<SupplierDto>> getSuppliers() {
+        List<SupplierDto> supplierDtoList = supplierServiceI.getSuppliers();
+        return ResponseEntity.ok().body(supplierDtoList);
     }
 
     @GetMapping("/suppliers")

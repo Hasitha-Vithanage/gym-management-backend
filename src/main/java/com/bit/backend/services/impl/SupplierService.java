@@ -36,8 +36,16 @@ public class SupplierService implements SupplierServiceI {
     @Override
     public List<SupplierDto> getSupplier() {
         List<SupplierEntity> supplierEntities = supplierRepository.findAll();
-        List<SupplierDto> supplierDtoList = supplierMapper.toSupplierDto(supplierEntities);
+        List<SupplierDto> supplierDtoList = supplierMapper.toSupplierDtoList(supplierEntities);
         return supplierDtoList;
+    }
+
+    @Override
+    public List<SupplierDto> getSuppliers() {
+        // call repository interface to get data
+        List<SupplierEntity> supplierEntities = supplierRepository.getSuppliers();
+        List<SupplierDto> supplierDtoLsit = supplierMapper.toSupplierDtoList(supplierEntities);
+        return supplierDtoLsit;
     }
 
     @Override

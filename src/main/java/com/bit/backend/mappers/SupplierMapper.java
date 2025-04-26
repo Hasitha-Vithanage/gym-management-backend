@@ -11,5 +11,5 @@ import java.util.List;
 public interface SupplierMapper {
     SupplierDto toSupplierDto(SupplierEntity supplierEntity);
     SupplierEntity toSupplierEntity(SupplierDto supplierDto);
-    List<SupplierDto> toSupplierDto(List<SupplierEntity> supplierEntities);
+    List<SupplierDto> toSupplierDtoList(List<SupplierEntity> supplierEntities);
 }
