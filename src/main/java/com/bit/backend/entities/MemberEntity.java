@@ -9,40 +9,40 @@ import java.time.LocalDate;
 public class MemberEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto increment
     private Long id;
 
-    @Column(name = "MemberNo")
+    @Column(name = "member_no", nullable = false, unique = true)
     private String memberNo;
 
-    @Column(name = "fistName")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "lastName")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "nic")
-    private String nic;
-
-    @Column(name = "dateOfBirth")
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @Column(name = "address")
     private String address;
 
-    @Column(name = "phoneNumber")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     @Column(name = "email")
     private String email;
 
-    @Column(name = "emergencyContactNumber")
+    @Column(name = "nic")
+    private String nic;
+
+    @Column(name = "emergency_contact_number")
     private String emergencyContactNumber;
 
-    @Column(name = "bloodType")
+    @Column(name = "blood_type")
     private String bloodType;
 
-    @Column(name = "joinedDate")
+    @Column(name = "joined_date")
     private LocalDate joinedDate;
 
     @Column(name = "gender")
@@ -51,28 +51,42 @@ public class MemberEntity {
     @Column(name = "injuries")
     private String injuries;
 
-    @Column(name = "membershipCategory")
+    @Column(name = "membership_category")
     private String membershipCategory;
+
+    // Image fields (can be large, use @Lob)
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
+
+    @Column(name = "image_name")
+    private String imageName;
+
+    @Column(name = "image_type")
+    private String imageType;
 
     public MemberEntity() {
     }
 
-    public MemberEntity(Long id, String memberNo, String firstName, String lastName, String nic, LocalDate dateOfBirth, String address, String phoneNumber, String email, String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory) {
+    public MemberEntity(Long id, String memberNo, String firstName, String lastName, LocalDate dateOfBirth, String address, String phoneNumber, String email, String nic, String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory, byte[] image, String imageName, String imageType) {
         this.id = id;
         this.memberNo = memberNo;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.nic = nic;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.nic = nic;
         this.emergencyContactNumber = emergencyContactNumber;
         this.bloodType = bloodType;
         this.joinedDate = joinedDate;
         this.gender = gender;
         this.injuries = injuries;
         this.membershipCategory = membershipCategory;
+        this.image = image;
+        this.imageName = imageName;
+        this.imageType = imageType;
     }
 
     public Long getId() {
@@ -107,14 +121,6 @@ public class MemberEntity {
         this.lastName = lastName;
     }
 
-    public String getNic() {
-        return nic;
-    }
-
-    public void setNic(String nic) {
-        this.nic = nic;
-    }
-
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
@@ -145,6 +151,14 @@ public class MemberEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNic() {
+        return nic;
+    }
+
+    public void setNic(String nic) {
+        this.nic = nic;
     }
 
     public String getEmergencyContactNumber() {
@@ -193,5 +207,29 @@ public class MemberEntity {
 
     public void setMembershipCategory(String membershipCategory) {
         this.membershipCategory = membershipCategory;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }
