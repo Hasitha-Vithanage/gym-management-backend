@@ -88,4 +88,12 @@ public class EmployeeService implements EmployeeServiceI {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public List<EmployeeDto> getTrainers() {
+        // Call repository interface to get data
+        List<EmployeeEntity> employeeEntityList = employeeRepository.getTrainers();
+        List<EmployeeDto> employeeDtoList = employeeMapper.toEmployeeDto(employeeEntityList);
+        return employeeDtoList;
+    }
 }

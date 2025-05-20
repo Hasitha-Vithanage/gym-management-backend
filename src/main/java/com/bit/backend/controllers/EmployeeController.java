@@ -40,6 +40,14 @@ public class EmployeeController {
         }
     }
 
+    @GetMapping("/ratings&feedback/getTrainers")
+    public ResponseEntity<List<EmployeeDto>> getTrainers() {
+        // calling service through interface
+
+        List<EmployeeDto>  employeeDtoList = employeeServiceI.getTrainers();
+        return ResponseEntity.ok(employeeDtoList);
+    }
+
     @PutMapping("employee/{id}")
     public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable long id, @RequestBody EmployeeDto employeeDto) {
         try {
