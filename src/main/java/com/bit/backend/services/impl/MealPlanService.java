@@ -37,4 +37,9 @@ public class MealPlanService  implements MealPlanServiceI {
         List<MealPlanDto> mealPlanDtoList = mealPlanMapper.toMealPlanDtoList(mealPlanEntityList);
         return mealPlanDtoList;
     }
+
+    @Override
+    public boolean hasRequestedMealPlan(String username) {
+        return mealPlanRepository.existsByUsername(username);
+    }
 }

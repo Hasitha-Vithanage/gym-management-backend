@@ -8,4 +8,5 @@ public interface MealPlanServiceI {
 
     MealPlanDto addMealPlanEntry(MealPlanDto mealPlanDto);
     List<MealPlanDto> getAllMealPlanEntries();
+    boolean hasRequestedMealPlan(String username);
 }

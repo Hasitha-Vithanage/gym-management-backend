@@ -4,10 +4,7 @@ import com.bit.backend.dtos.MealPlanDto;
 import com.bit.backend.repositories.MealPlanRepository;
 import com.bit.backend.services.MealPlanServiceI;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -35,4 +32,11 @@ public class MealPlanController {
         List<MealPlanDto> mealPlanDtoList = mealPlanServiceI.getAllMealPlanEntries();
         return ResponseEntity.ok(mealPlanDtoList);
     }
+
+    @GetMapping("/nutrition&meal-plan/{username}")
+    public ResponseEntity<Boolean> hasExistingRequest(@PathVariable String username) {
+        boolean exists = mealPlanServiceI.hasRequestedMealPlan(username);
+        return ResponseEntity.ok(exists);
+    }
+
 }
