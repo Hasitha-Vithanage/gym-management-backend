@@ -49,6 +49,14 @@ public class SupplierService implements SupplierServiceI {
     }
 
     @Override
+    public List<SupplierDto> getSupplementSuppliers() {
+        // call repository interface to get data
+        List<SupplierEntity> supplierEntities = supplierRepository.getSupplementSuppliers();
+        List<SupplierDto> supplierDtoLsit = supplierMapper.toSupplierDtoList(supplierEntities);
+        return supplierDtoLsit;
+    }
+
+    @Override
     public SupplierDto updateSupplier(long id, SupplierDto supplierDto) {
         System.out.println("In the updateSupplierEntity method");
 

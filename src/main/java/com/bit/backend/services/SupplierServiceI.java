@@ -10,5 +10,6 @@ public interface SupplierServiceI {
     SupplierDto updateSupplier(long id, SupplierDto supplierDto);
     List<SupplierDto> getSupplier();
     List<SupplierDto>getSuppliers();
+    List<SupplierDto>getSupplementSuppliers();
     SupplierDto deleteSupplier(long id);
 }

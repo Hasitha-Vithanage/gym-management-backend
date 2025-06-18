@@ -22,9 +22,15 @@ public class SupplierController {
         return ResponseEntity.created(URI.create("/suppliers" + supplierDtoResponse.getSupplierName())).body(supplierDtoResponse);
     }
 
-    @GetMapping("/equipments/get-suppliers")
+    @GetMapping("/get-suppliers")
     public ResponseEntity<List<SupplierDto>> getSuppliers() {
         List<SupplierDto> supplierDtoList = supplierServiceI.getSuppliers();
+        return ResponseEntity.ok().body(supplierDtoList);
+    }
+
+    @GetMapping("supplement/get-suppliers")
+    public ResponseEntity<List<SupplierDto>> getSupplementSuppliers() {
+        List<SupplierDto> supplierDtoList = supplierServiceI.getSupplementSuppliers();
         return ResponseEntity.ok().body(supplierDtoList);
     }
 
