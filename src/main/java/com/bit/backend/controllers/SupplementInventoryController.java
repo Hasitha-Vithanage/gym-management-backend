@@ -42,6 +42,13 @@ public class SupplementInventoryController {
         return ResponseEntity.ok().body(supplementInventoryDtoList);
     }
 
+    @GetMapping("/supplement/{id}")
+    public ResponseEntity<SupplementInventoryDto> getSupplementById(@PathVariable long id) {
+        SupplementInventoryDto supplementInventoryDto = supplementInventoryServiceI.getSupplementById(id);
+        return ResponseEntity.ok().body(supplementInventoryDto);
+    }
+
+
 //    @PutMapping("/member/{id}")
 //    public ResponseEntity<MemberDto> updateMember(@PathVariable long id, @RequestBody MemberDto memberDto) {
 //        MemberDto memberDtoResponse = memberServiceI.updateMember(id, memberDto);

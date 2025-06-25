@@ -41,6 +41,19 @@ public class SupplementInventoryService implements SupplementInventoryServiceI {
     }
 
     @Override
+    public SupplementInventoryDto getSupplementById(long id) {
+        Optional<SupplementInventoryEntity> optionalSupplementInventoryEntity = supplementInventoryRepository.findById(id);
+
+        SupplementInventoryEntity entity = optionalSupplementInventoryEntity
+                .orElseThrow(() -> new RuntimeException("Supplement not found with ID: " + id));
+
+        SupplementInventoryDto supplementInventoryDto = supplementInventoryMapper.toSupplementInventoryDto(entity);
+
+        return supplementInventoryDto;
+    }
+
+
+    @Override
     public SupplementInventoryDto updateSupplementInventory(long id, SupplementInventoryDto supplementInventoryDto) {
         System.out.println("In the updateSupplementInventoryEntity method");
 

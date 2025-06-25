@@ -8,6 +8,7 @@ public interface SupplementInventoryServiceI {
 
     SupplementInventoryDto addSupplementInventoryEntity(SupplementInventoryDto supplementInventoryDto);
     List<SupplementInventoryDto> getSupplementInventory();
+    SupplementInventoryDto getSupplementById(long id);
     SupplementInventoryDto updateSupplementInventory(long id, SupplementInventoryDto supplementInventoryDto);
     SupplementInventoryDto deleteSupplementInventory(long id);
 }
