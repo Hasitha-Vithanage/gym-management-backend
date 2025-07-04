@@ -1,6 +1,7 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.MemberDto;
+import com.bit.backend.dtos.SupplierDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.MemberServiceI;
 import org.springframework.http.HttpStatus;

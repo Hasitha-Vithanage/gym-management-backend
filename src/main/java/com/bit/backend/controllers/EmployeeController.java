@@ -40,7 +40,7 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/ratings&feedback/getTrainers")
+    @GetMapping("/getTrainers")
     public ResponseEntity<List<EmployeeDto>> getTrainers() {
         // calling service through interface
 
