@@ -41,11 +41,11 @@ public class MemberController {
         return ResponseEntity.ok().body(memberDtoList);
     }
 
-//    @PutMapping("/member/{id}")
-//    public ResponseEntity<MemberDto> updateMember(@PathVariable long id, @RequestBody MemberDto memberDto) {
-//        MemberDto memberDtoResponse = memberServiceI.updateMember(id, memberDto);
-//        return ResponseEntity.ok().body(memberDtoResponse);
-//    }
+    @GetMapping("/member/{id}")
+    public ResponseEntity<MemberDto> getMemberById(@PathVariable long id) {
+        MemberDto member = memberServiceI.getMemberById(id);
+        return ResponseEntity.ok().body(member);
+    }
 
     @PutMapping("/member/{id}")
     public ResponseEntity<MemberDto> updateMember(@PathVariable long id, @RequestPart("memberForm") MemberDto memberDto, @RequestPart("image") MultipartFile file) {

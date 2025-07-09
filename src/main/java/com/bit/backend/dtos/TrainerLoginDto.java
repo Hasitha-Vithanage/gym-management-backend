@@ -4,15 +4,21 @@ public class TrainerLoginDto {
 
     private long id;
     private long trainerId;
-    private String code;
+    private String firstName;
+    private String lastName;
+    private String userName;
+    private String password;
 
     public TrainerLoginDto() {
     }
 
-    public TrainerLoginDto(long id, long trainerId, String code) {
+    public TrainerLoginDto(long id, long trainerId, String firstName, String lastName, String userName, String password) {
         this.id = id;
         this.trainerId = trainerId;
-        this.code = code;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
     }
 
     public long getId() {
@@ -31,11 +37,35 @@ public class TrainerLoginDto {
         this.trainerId = trainerId;
     }
 
-    public String getCode() {
-        return code;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

@@ -10,4 +10,5 @@ public interface MemberServiceI {
     List<MemberDto> getMember();
     MemberDto updateMember(long id, MemberDto memberDto);
     MemberDto deleteMember(long id);
+    MemberDto getMemberById(long id);
 }

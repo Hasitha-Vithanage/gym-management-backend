@@ -68,4 +68,11 @@ public class MemberService implements MemberServiceI {
         MemberDto deletedDto = memberMapper.toMemberDto(optionalMemberEntity.get());
         return deletedDto;
     }
+
+    @Override
+    public MemberDto getMemberById(long id) {
+        MemberEntity memberEntity = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Member not found with ID: " + id));
+        return memberMapper.toMemberDto(memberEntity);
+    }
 }
