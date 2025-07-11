@@ -1,6 +1,9 @@
 package com.bit.backend.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
 
 @Entity
 @Table (name = "WorkoutPlanRequest")
@@ -31,10 +34,24 @@ public class WorkoutPlanRequestEntity {
     @Column(name = "trainerId")
     private long trainerId;
 
+    @Column(name = "status")
+    private String status = "requested";
+
+    @Column(name = "date", updatable = false)
+    @CreationTimestamp
+    private LocalDate date;
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null) {
+            status = "requested";
+        }
+    }
+
     public WorkoutPlanRequestEntity() {
     }
 
-    public WorkoutPlanRequestEntity(long id, String userId, int age, double weight, double height, String fitnessGoal, String experienceLevel, long trainerId) {
+    public WorkoutPlanRequestEntity(long id, String userId, int age, double weight, double height, String fitnessGoal, String experienceLevel, long trainerId, String status, LocalDate date) {
         this.id = id;
         this.userId = userId;
         this.age = age;
@@ -43,6 +60,8 @@ public class WorkoutPlanRequestEntity {
         this.fitnessGoal = fitnessGoal;
         this.experienceLevel = experienceLevel;
         this.trainerId = trainerId;
+        this.status = status;
+        this.date = date;
     }
 
     public long getId() {
@@ -107,5 +126,21 @@ public class WorkoutPlanRequestEntity {
 
     public void setTrainerId(long trainerId) {
         this.trainerId = trainerId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }

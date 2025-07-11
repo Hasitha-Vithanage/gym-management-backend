@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 public class WorkoutPlanRequestController {
@@ -29,7 +30,15 @@ public class WorkoutPlanRequestController {
             throw new AppException("Workout Plan Request failed. Please try again later. " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
 
+    @GetMapping("/workout-plan-upload")
+    public ResponseEntity<List<WorkoutPlanRequestDto>> getWorkoutPlanRequest() {
+        try {
+            List<WorkoutPlanRequestDto> workoutPlanRequestDtoList = workoutPlanRequestServiceI.getWorkoutPlanRequest();
+            return ResponseEntity.ok(workoutPlanRequestDtoList);
+        } catch (Exception e) {
+            throw new AppException("Failed to load workout request records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

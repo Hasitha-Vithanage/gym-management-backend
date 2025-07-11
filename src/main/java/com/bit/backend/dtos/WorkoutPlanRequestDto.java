@@ -1,5 +1,7 @@
 package com.bit.backend.dtos;
 
+import java.time.LocalDate;
+
 public class WorkoutPlanRequestDto {
 
     private long id;
@@ -10,11 +12,13 @@ public class WorkoutPlanRequestDto {
     private String fitnessGoal;
     private String experienceLevel;
     private long trainerId;
+    private String status;
+    private LocalDate date;
 
     public WorkoutPlanRequestDto() {
     }
 
-    public WorkoutPlanRequestDto(long id, String userId, int age, double weight, double height, String fitnessGoal, String experienceLevel, long trainerId) {
+    public WorkoutPlanRequestDto(long id, String userId, int age, double weight, double height, String fitnessGoal, String experienceLevel, long trainerId, String status, LocalDate date) {
         this.id = id;
         this.userId = userId;
         this.age = age;
@@ -23,6 +27,8 @@ public class WorkoutPlanRequestDto {
         this.fitnessGoal = fitnessGoal;
         this.experienceLevel = experienceLevel;
         this.trainerId = trainerId;
+        this.status = status;
+        this.date = date;
     }
 
     public long getId() {
@@ -87,5 +93,21 @@ public class WorkoutPlanRequestDto {
 
     public void setTrainerId(long trainerId) {
         this.trainerId = trainerId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
