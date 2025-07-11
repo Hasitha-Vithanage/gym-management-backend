@@ -8,4 +8,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface WorkoutPlanServiceI {
 
     WorkoutPlanDto addWorkoutPlanEntity(WorkoutPlanDto workoutPlanDto);
+    WorkoutPlanDto getWorkoutPlanByUserId(String userId);
 }

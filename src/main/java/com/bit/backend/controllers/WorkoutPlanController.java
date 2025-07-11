@@ -5,12 +5,11 @@ import com.bit.backend.dtos.WorkoutPlanDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.MemberServiceI;
 import com.bit.backend.services.WorkoutPlanServiceI;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
@@ -45,6 +44,13 @@ public class WorkoutPlanController {
         } catch (Exception e) {
             throw new AppException("Upload failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+
+    @GetMapping("/my-workout-plan/details/{userId}")
+    public ResponseEntity<WorkoutPlanDto> getWorkoutPlanDetails(@PathVariable String userId) {
+        WorkoutPlanDto dto = workoutPlanServiceI.getWorkoutPlanByUserId(userId);
+        return ResponseEntity.ok(dto);
     }
 
 
