@@ -1,7 +1,9 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.EmployeeDto;
+import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.entities.EmployeeEntity;
+import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.EmployeeMapper;
 import com.bit.backend.repositories.EmployeeRepository;
@@ -96,4 +98,12 @@ public class EmployeeService implements EmployeeServiceI {
         List<EmployeeDto> employeeDtoList = employeeMapper.toEmployeeDto(employeeEntityList);
         return employeeDtoList;
     }
+
+    @Override
+    public EmployeeDto getTrainerById(long id) {
+        EmployeeEntity employeeEntity = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Trainer not found with ID: " + id));
+        return employeeMapper.toEmployeeDto(employeeEntity);
+    }
+
 }
