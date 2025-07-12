@@ -47,10 +47,13 @@ public class WorkoutPlanController {
     }
 
 
-    @GetMapping("/my-workout-plan/details/{userId}")
-    public ResponseEntity<WorkoutPlanDto> getWorkoutPlanDetails(@PathVariable String userId) {
-        WorkoutPlanDto dto = workoutPlanServiceI.getWorkoutPlanByUserId(userId);
-        return ResponseEntity.ok(dto);
+    @GetMapping("/my-workout-plan/{userId}")
+    public ResponseEntity<byte[]> getWorkoutPlanPdf(@PathVariable String userId) {
+        WorkoutPlanDto dto = workoutPlanServiceI.getWorkoutPlanByUserId(userId); // You need this method
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + dto.getPdfName() + "\"")
+                .body(dto.getPdf());
     }
 
 
