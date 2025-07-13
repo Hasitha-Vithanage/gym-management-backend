@@ -26,7 +26,7 @@ public class AssignTrainerController {
             AssignTrainerDto assignTrainerDtoResponse = assignTrainerServiceI.addAssignTrainerEntity(assignTrainerDto);
             return ResponseEntity.created(URI.create("/assign-trainer" + assignTrainerDtoResponse.getMember())).body(assignTrainerDtoResponse);
         } catch (Exception e) {
-            throw new AppException("Assign Trainer registration failed. Please try again later. " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
