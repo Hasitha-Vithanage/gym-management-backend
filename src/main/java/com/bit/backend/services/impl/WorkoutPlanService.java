@@ -38,7 +38,7 @@ public class WorkoutPlanService implements WorkoutPlanServiceI {
     public WorkoutPlanDto getWorkoutPlanByUserId(String userId) {
         try {
             WorkoutPlanEntity entity = workoutPlanRepository.findTopByUserIdOrderByIdDesc(userId)
-                    .orElseThrow(() -> new AppException("Workout plan not found for user: " + userId, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException("Meal plan not found for user: " + userId, HttpStatus.NOT_FOUND));
             return workoutPlanMapper.toWorkoutPlanDto(entity);
         } catch (Exception e) {
             throw new AppException("Error fetching workout plan: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,10 +1,7 @@
 package com.bit.backend.controllers;
 
-import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.WorkoutPlanDto;
-import com.bit.backend.entities.WorkoutPlanRequestEntity;
 import com.bit.backend.exceptions.AppException;
-import com.bit.backend.services.MemberServiceI;
 import com.bit.backend.services.WorkoutPlanRequestServiceI;
 import com.bit.backend.services.WorkoutPlanServiceI;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
-import java.util.Optional;
 
 @RestController
 public class WorkoutPlanController {
