@@ -36,6 +36,12 @@ public class FeedbackController {
         return ResponseEntity.ok(feedbackDtoList);
     }
 
+    @GetMapping("/ratings&feedback/{userName}")
+    public ResponseEntity<List<FeedbackDto>> getFeedbacksByUserName(@PathVariable String userName) {
+        List<FeedbackDto> feedbackDtoList = feedbackServiceI.getFeedbacksByUserName(userName);
+        return ResponseEntity.ok(feedbackDtoList);
+    }
+
     @PutMapping("ratings&feedback/{id}")
     public ResponseEntity<FeedbackDto> updateFeedback(@PathVariable long id, @RequestBody FeedbackDto feedbackDto) {
         try {

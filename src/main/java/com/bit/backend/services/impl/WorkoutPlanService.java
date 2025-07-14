@@ -4,6 +4,7 @@ import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.WorkoutPlanDto;
 import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.entities.WorkoutPlanEntity;
+import com.bit.backend.entities.WorkoutPlanRequestEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.WorkoutPlanMapper;
 import com.bit.backend.repositories.WorkoutPlanRepository;
@@ -43,4 +44,5 @@ public class WorkoutPlanService implements WorkoutPlanServiceI {
             throw new AppException("Error fetching workout plan: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

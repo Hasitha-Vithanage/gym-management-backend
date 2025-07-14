@@ -6,18 +6,17 @@ public class FeedbackDto {
 
     private long id;
     private String category;
-    private Long trainer;
+    private String trainer;
     private int rating;
     private boolean anonymous;
     private String feedback;
     private LocalDate date;
     private String username;
-    private Long userId;
 
     public FeedbackDto() {
     }
 
-    public FeedbackDto(long id, String category, Long trainer, int rating, boolean anonymous, String feedback, LocalDate date, String username, Long userId) {
+    public FeedbackDto(long id, String category, String trainer, int rating, boolean anonymous, String feedback, LocalDate date, String username) {
         this.id = id;
         this.category = category;
         this.trainer = trainer;
@@ -26,7 +25,6 @@ public class FeedbackDto {
         this.feedback = feedback;
         this.date = date;
         this.username = username;
-        this.userId = userId;
     }
 
     public long getId() {
@@ -45,11 +43,11 @@ public class FeedbackDto {
         this.category = category;
     }
 
-    public Long getTrainer() {
+    public String getTrainer() {
         return trainer;
     }
 
-    public void setTrainer(Long trainer) {
+    public void setTrainer(String trainer) {
         this.trainer = trainer;
     }
 
@@ -91,13 +89,5 @@ public class FeedbackDto {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 }

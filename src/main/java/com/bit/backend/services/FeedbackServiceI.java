@@ -11,4 +11,6 @@ public interface FeedbackServiceI {
     FeedbackDto updateFeedback(long id, FeedbackDto feedbackDto);
 
     FeedbackDto deleteFeedback(long id);
+
+    List<FeedbackDto> getFeedbacksByUserName(String userName);
 }

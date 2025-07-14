@@ -17,6 +17,7 @@ public class ProgressTrackingDto {
     private double bodyFat;
     private String gender;
     private String remarks;
+    private String userName;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private byte[] frontImage;
@@ -42,7 +43,7 @@ public class ProgressTrackingDto {
     public ProgressTrackingDto() {
     }
 
-    public ProgressTrackingDto(long id, LocalDate date, double weight, double height, double waist, double hip, double neck, double bmi, double bodyFat, String gender, String remarks, byte[] frontImage, String frontImageName, String frontImageType, byte[] sideImage, String sideImageName, String sideImageType, byte[] backImage, String backImageName, String backImageType) {
+    public ProgressTrackingDto(long id, LocalDate date, double weight, double height, double waist, double hip, double neck, double bmi, double bodyFat, String gender, String remarks, String userName, byte[] frontImage, String frontImageName, String frontImageType, byte[] sideImage, String sideImageName, String sideImageType, byte[] backImage, String backImageName, String backImageType) {
         this.id = id;
         this.date = date;
         this.weight = weight;
@@ -54,6 +55,7 @@ public class ProgressTrackingDto {
         this.bodyFat = bodyFat;
         this.gender = gender;
         this.remarks = remarks;
+        this.userName = userName;
         this.frontImage = frontImage;
         this.frontImageName = frontImageName;
         this.frontImageType = frontImageType;
@@ -151,6 +153,14 @@ public class ProgressTrackingDto {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public byte[] getFrontImage() {

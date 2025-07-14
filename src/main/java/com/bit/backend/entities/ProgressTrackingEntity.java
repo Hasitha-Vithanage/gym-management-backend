@@ -42,6 +42,9 @@ public class ProgressTrackingEntity {
     @Column(name = "remarks")
     private String remarks;
 
+    @Column(name = "userName")
+    private String userName;
+
     // frontImage fields (can be large, use @Lob)
     @Lob
     @Column(name = "frontImage")
@@ -78,7 +81,7 @@ public class ProgressTrackingEntity {
     public ProgressTrackingEntity() {
     }
 
-    public ProgressTrackingEntity(Long id, LocalDate date, double weight, double height, double waist, double hip, double neck, double bmi, double bodyFat, String gender, String remarks, byte[] frontImage, String frontImageName, String frontImageType, byte[] sideImage, String sideImageName, String sideImageType, byte[] backImage, String backImageName, String backImageType) {
+    public ProgressTrackingEntity(Long id, LocalDate date, double weight, double height, double waist, double hip, double neck, double bmi, double bodyFat, String gender, String remarks, String userName, byte[] frontImage, String frontImageName, String frontImageType, byte[] sideImage, String sideImageName, String sideImageType, byte[] backImage, String backImageName, String backImageType) {
         this.id = id;
         this.date = date;
         this.weight = weight;
@@ -90,6 +93,7 @@ public class ProgressTrackingEntity {
         this.bodyFat = bodyFat;
         this.gender = gender;
         this.remarks = remarks;
+        this.userName = userName;
         this.frontImage = frontImage;
         this.frontImageName = frontImageName;
         this.frontImageType = frontImageType;
@@ -187,6 +191,14 @@ public class ProgressTrackingEntity {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public byte[] getFrontImage() {

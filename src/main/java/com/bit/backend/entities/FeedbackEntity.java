@@ -16,7 +16,7 @@ public class FeedbackEntity {
     private String category;
 
     @Column(name = "trainer")
-    private Long trainer;
+    private String trainer;
 
     @Column(name = "rating")
     private int rating;
@@ -33,13 +33,10 @@ public class FeedbackEntity {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "userId")
-    private Long userId;
-
     public FeedbackEntity() {
     }
 
-    public FeedbackEntity(long id, String category, Long trainer, int rating, Boolean anonymous, String feedback, LocalDate date, String username, Long userId) {
+    public FeedbackEntity(long id, String category, String trainer, int rating, Boolean anonymous, String feedback, LocalDate date, String username) {
         this.id = id;
         this.category = category;
         this.trainer = trainer;
@@ -48,7 +45,6 @@ public class FeedbackEntity {
         this.feedback = feedback;
         this.date = date;
         this.username = username;
-        this.userId = userId;
     }
 
     public long getId() {
@@ -67,11 +63,11 @@ public class FeedbackEntity {
         this.category = category;
     }
 
-    public Long getTrainer() {
+    public String getTrainer() {
         return trainer;
     }
 
-    public void setTrainer(Long trainer) {
+    public void setTrainer(String trainer) {
         this.trainer = trainer;
     }
 
@@ -113,13 +109,5 @@ public class FeedbackEntity {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 }

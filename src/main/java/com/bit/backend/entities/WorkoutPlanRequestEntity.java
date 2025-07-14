@@ -35,7 +35,7 @@ public class WorkoutPlanRequestEntity {
     private long trainerId;
 
     @Column(name = "status")
-    private String status = "requested";
+    private String status = "Requested";
 
     @Column(name = "date", updatable = false)
     @CreationTimestamp

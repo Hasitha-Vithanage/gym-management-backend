@@ -79,4 +79,11 @@ public class FeedbackService implements FeedbackServiceI {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public List<FeedbackDto> getFeedbacksByUserName(String userName) {
+        List<FeedbackEntity> feedbackEntityList = feedbackRepository.findByUsername(userName);
+        return feedbackMapper.toFeedbackDtoList(feedbackEntityList);
+    }
+
 }

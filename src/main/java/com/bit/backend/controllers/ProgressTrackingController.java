@@ -6,6 +6,7 @@ import com.bit.backend.services.ProgressTrackingServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,12 +23,15 @@ public class ProgressTrackingController {
         this.progressTrackingServiceI = progressTrackingServiceI;
     }
 
-    @PostMapping(value = {"/progress-tracking"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ProgressTrackingDto> addProgressTrackingEntity(@RequestPart("progressForm") ProgressTrackingDto progressTrackingDto,
+    @PostMapping(value = {"/progress-tracking/{userName}"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<ProgressTrackingDto> addProgressTrackingEntity(@PathVariable String userName,
+                                                                         @RequestPart("progressForm") ProgressTrackingDto progressTrackingDto,
                                                                          @RequestPart("frontImage") MultipartFile frontImage,
                                                                          @RequestPart("sideImage") MultipartFile sideImage,
                                                                          @RequestPart("backImage") MultipartFile backImage) {
         try {
+            progressTrackingDto.setUserName(userName);
+
             progressTrackingDto.setFrontImage(frontImage.getBytes());
             progressTrackingDto.setFrontImageName(frontImage.getOriginalFilename());
             progressTrackingDto.setFrontImageType(frontImage.getContentType());

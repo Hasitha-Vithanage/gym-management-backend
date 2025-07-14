@@ -2,8 +2,10 @@ package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.WorkoutPlanDto;
+import com.bit.backend.entities.WorkoutPlanRequestEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.MemberServiceI;
+import com.bit.backend.services.WorkoutPlanRequestServiceI;
 import com.bit.backend.services.WorkoutPlanServiceI;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,14 +15,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 public class WorkoutPlanController {
 
     private WorkoutPlanServiceI workoutPlanServiceI;
+    private WorkoutPlanRequestServiceI workoutPlanRequestServiceI;
 
-    public WorkoutPlanController(WorkoutPlanServiceI workoutPlanServiceI) {
+    public WorkoutPlanController(WorkoutPlanServiceI workoutPlanServiceI, WorkoutPlanRequestServiceI workoutPlanRequestServiceI) {
         this.workoutPlanServiceI = workoutPlanServiceI;
+        this.workoutPlanRequestServiceI = workoutPlanRequestServiceI;
     }
 
     @PostMapping(value = "/workout-plan-upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -40,6 +45,8 @@ public class WorkoutPlanController {
             dto.setPdfType(file.getContentType());
 
             WorkoutPlanDto response = workoutPlanServiceI.addWorkoutPlanEntity(dto);
+            workoutPlanRequestServiceI.updateStatus(userId);
+
             return ResponseEntity.created(URI.create("/workout-plan-upload/" + response.getId())).body(response);
         } catch (Exception e) {
             throw new AppException("Upload failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -41,4 +41,17 @@ public class WorkoutPlanRequestController {
         }
     }
 
+    @DeleteMapping("/my-workout-plan/{id}")
+    public ResponseEntity<WorkoutPlanRequestDto> deleteWorkoutPlanRequest(@PathVariable long id) {
+        try {
+            WorkoutPlanRequestDto workoutPlanRequestDto = workoutPlanRequestServiceI.deleteWorkoutPlanRequest(id);
+            return ResponseEntity.ok(workoutPlanRequestDto);
+        } catch (Exception e) {
+            throw new AppException("Failed to delete the Workout Plan Request record. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
+
+
+}
 }
