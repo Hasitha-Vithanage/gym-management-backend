@@ -13,8 +13,8 @@ public class MealPlanEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "userId")
+    private String userId;
 
     @Column(name = "requestedDate")
     private LocalDate requestedDate;
@@ -30,19 +30,30 @@ public class MealPlanEntity {
     @Column(name = "allergies")
     private String allergies;
 
+    @Column(name = "status")
+    private String status;
+
     @Column(name = "additionalNotes")
     private String additionalNotes;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.status == null) {
+            this.status = "Requested";
+        }
+    }
 
     public MealPlanEntity() {
     }
 
-    public MealPlanEntity(long id, String username, LocalDate requestedDate, String fitnessGoal, List<String> dietaryPreferences, String allergies, String additionalNotes) {
+    public MealPlanEntity(long id, String userId, LocalDate requestedDate, String fitnessGoal, List<String> dietaryPreferences, String allergies, String status, String additionalNotes) {
         this.id = id;
-        this.username = username;
+        this.userId = userId;
         this.requestedDate = requestedDate;
         this.fitnessGoal = fitnessGoal;
         this.dietaryPreferences = dietaryPreferences;
         this.allergies = allergies;
+        this.status = status;
         this.additionalNotes = additionalNotes;
     }
 
@@ -54,12 +65,12 @@ public class MealPlanEntity {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public LocalDate getRequestedDate() {
@@ -92,6 +103,14 @@ public class MealPlanEntity {
 
     public void setAllergies(String allergies) {
         this.allergies = allergies;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getAdditionalNotes() {

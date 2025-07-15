@@ -3,13 +3,17 @@ package com.bit.backend.services.impl;
 import com.bit.backend.dtos.MealPlanDto;
 import com.bit.backend.dtos.MealPlanUploadDto;
 import com.bit.backend.dtos.WorkoutPlanDto;
+import com.bit.backend.dtos.WorkoutPlanRequestDto;
 import com.bit.backend.entities.MealPlanEntity;
 import com.bit.backend.entities.MealPlanUploadEntity;
+import com.bit.backend.entities.WorkoutPlanRequestEntity;
+import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.MealPlanMapper;
 import com.bit.backend.mappers.MealPlanUploadMapper;
 import com.bit.backend.repositories.MealPlanRepository;
 import com.bit.backend.repositories.MealPlanUploadRepository;
 import com.bit.backend.services.MealPlanServiceI;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,7 +52,24 @@ public class MealPlanService  implements MealPlanServiceI {
     }
 
     @Override
-    public boolean hasRequestedMealPlan(String username) {
-        return mealPlanRepository.existsByUsername(username);
+    public boolean hasRequestedMealPlan(String userId) {
+        return mealPlanRepository.existsByUserId(userId);
     }
+
+//    @Override
+//    public MealPlanDto updateStatus(String userId) {
+//        try {
+//            MealPlanEntity entity = mealPlanRepository.findByUserId(userId)
+//                    .orElseThrow(() -> new AppException("Meal Plan Request does not exist for user: " + userId, HttpStatus.BAD_REQUEST));
+//
+//            entity.setStatus("Uploaded");
+//
+//            MealPlanEntity MealPlanEntity =  mealPlanRepository.save(entity);
+//            MealPlanDto responseMealPlanDto = mealPlanMapper.toMealPlanDto(MealPlanEntity);
+//            return responseMealPlanDto;
+//
+//        } catch (Exception e) {
+//            throw new AppException("Failed to update status: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 }

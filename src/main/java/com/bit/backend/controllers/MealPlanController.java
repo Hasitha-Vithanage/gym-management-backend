@@ -23,7 +23,7 @@ public class MealPlanController {
     @PostMapping("/nutrition&meal-plan")
     public ResponseEntity<MealPlanDto> addMealPlan(@RequestBody MealPlanDto mealPlanDto) {
         MealPlanDto mealPlanDtoResponse = mealPlanServiceI.addMealPlanEntry(mealPlanDto);
-        return ResponseEntity.created(URI.create("/nutrition&meal-plan"+mealPlanDtoResponse.getUsername())).body(mealPlanDtoResponse);
+        return ResponseEntity.created(URI.create("/nutrition&meal-plan"+mealPlanDtoResponse.getUserId())).body(mealPlanDtoResponse);
     }
 
     @GetMapping("/nutrition&meal-plan")
@@ -32,9 +32,9 @@ public class MealPlanController {
         return ResponseEntity.ok(mealPlanDtoList);
     }
 
-    @GetMapping("/nutrition&meal-plan/{username}")
-    public ResponseEntity<Boolean> hasExistingRequest(@PathVariable String username) {
-        boolean exists = mealPlanServiceI.hasRequestedMealPlan(username);
+    @GetMapping("/nutrition&meal-plan/{userId}")
+    public ResponseEntity<Boolean> hasExistingRequest(@PathVariable String userId) {
+        boolean exists = mealPlanServiceI.hasRequestedMealPlan(userId);
         return ResponseEntity.ok(exists);
     }
 

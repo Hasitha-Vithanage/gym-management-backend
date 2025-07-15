@@ -1,7 +1,6 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.MealPlanUploadDto;
-import com.bit.backend.dtos.WorkoutPlanDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.MealPlanServiceI;
 import com.bit.backend.services.MealPlanUploadServiceI;

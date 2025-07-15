@@ -5,23 +5,25 @@ import java.util.List;
 
 public class MealPlanDto {
     private long id;
-    private String username;
+    private String userId;
     private LocalDate requestedDate;
     private String fitnessGoal;
     private List<String> dietaryPreferences;
     private String allergies;
+    private String status;
     private String additionalNotes;
 
     public MealPlanDto() {
     }
 
-    public MealPlanDto(long id, String username, LocalDate requestedDate, String fitnessGoal, List<String> dietaryPreferences, String allergies, String additionalNotes) {
+    public MealPlanDto(long id, String userId, LocalDate requestedDate, String fitnessGoal, List<String> dietaryPreferences, String allergies, String status, String additionalNotes) {
         this.id = id;
-        this.username = username;
+        this.userId = userId;
         this.requestedDate = requestedDate;
         this.fitnessGoal = fitnessGoal;
         this.dietaryPreferences = dietaryPreferences;
         this.allergies = allergies;
+        this.status = status;
         this.additionalNotes = additionalNotes;
     }
 
@@ -33,12 +35,12 @@ public class MealPlanDto {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public LocalDate getRequestedDate() {
@@ -71,6 +73,14 @@ public class MealPlanDto {
 
     public void setAllergies(String allergies) {
         this.allergies = allergies;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getAdditionalNotes() {
