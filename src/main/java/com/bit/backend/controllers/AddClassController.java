@@ -1,14 +1,13 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.AddClassDto;
+import com.bit.backend.dtos.EmployeeDto;
+import com.bit.backend.dtos.SupplementInventoryDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.AddClassServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -41,5 +40,21 @@ try{
 catch(Exception e){
     throw new AppException("Failed to load classes.", HttpStatus.INTERNAL_SERVER_ERROR);
 }
+    }
+
+    @PutMapping("/add-class/{id}")
+    public ResponseEntity<AddClassDto> updateAddClass(@PathVariable long id, @RequestBody AddClassDto addClassDto) {
+        try {
+            AddClassDto addClassDtoResponse = addClassServiceI.updateAddClass(id, addClassDto);
+            return ResponseEntity.ok(addClassDtoResponse);
+        } catch (Exception e) {
+            throw new AppException("Failed to update the class information. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/book-class-submit/{id}")
+    public ResponseEntity<AddClassDto> getAddClassById(@PathVariable long id) {
+        AddClassDto addClassDto = addClassServiceI.getClassById(id);
+        return ResponseEntity.ok().body(addClassDto);
     }
 }

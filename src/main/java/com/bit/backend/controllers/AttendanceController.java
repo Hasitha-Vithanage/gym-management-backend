@@ -32,13 +32,26 @@ public class AttendanceController {
     }
 
     @PostMapping("/employeeService/mark-attendance/present/{employeeId}")
+    public ResponseEntity<AttendanceDto> markEmployeeAttendancePresentQR(
+            @PathVariable String employeeId,
+            @RequestBody AttendanceDto dto) {
+
+        dto.setAttendanceType("employee");
+        dto.setEmployee(employeeId);
+        dto.setAttendanceStatus("present");
+
+        AttendanceDto saved = attendanceServiceI.addAttendanceEntity(dto);
+        return ResponseEntity.ok(saved);
+    }
+
+    @PostMapping("/employeeService/mark-attendance/{employeeId}")
     public ResponseEntity<AttendanceDto> markEmployeeAttendancePresent(
             @PathVariable String employeeId,
             @RequestBody AttendanceDto dto) {
 
         dto.setAttendanceType("employee");
         dto.setEmployee(employeeId);
-//        dto.setAttendanceStatus("present");
+        dto.setAttendanceStatus(dto.getAttendanceStatus());
 
         AttendanceDto saved = attendanceServiceI.addAttendanceEntity(dto);
         return ResponseEntity.ok(saved);
