@@ -2,6 +2,7 @@ package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.MealPlanUploadDto;
 import com.bit.backend.dtos.WorkoutPlanDto;
+import com.bit.backend.entities.MealPlanEntity;
 import com.bit.backend.entities.MealPlanUploadEntity;
 import com.bit.backend.entities.WorkoutPlanEntity;
 import com.bit.backend.exceptions.AppException;
@@ -12,15 +13,20 @@ import com.bit.backend.services.MealPlanUploadServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class MealPlanUploadService implements MealPlanUploadServiceI {
 
     private final MealPlanUploadRepository mealPlanUploadRepository;
     private final MealPlanUploadMapper mealPlanUploadMapper;
+    private final MealPlanRepository mealPlanRepository;
 
-    public MealPlanUploadService(MealPlanUploadRepository mealPlanUploadRepository, MealPlanUploadMapper mealPlanUploadMapper) {
+    public MealPlanUploadService(MealPlanUploadRepository mealPlanUploadRepository, MealPlanUploadMapper mealPlanUploadMapper,
+                                 MealPlanRepository mealPlanRepository) {
         this.mealPlanUploadRepository = mealPlanUploadRepository;
         this.mealPlanUploadMapper = mealPlanUploadMapper;
+        this.mealPlanRepository = mealPlanRepository;
     }
 
 
@@ -28,9 +34,20 @@ public class MealPlanUploadService implements MealPlanUploadServiceI {
     public MealPlanUploadDto addMealPlanUploadEntity(MealPlanUploadDto mealPlanUploadDto) {
         System.out.println("In the addMemberEntity method");
 
+        Optional<MealPlanEntity> oMealPlanEntity = mealPlanRepository.findById(mealPlanUploadDto.getRequestId());
+
+        if (!oMealPlanEntity.isPresent()) {
+            throw new AppException("Meal plan request not found!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         MealPlanUploadEntity mealPlanUploadEntity = mealPlanUploadMapper.toMealPlanUploadEntity(mealPlanUploadDto);
         MealPlanUploadEntity savedItem = mealPlanUploadRepository.save(mealPlanUploadEntity);
         MealPlanUploadDto savedDto = mealPlanUploadMapper.toMealPlanUploadDto(savedItem);
+
+        MealPlanEntity mealPlanEntity = oMealPlanEntity.get();
+        mealPlanEntity.setStatus("Uploaded");
+        MealPlanEntity savedMealPlanEntity = mealPlanRepository.save(mealPlanEntity);
+
         return savedDto;
     }
 

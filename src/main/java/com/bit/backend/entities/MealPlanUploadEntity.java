@@ -37,10 +37,13 @@ public class MealPlanUploadEntity {
     @CreationTimestamp
     private LocalDate uploadDate;
 
+    @Column(name = "request_id")
+    private Long requestId;
+
     public MealPlanUploadEntity() {
     }
 
-    public MealPlanUploadEntity(Long id, String mealPlanTitle, String planDescription, String userId, byte[] pdf, String pdfName, String pdfType, LocalDate uploadDate) {
+    public MealPlanUploadEntity(Long id, String mealPlanTitle, String planDescription, String userId, byte[] pdf, String pdfName, String pdfType, LocalDate uploadDate, Long requestId) {
         this.id = id;
         this.mealPlanTitle = mealPlanTitle;
         this.planDescription = planDescription;
@@ -49,6 +52,7 @@ public class MealPlanUploadEntity {
         this.pdfName = pdfName;
         this.pdfType = pdfType;
         this.uploadDate = uploadDate;
+        this.requestId = requestId;
     }
 
     public Long getId() {
@@ -113,5 +117,13 @@ public class MealPlanUploadEntity {
 
     public void setUploadDate(LocalDate uploadDate) {
         this.uploadDate = uploadDate;
+    }
+
+    public Long getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(Long requestId) {
+        this.requestId = requestId;
     }
 }

@@ -14,11 +14,12 @@ public class MealPlanUploadDto {
     private String pdfName;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String pdfType;
+    private Long requestId;
 
     public MealPlanUploadDto() {
     }
 
-    public MealPlanUploadDto(long id, String mealPlanTitle, String planDescription, String userId, byte[] pdf, String pdfName, String pdfType) {
+    public MealPlanUploadDto(long id, String mealPlanTitle, String planDescription, String userId, byte[] pdf, String pdfName, String pdfType, Long requestId) {
         this.id = id;
         this.mealPlanTitle = mealPlanTitle;
         this.planDescription = planDescription;
@@ -26,6 +27,7 @@ public class MealPlanUploadDto {
         this.pdf = pdf;
         this.pdfName = pdfName;
         this.pdfType = pdfType;
+        this.requestId = requestId;
     }
 
     public long getId() {
@@ -82,5 +84,13 @@ public class MealPlanUploadDto {
 
     public void setPdfType(String pdfType) {
         this.pdfType = pdfType;
+    }
+
+    public Long getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(Long requestId) {
+        this.requestId = requestId;
     }
 }

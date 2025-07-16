@@ -31,7 +31,8 @@ public class MealPlanUploadController {
             @RequestPart("mealPlanTitle") String title,
             @RequestPart("planDescription") String description,
             @RequestPart("userId") String userId,
-            @RequestPart("pdf") MultipartFile file) {
+            @RequestPart("pdf") MultipartFile file,
+            @RequestPart("requestId") String requestId) {
 
         try {
             MealPlanUploadDto dto = new MealPlanUploadDto();
@@ -41,6 +42,7 @@ public class MealPlanUploadController {
             dto.setPdf(file.getBytes());
             dto.setPdfName(file.getOriginalFilename());
             dto.setPdfType(file.getContentType());
+            dto.setRequestId(Long.parseLong(requestId));
 
             MealPlanUploadDto response = mealPlanUploadServiceI.addMealPlanUploadEntity(dto);
 //            mealPlanServiceI.updateStatus(userId);
