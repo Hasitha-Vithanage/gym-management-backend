@@ -40,6 +40,37 @@ public class ProgressTrackingDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String backImageType;
 
+
+    // Base64 strings for frontend image display
+    private String frontImageBase64;
+    private String sideImageBase64;
+    private String backImageBase64;
+
+    // Getters and setters
+    public String getFrontImageBase64() {
+        return frontImageBase64;
+    }
+
+    public void setFrontImageBase64(String frontImageBase64) {
+        this.frontImageBase64 = frontImageBase64;
+    }
+
+    public String getSideImageBase64() {
+        return sideImageBase64;
+    }
+
+    public void setSideImageBase64(String sideImageBase64) {
+        this.sideImageBase64 = sideImageBase64;
+    }
+
+    public String getBackImageBase64() {
+        return backImageBase64;
+    }
+
+    public void setBackImageBase64(String backImageBase64) {
+        this.backImageBase64 = backImageBase64;
+    }
+
     public ProgressTrackingDto() {
     }
 
@@ -234,4 +265,5 @@ public class ProgressTrackingDto {
     public void setBackImageType(String backImageType) {
         this.backImageType = backImageType;
     }
+
 }

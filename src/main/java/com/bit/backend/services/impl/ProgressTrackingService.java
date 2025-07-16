@@ -7,6 +7,10 @@ import com.bit.backend.repositories.ProgressTrackingRepository;
 import com.bit.backend.services.ProgressTrackingServiceI;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class ProgressTrackingService implements ProgressTrackingServiceI {
 
@@ -27,4 +31,16 @@ public class ProgressTrackingService implements ProgressTrackingServiceI {
         ProgressTrackingDto savedDto = progressTrackingMapper.toProgressTrackingDto(savedItem);
         return savedDto;
     }
+
+//    @Override
+//    public List<Map<String, Object>> getWeightOverTime(String userName) {
+//        return progressTrackingRepository.getWeightOverTime(userName);
+//    }
+
+
+    @Override
+    public List<Map<String, Object>> getWeightOverTimeByUser(String userName) {
+        return progressTrackingRepository.getWeightOverTimeByUser(userName);
+    }
+
 }

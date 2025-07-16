@@ -6,13 +6,13 @@ import com.bit.backend.services.ProgressTrackingServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ProgressTrackingController {
@@ -45,9 +45,24 @@ public class ProgressTrackingController {
             progressTrackingDto.setBackImageType(backImage.getContentType());
 
             ProgressTrackingDto progressTrackingDtoResponse = progressTrackingServiceI.addProgressTrackingEntity(progressTrackingDto);
-            return ResponseEntity.created(URI.create("/progress-tracking"+progressTrackingDtoResponse.getId())).body(progressTrackingDtoResponse);
+            return ResponseEntity.created(URI.create("/progress-tracking" + progressTrackingDtoResponse.getId())).body(progressTrackingDtoResponse);
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/weight-over-time/{userName}")
+    public ResponseEntity<List<Map<String, Object>>> getWeightOverTimeByUser(@PathVariable String userName) {
+        try {
+            List<Map<String, Object>> weightOverTime = progressTrackingServiceI.getWeightOverTimeByUser(userName);
+            return ResponseEntity.ok(weightOverTime);
+        } catch (Exception e) {
+            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+
+
 }
