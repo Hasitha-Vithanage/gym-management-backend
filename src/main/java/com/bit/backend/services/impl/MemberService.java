@@ -1,7 +1,9 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.MemberDto;
+import com.bit.backend.dtos.MembershipCategoryDto;
 import com.bit.backend.entities.MemberEntity;
+import com.bit.backend.entities.MembershipCategoryEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.MemberMapper;
 import com.bit.backend.repositories.MemberRepository;
@@ -75,4 +77,11 @@ public class MemberService implements MemberServiceI {
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + id));
         return memberMapper.toMemberDto(memberEntity);
     }
+
+    @Override
+    public List<MemberDto> getMemberByMember(String firstName) {
+        List<MemberEntity> memberEntityList = memberRepository.findByFirstName(firstName);
+        return memberMapper.toMemberDto(memberEntityList);
+    }
+
 }

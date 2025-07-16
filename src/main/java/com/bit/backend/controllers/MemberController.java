@@ -1,6 +1,7 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.MemberDto;
+import com.bit.backend.dtos.MembershipCategoryDto;
 import com.bit.backend.dtos.SupplierDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.MemberServiceI;
@@ -65,4 +66,12 @@ public class MemberController {
         MemberDto memberDto = memberServiceI.deleteMember(id);
         return ResponseEntity.ok().body(memberDto);
     }
+
+    @GetMapping("/membership-category/{firstName}")
+    public ResponseEntity<List<MemberDto>> getMemberByFirstName(@PathVariable String firstName) {
+        List<MemberDto> memberDtoList = memberServiceI.getMemberByMember(firstName);
+        return ResponseEntity.ok(memberDtoList);
+    }
+
+
 }

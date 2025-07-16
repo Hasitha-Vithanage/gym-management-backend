@@ -1,8 +1,12 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.AssignTrainerDto;
+import com.bit.backend.dtos.FeedbackDto;
+import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.MembershipCategoryDto;
 import com.bit.backend.entities.AssignTrainerEntity;
+import com.bit.backend.entities.FeedbackEntity;
+import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.entities.MembershipCategoryEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.MembershipCategoryMapper;
@@ -76,6 +80,12 @@ public class MembershipCategoryService implements MembershipCategoryServiceI {
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public List<MembershipCategoryDto> getMembershipCategoryByMember(String categoryName) {
+        List<MembershipCategoryEntity> membershipCategoryEntityList = membershipCategoryRepository.findByCategoryName(categoryName);
+        return membershipCategoryMapper.toMembershipCategoryDto(membershipCategoryEntityList);
     }
 
 }

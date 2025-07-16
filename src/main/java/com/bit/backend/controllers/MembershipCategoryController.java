@@ -1,6 +1,8 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.AssignTrainerDto;
+import com.bit.backend.dtos.FeedbackDto;
+import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.MembershipCategoryDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.MembershipCategoryServiceI;
@@ -49,5 +51,11 @@ public class MembershipCategoryController {
         } catch (Exception e) {
             throw new AppException("Failed to load Membership Category records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/membership-category-fee/{categoryName}")
+    public ResponseEntity<List<MembershipCategoryDto>> getMembershipCategoryByCategoryName(@PathVariable String categoryName) {
+        List<MembershipCategoryDto> membershipCategoryDtoList = membershipCategoryServiceI.getMembershipCategoryByMember(categoryName);
+        return ResponseEntity.ok(membershipCategoryDtoList);
     }
 }
