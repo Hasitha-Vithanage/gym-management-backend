@@ -106,4 +106,11 @@ public class EmployeeService implements EmployeeServiceI {
         return employeeMapper.toEmployeeDto(employeeEntity);
     }
 
+    @Override
+    public Long getEmployeeCount() {
+        // call repository to get employee count
+        long employeeCount = employeeRepository.count();
+        return employeeCount;
+    }
+
 }

@@ -1,30 +1,51 @@
-package com.bit.backend.dtos;
+package com.bit.backend.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-public class BookClassDto {
+@Entity
+@Table(name = "bookClass")
+public class BookClassEntity {
 
-    private long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto increment
+    private Long id;
+
+    @Column(name = "firstName", nullable = false, unique = true)
     private String firstName;
+
+    @Column(name = "lastName", nullable = false)
     private String lastName;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "phone")
     private String phone;
+
+    @Column(name = "classId")
     private long classId;
+
+    @Column(name = "bookedBy")
     private String bookedBy;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    // Image fields (can be large, use @Lob)
+    @Lob
+    @Column(name = "image")
     private byte[] image;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+
+    @Column(name = "image_name")
     private String imageName;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+
+    @Column(name = "image_type")
     private String imageType;
 
-    public BookClassDto() {
+    public BookClassEntity() {
     }
 
-    public BookClassDto(long id, String firstName, String lastName, String email, String phone, long classId, String bookedBy, byte[] image, String imageName, String imageType) {
+    public BookClassEntity(Long id, String firstName, String lastName, String email, String phone, long classId, String bookedBy, byte[] image, String imageName, String imageType) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -37,11 +58,11 @@ public class BookClassDto {
         this.imageType = imageType;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

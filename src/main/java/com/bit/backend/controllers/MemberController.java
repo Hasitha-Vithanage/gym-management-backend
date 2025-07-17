@@ -73,5 +73,15 @@ public class MemberController {
         return ResponseEntity.ok(memberDtoList);
     }
 
+    @GetMapping("/member-count")
+    public ResponseEntity<Long> getMemberCount() {
+        Long memberCount = memberServiceI.getMemberCount();
+        return ResponseEntity.ok().body(memberCount);
+    }
 
+    @GetMapping("/new-members")
+    public ResponseEntity<Integer> getNewMembers() {
+        Integer newMembers = memberServiceI.newMembersInThisMonth();
+        return ResponseEntity.ok().body(newMembers);
+    }
 }

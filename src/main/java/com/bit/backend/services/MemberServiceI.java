@@ -13,4 +13,6 @@ public interface MemberServiceI {
     MemberDto deleteMember(long id);
     MemberDto getMemberById(long id);
     List<MemberDto> getMemberByMember(String member);
+    long getMemberCount();
+    Integer newMembersInThisMonth();
 }

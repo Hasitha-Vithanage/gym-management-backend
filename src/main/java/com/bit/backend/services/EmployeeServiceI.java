@@ -18,4 +18,6 @@ public interface EmployeeServiceI {
     List<EmployeeDto> getTrainers();
 
     EmployeeDto getTrainerById(long id);
+
+   Long getEmployeeCount();
 }

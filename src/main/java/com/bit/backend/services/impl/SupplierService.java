@@ -85,4 +85,9 @@ public class SupplierService implements SupplierServiceI {
         return deletedDto;
     }
 
+    @Override
+    public Long getSupplierCount() {
+        Long supplierCount = supplierRepository.count();
+        return supplierCount;
+    }
 }

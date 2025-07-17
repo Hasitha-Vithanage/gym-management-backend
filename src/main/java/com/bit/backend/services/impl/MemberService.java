@@ -84,4 +84,17 @@ public class MemberService implements MemberServiceI {
         return memberMapper.toMemberDto(memberEntityList);
     }
 
+    @Override
+    public long getMemberCount() {
+        //calling repository to get member count
+        long memberCount = memberRepository.count();
+        return memberCount;
+    }
+
+    @Override
+    public Integer newMembersInThisMonth() {
+        //Calling repository to get data
+        int newMembers = memberRepository.countNewMembersInCurrentMonth();
+        return newMembers;
+    }
 }

@@ -52,4 +52,9 @@ public class SupplierController {
         return ResponseEntity.ok().body(supplierDto);
     }
 
+    @GetMapping("/supplier-count")
+    public ResponseEntity<Long> getSupplierCount() {
+        Long supplierCount = supplierServiceI.getSupplierCount();
+        return ResponseEntity.ok().body(supplierCount);
+    }
 }

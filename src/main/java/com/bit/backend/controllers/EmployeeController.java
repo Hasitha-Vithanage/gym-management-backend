@@ -75,4 +75,14 @@ public class EmployeeController {
         }
     }
 
+    @GetMapping("/employee-count")
+    public ResponseEntity<Long> getEmployeeCount() {
+        try {
+            long employeeCount = employeeServiceI.getEmployeeCount();
+            return ResponseEntity.ok(employeeCount);
+        } catch (Exception e) {
+            throw new AppException("Failed to get Employee Count", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

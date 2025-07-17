@@ -12,4 +12,5 @@ public interface SupplierServiceI {
     List<SupplierDto>getSuppliers();
     List<SupplierDto>getSupplementSuppliers();
     SupplierDto deleteSupplier(long id);
+    Long getSupplierCount();
 }
