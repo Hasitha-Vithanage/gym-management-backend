@@ -4,6 +4,7 @@ import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.MembershipCategoryDto;
 import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.entities.MembershipCategoryEntity;
+import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.MemberMapper;
 import com.bit.backend.repositories.MemberRepository;
@@ -29,6 +30,18 @@ public class MemberService implements MemberServiceI {
     public MemberDto addMemberEntity(MemberDto memberDto) {
         System.out.println("In the addMemberEntity method");
 
+        if (memberDto.getMemberNo() == null || memberDto.getMemberNo().isBlank()) {
+            throw new AppException("Member number is required", HttpStatus.BAD_REQUEST);
+        }
+        if(memberRepository.existsByMemberNo(memberDto.getMemberNo())) {
+            throw new AppException("Member number already exists", HttpStatus.BAD_REQUEST);
+        }
+//        Optional<MemberEntity> member = memberRepository.findByMemberNo(memberDto.getMemberNo());
+//
+//        if (member.isPresent()) {
+//            throw new AppException("Member number already exists.", HttpStatus.BAD_REQUEST);
+//        }
+
         MemberEntity memberEntity = memberMapper.toMemberEntity(memberDto);
         MemberEntity savedItem = memberRepository.save(memberEntity);
         MemberDto savedDto = memberMapper.toMemberDto(savedItem);
@@ -51,6 +64,7 @@ public class MemberService implements MemberServiceI {
         if (!optionalMemberEntity.isPresent()) {
             throw new AppException("Member Does Not Exist", HttpStatus.BAD_REQUEST);
         }
+
 
         MemberEntity newMemberEntity = memberMapper.toMemberEntity(memberDto);
         newMemberEntity.setId(id);

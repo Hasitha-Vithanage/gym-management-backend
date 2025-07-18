@@ -6,8 +6,10 @@ import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.EmployeeServiceI;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -21,13 +23,16 @@ public class EmployeeController {
         this.employeeServiceI = employeeServiceI;
     }
 
-    @PostMapping("/employee")
-    public ResponseEntity<EmployeeDto> addEmployee(@RequestBody EmployeeDto employeeDto) {
+    @PostMapping(value = {"/employee"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<EmployeeDto> addEmployee(@RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file) {
         try {
+            employeeDto.setImage(file.getBytes());
+            employeeDto.setImageName(file.getOriginalFilename());
+            employeeDto.setImageType(file.getContentType());
             EmployeeDto employeeDtoResponse = employeeServiceI.addEmployeeEntity(employeeDto);
-            return ResponseEntity.created(URI.create("/employee" + employeeDtoResponse.getFirstName())).body(employeeDtoResponse);
+            return ResponseEntity.created(URI.create("/employee"+employeeDtoResponse.getFirstName())).body(employeeDtoResponse);
         } catch (Exception e) {
-            throw new AppException("Employee registration failed. Please try again later. " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

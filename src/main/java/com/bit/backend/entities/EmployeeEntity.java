@@ -48,10 +48,21 @@ public class EmployeeEntity {
     @Column(name = "emergency_contact_number")
     private String emergencyContactNumber;
 
+    // Image fields (can be large, use @Lob)
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
+
+    @Column(name = "image_name")
+    private String imageName;
+
+    @Column(name = "image_type")
+    private String imageType;
+
     public EmployeeEntity() {
     }
 
-    public EmployeeEntity(Long id, String employeeId, String jobTitle, LocalDate dateOfJoining, String firstName, String lastName, String nic, LocalDate dateOfBirth, String gender, String address, String email, String phoneNumber, String emergencyContactNumber) {
+    public EmployeeEntity(Long id, String employeeId, String jobTitle, LocalDate dateOfJoining, String firstName, String lastName, String nic, LocalDate dateOfBirth, String gender, String address, String email, String phoneNumber, String emergencyContactNumber, byte[] image, String imageName, String imageType) {
         this.id = id;
         this.employeeId = employeeId;
         this.jobTitle = jobTitle;
@@ -65,6 +76,9 @@ public class EmployeeEntity {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.emergencyContactNumber = emergencyContactNumber;
+        this.image = image;
+        this.imageName = imageName;
+        this.imageType = imageType;
     }
 
     public Long getId() {
@@ -169,5 +183,29 @@ public class EmployeeEntity {
 
     public void setEmergencyContactNumber(String emergencyContactNumber) {
         this.emergencyContactNumber = emergencyContactNumber;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }

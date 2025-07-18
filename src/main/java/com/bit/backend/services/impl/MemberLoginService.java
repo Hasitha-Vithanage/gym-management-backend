@@ -1,7 +1,9 @@
 package com.bit.backend.services.impl;
 
+import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.MemberLoginDto;
 import com.bit.backend.dtos.TrainerLoginDto;
+import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.entities.MemberLoginEntity;
 import com.bit.backend.entities.TrainerLoginEntity;
 import com.bit.backend.exceptions.AppException;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberLoginService implements MemberLoginServiceI {
@@ -46,4 +49,17 @@ public class MemberLoginService implements MemberLoginServiceI {
         List<MemberLoginDto> memberLoginDtoList = memberLoginMapper.toMemberLoginDtoList(memberLoginEntities);
         return memberLoginDtoList;
     }
+
+    @Override
+    public MemberLoginDto deleteMemberLogin(long id) {
+        Optional<MemberLoginEntity> optionalMemberLoginEntity = memberLoginRepository.findById(id);
+        if (!optionalMemberLoginEntity.isPresent()) {
+            throw new AppException("Member Login Does Not Exist", HttpStatus.BAD_REQUEST);
+        }
+
+        memberLoginRepository.deleteById(id);
+        MemberLoginDto deletedDto = memberLoginMapper.toMemberLoginDto(optionalMemberLoginEntity.get());
+        return deletedDto;
+    }
+
 }

@@ -12,7 +12,7 @@ public class MemberEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto increment
     private Long id;
 
-    @Column(name = "member_no", nullable = false, unique = true)
+    @Column(name = "member_no", nullable = false)
     private String memberNo;
 
     @Column(name = "first_name", nullable = false)
