@@ -61,6 +61,16 @@ public class ProgressTrackingController {
         }
     }
 
+    @GetMapping("/get-progress-data")
+    public ResponseEntity<List<ProgressTrackingDto>> getProgressData() {
+        try {
+            List<ProgressTrackingDto> progressData = progressTrackingServiceI.getProgressData();
+            return ResponseEntity.ok(progressData);
+        } catch (Exception e) {
+            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 

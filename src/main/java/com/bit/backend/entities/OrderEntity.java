@@ -24,14 +24,18 @@ public class OrderEntity {
     @Column(name = "orderedBy")
     private String orderedBy;
 
+    @Column(name = "status")
+    private String status;
+
     public OrderEntity() {
     }
 
-    public OrderEntity(long id, LocalDate date, double totalCost, String orderedBy) {
+    public OrderEntity(long id, LocalDate date, double totalCost, String orderedBy, String status) {
         this.id = id;
         this.date = date;
         this.totalCost = totalCost;
         this.orderedBy = orderedBy;
+        this.status = status;
     }
 
     public long getId() {
@@ -64,5 +68,13 @@ public class OrderEntity {
 
     public void setOrderedBy(String orderedBy) {
         this.orderedBy = orderedBy;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

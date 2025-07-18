@@ -1,19 +1,23 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.OrderDto;
+import com.bit.backend.dtos.SupplementInventoryDto;
 import com.bit.backend.entities.BillingDetailsEntity;
 import com.bit.backend.entities.OrderEntity;
 import com.bit.backend.entities.OrderItemEntity;
+import com.bit.backend.entities.SupplementInventoryEntity;
 import com.bit.backend.mappers.OrderMapper;
 import com.bit.backend.repositories.BillingDetailsRepository;
 import com.bit.backend.repositories.OrderItemRepository;
 import com.bit.backend.repositories.OrderRepository;
+import com.bit.backend.repositories.SupplementInventoryRepository;
 import com.bit.backend.services.OrderServiceI;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService implements OrderServiceI {
@@ -23,15 +27,17 @@ public class OrderService implements OrderServiceI {
     private final OrderItemRepository orderItemRepository;
     private final BillingDetailsRepository billingDetailsRepository;
     private final OrderMapper orderMapper;
+    private final SupplementInventoryRepository supplementInventoryRepository;
 
     public OrderService(OrderRepository orderRepository,
                         OrderItemRepository orderItemRepository,
                         BillingDetailsRepository billingDetailsRepository,
-                        OrderMapper orderMapper) {
+                        OrderMapper orderMapper, SupplementInventoryRepository supplementInventoryRepository) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.billingDetailsRepository = billingDetailsRepository;
         this.orderMapper = orderMapper;
+        this.supplementInventoryRepository = supplementInventoryRepository;
     }
 
     @Override
@@ -39,21 +45,44 @@ public class OrderService implements OrderServiceI {
     public OrderDto addOrder(OrderDto orderDto) {
         System.out.println("In the addOrder method");
 
-        // Map and save OrderEntity
+        // Step 1: Save the OrderEntity first
         OrderEntity orderEntity = orderMapper.toOrderEntity(orderDto);
+        orderEntity.setStatus("Order Pending");
         OrderEntity savedOrder = orderRepository.save(orderEntity);
 
-        // Map and save OrderItemEntities
+        // Step 2: Process Order Items and update stock
         List<OrderItemEntity> orderItems = new ArrayList<>();
         if (orderDto.getOrderItems() != null) {
             for (OrderDto.OrderItemDto itemDto : orderDto.getOrderItems()) {
-                OrderItemEntity itemEntity = orderMapper.toOrderItemEntity(itemDto);
-                itemEntity.setOrder(savedOrder);
-                orderItems.add(orderItemRepository.save(itemEntity));
+
+                // Get the product from supplement inventory
+                Optional<SupplementInventoryEntity> supplementOpt =
+                        supplementInventoryRepository.findById(itemDto.getProductId());
+
+                if (supplementOpt.isPresent()) {
+                    SupplementInventoryEntity supplement = supplementOpt.get();
+
+                    // Check if enough stock is available
+                    if (supplement.getQuantityInStock() < itemDto.getQuantity()) {
+                        throw new RuntimeException("Insufficient stock for product: " + supplement.getProductName());
+                    }
+
+                    // Deduct the ordered quantity from stock
+                    supplement.setQuantityInStock(supplement.getQuantityInStock() - itemDto.getQuantity());
+                    supplementInventoryRepository.save(supplement);
+
+                    // Map and save order item
+                    OrderItemEntity itemEntity = orderMapper.toOrderItemEntity(itemDto);
+                    itemEntity.setOrder(savedOrder); // set parent order reference
+                    orderItems.add(orderItemRepository.save(itemEntity));
+
+                } else {
+                    throw new RuntimeException("Supplement product not found with ID: " + itemDto.getProductId());
+                }
             }
         }
 
-        // Map and save BillingDetailsEntity
+        // Step 3: Save BillingDetails if present
         BillingDetailsEntity billingEntity = null;
         if (orderDto.getBillingDetails() != null) {
             billingEntity = orderMapper.toBillingDetailsEntity(orderDto.getBillingDetails());
@@ -61,7 +90,7 @@ public class OrderService implements OrderServiceI {
             billingDetailsRepository.save(billingEntity);
         }
 
-        // Map saved entities back to DTO
+        // Step 4: Return the mapped DTO
         OrderDto savedDto = orderMapper.toOrderDto(savedOrder);
         savedDto.setOrderItems(orderMapper.toOrderItemDtoList(orderItems));
         if (billingEntity != null) {

@@ -1,5 +1,6 @@
 package com.bit.backend.services;
 
+import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.ProgressTrackingDto;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface ProgressTrackingServiceI {
 
     List<Map<String, Object>> getWeightOverTimeByUser(String userName);
 
-
+    List<ProgressTrackingDto> getProgressData();
 }

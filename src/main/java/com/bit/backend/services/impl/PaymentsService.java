@@ -30,6 +30,19 @@ public class PaymentsService implements PaymentsServiceI {
         try {
             System.out.println("************ In Service *************");
 
+            if(paymentsDto.getPaymentDate() == null) {
+                throw new AppException("Payment Date cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+            if(paymentsDto.getMember() == null) {
+                throw new AppException("Member cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+            if(paymentsDto.getStatus() == null) {
+                throw new AppException("Status cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+            if(paymentsDto.getAmount() == 0) {
+                throw new AppException("Amount cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+
             // Check if this member already has a trainer assigned
             boolean alreadyPaid = paymentsRepository.existsByMember(paymentsDto.getMember());
             if (alreadyPaid) {
