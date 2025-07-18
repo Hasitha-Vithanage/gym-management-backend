@@ -7,11 +7,13 @@ import com.bit.backend.services.MemberLoginServiceI;
 import com.bit.backend.services.TrainerLoginServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 public class MemberLoginController {
@@ -30,5 +32,13 @@ public class MemberLoginController {
         } catch (Exception e) {
             throw new AppException("Assign Login failed. Please try again later. " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/member-login")
+    public ResponseEntity<List<MemberLoginDto>> getMemberLogin() {
+        // calling service through interface
+
+        List<MemberLoginDto> memberLoginDtoList = memberLoginServiceI.getMemberLoginEntity();
+        return ResponseEntity.ok(memberLoginDtoList);
     }
 }

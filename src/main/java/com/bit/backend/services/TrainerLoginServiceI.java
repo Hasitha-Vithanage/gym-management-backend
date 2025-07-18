@@ -8,4 +8,5 @@ import java.util.List;
 public interface TrainerLoginServiceI {
 
     TrainerLoginDto addTrainerLoginEntity(TrainerLoginDto trainerLoginDto);
+    List<TrainerLoginDto> getTrainerLoginEntity();
 }

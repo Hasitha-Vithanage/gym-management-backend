@@ -2,9 +2,11 @@ package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.AssignTrainerDto;
 import com.bit.backend.dtos.EmployeeDto;
+import com.bit.backend.dtos.EquipmentDto;
 import com.bit.backend.dtos.TrainerLoginDto;
 import com.bit.backend.entities.AssignTrainerEntity;
 import com.bit.backend.entities.EmployeeEntity;
+import com.bit.backend.entities.EquipmentEntity;
 import com.bit.backend.entities.TrainerLoginEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AssignTrainerMapper;
@@ -14,6 +16,8 @@ import com.bit.backend.repositories.TrainerLoginRepository;
 import com.bit.backend.services.TrainerLoginServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TrainerLoginService implements TrainerLoginServiceI {
@@ -40,5 +44,13 @@ public class TrainerLoginService implements TrainerLoginServiceI {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public List<TrainerLoginDto> getTrainerLoginEntity() {
+        List<TrainerLoginEntity> trainerLoginEntities = trainerLoginRepository.findAll();
+        List<TrainerLoginDto> trainerLoginDtoList = trainerLoginMapper.toTrainerLoginDtoList(trainerLoginEntities);
+        return trainerLoginDtoList;
+    }
+
 
 }

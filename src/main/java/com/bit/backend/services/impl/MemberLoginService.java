@@ -13,6 +13,8 @@ import com.bit.backend.services.MemberLoginServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MemberLoginService implements MemberLoginServiceI {
 
@@ -36,5 +38,12 @@ public class MemberLoginService implements MemberLoginServiceI {
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public List<MemberLoginDto> getMemberLoginEntity() {
+        List<MemberLoginEntity> memberLoginEntities = memberLoginRepository.findAll();
+        List<MemberLoginDto> memberLoginDtoList = memberLoginMapper.toMemberLoginDtoList(memberLoginEntities);
+        return memberLoginDtoList;
     }
 }

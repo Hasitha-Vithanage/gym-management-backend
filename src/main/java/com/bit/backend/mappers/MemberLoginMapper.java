@@ -7,9 +7,13 @@ import com.bit.backend.entities.TrainerLoginEntity;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 public interface MemberLoginMapper {
 
     MemberLoginDto toMemberLoginDto(MemberLoginEntity memberLoginEntity);
     MemberLoginEntity toMemberLoginEntity(MemberLoginDto memberLoginDto);
+    List<MemberLoginDto> toMemberLoginDtoList(List<MemberLoginEntity> memberLoginEntities);
+
 }
