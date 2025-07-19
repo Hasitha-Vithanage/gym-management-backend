@@ -3,6 +3,7 @@ package com.bit.backend.controllers;
 import com.bit.backend.dtos.AssignTrainerDto;
 import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.OrderDto;
+import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.AssignTrainerServiceI;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,16 @@ public class AssignTrainerController {
         try {
            AssignTrainerDto assignTrainerDto = assignTrainerServiceI.getAssignTrainerByMember(memberName);
             return ResponseEntity.ok(assignTrainerDto);
+        } catch (Exception e) {
+            throw new AppException("Failed to load AssignTrainer records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/get-trainer-by-member/{id}")
+    public ResponseEntity <User> getTrainerByMember(@PathVariable String id) {
+        try {
+            User user = assignTrainerServiceI.getTrainerByMember(id);
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             throw new AppException("Failed to load AssignTrainer records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

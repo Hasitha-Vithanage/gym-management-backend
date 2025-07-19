@@ -32,4 +32,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM app_user WHERE login = :userName and id <> :userId")
     List<User> checkIfUserNameExistForOtherUsers(String userName, Long userId);
+
+    List<User> findByFirstName(String trainerName);
 }

@@ -16,4 +16,5 @@ public interface AssignTrainerRepository extends JpaRepository<AssignTrainerEnti
     AssignTrainerEntity findByMember(String member);
 
 
+//    AssignTrainerEntity findByTrainer(String firstName);
 }

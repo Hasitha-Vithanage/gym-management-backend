@@ -2,6 +2,7 @@ package com.bit.backend.services;
 
 import com.bit.backend.dtos.AssignTrainerDto;
 import com.bit.backend.dtos.EquipmentDto;
+import com.bit.backend.entities.User;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface AssignTrainerServiceI {
     List<AssignTrainerDto> getAssignTrainer();
     AssignTrainerDto deleteAssignTrainer(long id);
     AssignTrainerDto getAssignTrainerByMember(String member);
+
+    User getTrainerByMember(String id);
 }

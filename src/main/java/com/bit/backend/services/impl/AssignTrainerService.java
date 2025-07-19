@@ -2,11 +2,14 @@ package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.AssignTrainerDto;
 import com.bit.backend.dtos.EmployeeDto;
+import com.bit.backend.dtos.UserDto;
 import com.bit.backend.entities.AssignTrainerEntity;
 import com.bit.backend.entities.EmployeeEntity;
+import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AssignTrainerMapper;
 import com.bit.backend.repositories.AssignTrainerRepository;
+import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.AssignTrainerServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,10 +23,12 @@ public class AssignTrainerService implements AssignTrainerServiceI {
 
     private final AssignTrainerRepository assignTrainerRepository;
     private final AssignTrainerMapper assignTrainerMapper;
+    private final UserRepository userRepository;
 
-    public AssignTrainerService(AssignTrainerRepository assignTrainerRepository, AssignTrainerMapper assignTrainerMapper) {
+    public AssignTrainerService(AssignTrainerRepository assignTrainerRepository, AssignTrainerMapper assignTrainerMapper, UserService userService, UserRepository userRepository) {
         this.assignTrainerRepository = assignTrainerRepository;
         this.assignTrainerMapper = assignTrainerMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -109,5 +114,20 @@ public class AssignTrainerService implements AssignTrainerServiceI {
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public User getTrainerByMember(String id) {
+        Long memberId = Long.parseLong(id);
+         Optional<User> userOpt = userRepository.findById(memberId);
+         if (!userOpt.isPresent()) {
+             throw new AppException("User Does Not Exist", HttpStatus.BAD_REQUEST);
+         }
+         User user = userOpt.get();
+         AssignTrainerEntity assignTrainerEntity = assignTrainerRepository.findByMember(user.getFirstName());
+         String trainerName = assignTrainerEntity.getTrainer();
+         List<User> userList = userRepository.findByFirstName(trainerName);
+         User user1 = userList.get(0);
+         return user1;
     }
 }
