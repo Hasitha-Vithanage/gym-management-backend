@@ -97,4 +97,51 @@ public class UserService implements UserServiceI {
 
         return null;
     }
+
+    @Override
+    public UserDto findByLogin(String userName) {
+        Optional<User> oUser = userRepository.findByLogin(userName);
+        if (oUser.isPresent()) {
+            return userMapper.toUserDto(oUser.get());
+        }
+        return null;
+    }
+
+    @Override
+    public List<User> checkIfUserNameExistForOtherUsers(String userName, Long userId) {
+        try {
+
+            List<User> userList = userRepository.checkIfUserNameExistForOtherUsers(userName, userId);
+
+            if (userList.size() > 0) {
+                return userList;
+            }
+
+            return null;
+
+        } catch (Exception e) {
+            throw new AppException("Error occurred! Please try again", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public UserDto updatePassword(String userName, String password, Long userId) {
+        try {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
+
+        if (password.length() > 0) {
+            /*Update password only if it not matches with the old password*/
+            if (!passwordEncoder.matches(CharBuffer.wrap(password), user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(CharBuffer.wrap(password)));
+            }
+        }
+        user.setLogin(userName);
+
+        User userEntity = userRepository.save(user);
+        return userMapper.toUserDto(userEntity);
+
+        } catch (Exception e) {
+            throw new AppException("Error occurred! Please try again", HttpStatus.BAD_REQUEST);
+        }
+    }
 }
