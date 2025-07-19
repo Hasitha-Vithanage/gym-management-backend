@@ -10,4 +10,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM ems.orders WHERE total_cost > 6000")
     List<OrderEntity> getOrdersOverLimit();
+
+//    @Query(nativeQuery = true, value = "SELECT * FROM ems.orders where order_id = :id")
+//    OrderEntity findByOrderId(Long id);
 }

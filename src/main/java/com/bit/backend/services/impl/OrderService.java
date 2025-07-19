@@ -1,5 +1,6 @@
 package com.bit.backend.services.impl;
 
+import com.bit.backend.dtos.EquipmentDto;
 import com.bit.backend.dtos.OrderDto;
 import com.bit.backend.dtos.PaymentsDto;
 import com.bit.backend.dtos.SupplementInventoryDto;
@@ -47,7 +48,7 @@ public class OrderService implements OrderServiceI {
 
         // Step 1: Save the OrderEntity first
         OrderEntity orderEntity = orderMapper.toOrderEntity(orderDto);
-        orderEntity.setStatus("Order Pending");
+        orderEntity.setStatus("Unpaid");
         OrderEntity savedOrder = orderRepository.save(orderEntity);
 
         // Step 2: Process Order Items and update stock
@@ -117,6 +118,57 @@ public class OrderService implements OrderServiceI {
         List<OrderEntity> orderEntityList = orderRepository.getOrdersOverLimit();
         List<OrderDto> orderDtoList = orderMapper.toOrderDtoList(orderEntityList);
         return orderDtoList;
+    }
+
+    @Override
+    public OrderDto.OrderItemDto getOrderItemById(Long id) {
+//        OrderItemEntity orderItemEntity = orderItemRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Order Item not found with ID: " + id));
+//        return orderMapper.toOrderItemDto(orderItemEntity);
+
+        OrderItemEntity orderItemEntity = orderItemRepository.findByOrderId(id);
+
+        if (orderItemEntity == null) {
+            throw new AppException("Order Item not found with ID: " + id, HttpStatus.BAD_REQUEST);
+        }
+
+        return orderMapper.toOrderItemDto(orderItemEntity);
+    }
+
+    @Override
+    public OrderDto getOrderDetailById(Long id) {
+        OrderEntity orderEntity = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found with ID: " + id));
+        return orderMapper.toOrderDto(orderEntity);
+
+    }
+
+    @Override
+    public OrderDto updateOrderStatus(Long id) {
+        Optional<OrderEntity> optionalOrderEntity = orderRepository.findById(id);
+
+        if (!optionalOrderEntity.isPresent()) {
+            throw new AppException("Order Does Not Exist", HttpStatus.BAD_REQUEST);
+        }
+
+        optionalOrderEntity.get().setStatus("Paid");
+        return orderMapper.toOrderDto(orderRepository.save(optionalOrderEntity.get()));
+
+//        EquipmentEntity newEquipmentEntity = equipmentMapper.toEquipmentEntity(equipmentDto);
+//        newEquipmentEntity.setId(id);
+//        EquipmentEntity savedItem = equipmentRepository.save(newEquipmentEntity);
+//        EquipmentDto savedDto = equipmentMapper.toEquipmentDto(savedItem);
+    }
+
+    @Override
+    public OrderDto.BillingDetailsDto getBillingDetailsById(Long id) {
+        BillingDetailsEntity billingDetailsEntity = billingDetailsRepository.findByOrderId(id);
+
+        if (billingDetailsEntity == null) {
+            throw new AppException("Billing Details not found with ID: " + id, HttpStatus.BAD_REQUEST);
+        }
+
+        return orderMapper.toBillingDetailsDto(billingDetailsEntity);
     }
 
 }

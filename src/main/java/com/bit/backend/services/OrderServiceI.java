@@ -11,4 +11,8 @@ public interface OrderServiceI {
     OrderDto addOrder(OrderDto orderDto);
     List<OrderDto> getOrders();
     List<OrderDto> getOrdersOverLimit();
+    OrderDto.OrderItemDto getOrderItemById(Long id);
+    OrderDto getOrderDetailById(Long id);
+    OrderDto updateOrderStatus(Long id);
+    OrderDto.BillingDetailsDto getBillingDetailsById(Long id);
 }

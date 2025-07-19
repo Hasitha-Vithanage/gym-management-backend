@@ -5,7 +5,7 @@ import java.util.List;
 
 public class OrderDto {
     // Order Data
-    private long orderId;
+    private long id;
     private LocalDate date;
     private double totalCost;
     private String orderedBy;
@@ -26,12 +26,12 @@ public class OrderDto {
         this.status = status;
     }
 
-    public long getOrderId() {
-        return orderId;
+    public long getId() {
+        return id;
     }
 
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public LocalDate getDate() {
