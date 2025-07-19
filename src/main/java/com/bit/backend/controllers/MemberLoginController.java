@@ -55,4 +55,10 @@ public class MemberLoginController {
         MemberLoginDto memberLoginDto = memberLoginServiceI.deleteMemberLogin(id);
         return ResponseEntity.ok().body(memberLoginDto);
     }
+
+    @GetMapping("/member-user-id/{id}")
+    public ResponseEntity<MemberLoginDto> getMemberLoginData(@PathVariable long id) {
+        MemberLoginDto memberLoginDto = memberLoginServiceI.getMemberLoginDataByMemberId(id);
+        return ResponseEntity.created(URI.create("/member-user-id" + memberLoginDto.getId())).body(memberLoginDto);
+    }
 }

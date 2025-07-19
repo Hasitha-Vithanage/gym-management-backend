@@ -121,4 +121,10 @@ public class MemberLoginService implements MemberLoginServiceI {
        }
     }
 
+    @Override
+    public MemberLoginDto getMemberLoginDataByMemberId(long id) {
+        MemberLoginEntity memberLoginEntity = memberLoginRepository.findByMember(id);
+        return memberLoginMapper.toMemberLoginDto(memberLoginEntity);
+    }
+
 }

@@ -13,4 +13,5 @@ public interface MemberLoginServiceI {
     List<MemberLoginDto> getMemberLoginEntity();
     MemberLoginDto deleteMemberLogin(long id);
     MemberLoginDto updateMemberLogin(MemberLoginDto memberLoginDto, long id);
+    MemberLoginDto getMemberLoginDataByMemberId(long id);
 }

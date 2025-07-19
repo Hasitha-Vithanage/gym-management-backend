@@ -116,5 +116,11 @@ public class TrainerLoginService implements TrainerLoginServiceI {
         }
     }
 
+    @Override
+    public TrainerLoginDto getEmployeeLoginDataByEmployeeId(long id) {
+        TrainerLoginEntity trainerLoginEntity = trainerLoginRepository.findByEmployee(id);
+        return trainerLoginMapper.toTrainerLoginDto(trainerLoginEntity);
+    }
+
 
 }
