@@ -1,8 +1,10 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.AssignTrainerDto;
+import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.PaymentsDto;
 import com.bit.backend.entities.AssignTrainerEntity;
+import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.entities.PaymentsEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.PaymentsMapper;
@@ -70,6 +72,18 @@ public class PaymentsService implements PaymentsServiceI {
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public PaymentsDto deletePayments(long id) {
+        Optional<PaymentsEntity> optionalPaymentsEntity = paymentsRepository.findById(id);
+        if (!optionalPaymentsEntity.isPresent()) {
+            throw new AppException("Payments Does Not Exist", HttpStatus.BAD_REQUEST);
+        }
+
+        paymentsRepository.deleteById(id);
+        PaymentsDto deletedDto = paymentsMapper.toPaymentsDto(optionalPaymentsEntity.get());
+        return deletedDto;
     }
 
     @Override

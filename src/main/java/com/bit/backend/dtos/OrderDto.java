@@ -9,6 +9,7 @@ public class OrderDto {
     private LocalDate date;
     private double totalCost;
     private String orderedBy;
+    private String status;
 
     // List of Order Items
     private List<OrderItemDto> orderItems;
@@ -17,6 +18,13 @@ public class OrderDto {
     private BillingDetailsDto billingDetails;
 
     // Getters and Setters
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public long getOrderId() {
         return orderId;

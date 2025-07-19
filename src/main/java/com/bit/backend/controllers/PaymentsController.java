@@ -1,6 +1,7 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.AssignTrainerDto;
+import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.PaymentsDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.PaymentsServiceI;
@@ -48,5 +49,11 @@ public class PaymentsController {
         } catch (Exception e) {
             throw new AppException("Failed to update the Payments information. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @DeleteMapping("/payments/{id}")
+    public ResponseEntity<PaymentsDto> deletePayments(@PathVariable long id) {
+        PaymentsDto paymentsDto = paymentsServiceI.deletePayments(id);
+        return ResponseEntity.ok().body(paymentsDto);
     }
 }

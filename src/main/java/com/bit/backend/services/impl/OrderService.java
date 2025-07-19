@@ -1,11 +1,10 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.OrderDto;
+import com.bit.backend.dtos.PaymentsDto;
 import com.bit.backend.dtos.SupplementInventoryDto;
-import com.bit.backend.entities.BillingDetailsEntity;
-import com.bit.backend.entities.OrderEntity;
-import com.bit.backend.entities.OrderItemEntity;
-import com.bit.backend.entities.SupplementInventoryEntity;
+import com.bit.backend.entities.*;
+import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.OrderMapper;
 import com.bit.backend.repositories.BillingDetailsRepository;
 import com.bit.backend.repositories.OrderItemRepository;
@@ -13,6 +12,7 @@ import com.bit.backend.repositories.OrderRepository;
 import com.bit.backend.repositories.SupplementInventoryRepository;
 import com.bit.backend.services.OrderServiceI;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -98,6 +98,25 @@ public class OrderService implements OrderServiceI {
         }
 
         return savedDto;
+    }
+
+    @Override
+    public List<OrderDto> getOrders() {
+        try {
+            // db operations and send data
+            List<OrderEntity> orderEntityList = orderRepository.findAll();
+            List<OrderDto> orderDtoList = orderMapper.toOrderDtoList(orderEntityList);
+            return orderDtoList;
+        } catch (Exception e) {
+            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public List<OrderDto> getOrdersOverLimit() {
+        List<OrderEntity> orderEntityList = orderRepository.getOrdersOverLimit();
+        List<OrderDto> orderDtoList = orderMapper.toOrderDtoList(orderEntityList);
+        return orderDtoList;
     }
 
 }

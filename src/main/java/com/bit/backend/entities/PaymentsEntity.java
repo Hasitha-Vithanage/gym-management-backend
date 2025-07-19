@@ -22,9 +22,11 @@ public class PaymentsEntity {
     @Column(name = "amount")
     private double amount;
 
-    @Column(name = "paymentDate", updatable = false)
-    @CreationTimestamp
+    @Column(name = "paymentDate")
     private LocalDate paymentDate;
+
+    @Column(name = "nextPaymentDate")
+    private LocalDate nextPaymentDate;
 
     @Column(name = "status")
     private String status;
@@ -32,12 +34,13 @@ public class PaymentsEntity {
     public PaymentsEntity() {
     }
 
-    public PaymentsEntity(long id, String member, String membershipCategory, double amount, LocalDate paymentDate, String status) {
+    public PaymentsEntity(long id, String member, String membershipCategory, double amount, LocalDate paymentDate, LocalDate nextPaymentDate, String status) {
         this.id = id;
         this.member = member;
         this.membershipCategory = membershipCategory;
         this.amount = amount;
         this.paymentDate = paymentDate;
+        this.nextPaymentDate = nextPaymentDate;
         this.status = status;
     }
 
@@ -79,6 +82,14 @@ public class PaymentsEntity {
 
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
+    }
+
+    public LocalDate getNextPaymentDate() {
+        return nextPaymentDate;
+    }
+
+    public void setNextPaymentDate(LocalDate nextPaymentDate) {
+        this.nextPaymentDate = nextPaymentDate;
     }
 
     public String getStatus() {
