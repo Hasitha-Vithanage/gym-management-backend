@@ -1,6 +1,7 @@
 package com.bit.backend.services;
 
 import com.bit.backend.dtos.*;
+import com.bit.backend.entities.User;
 
 import java.util.List;
 
@@ -10,4 +11,7 @@ public interface UserServiceI {
     List<Integer> getAuthIds(long userId);
     SystemPrivilegeListDto getSystemPrivileges();
     List<Integer> setSystemPrivileges(SystemPrivilegeListDto systemPrivilegeListDto);
+    UserDto findByLogin(String userName);
+    List<User> checkIfUserNameExistForOtherUsers(String userName, Long userId);
+    UserDto updatePassword(String userName, String password, Long userId);
 }

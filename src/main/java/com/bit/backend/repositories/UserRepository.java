@@ -29,4 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(nativeQuery = true, value = "SELECT id, description FROM get_available_system_auth_details WHERE assigned = 1")
     List<Tuple> getAssignedSystemPrivileges();
+
+    @Query(nativeQuery = true, value = "SELECT * FROM app_user WHERE login = :userName and id <> :userId")
+    List<User> checkIfUserNameExistForOtherUsers(String userName, Long userId);
 }
