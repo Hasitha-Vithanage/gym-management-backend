@@ -29,7 +29,8 @@ public class WorkoutPlanController {
             @RequestPart("workoutPlanTitle") String title,
             @RequestPart("planDescription") String description,
             @RequestPart("userId") String userId,
-            @RequestPart("pdf") MultipartFile file) {
+            @RequestPart("pdf") MultipartFile file,
+            @RequestPart("reqId") String reqId) {
 
         try {
             WorkoutPlanDto dto = new WorkoutPlanDto();
@@ -41,7 +42,7 @@ public class WorkoutPlanController {
             dto.setPdfType(file.getContentType());
 
             WorkoutPlanDto response = workoutPlanServiceI.addWorkoutPlanEntity(dto);
-            workoutPlanRequestServiceI.updateStatus(userId);
+            workoutPlanRequestServiceI.updateStatus(Long.parseLong(reqId));
 
             return ResponseEntity.created(URI.create("/workout-plan-upload/" + response.getId())).body(response);
         } catch (Exception e) {

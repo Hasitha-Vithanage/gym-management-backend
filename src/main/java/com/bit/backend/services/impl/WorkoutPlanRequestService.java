@@ -72,10 +72,10 @@ public class WorkoutPlanRequestService implements WorkoutPlanRequestServiceI {
     }
 
     @Override
-    public WorkoutPlanRequestDto updateStatus(String userId) {
+    public WorkoutPlanRequestDto updateStatus(long id) {
         try {
-            WorkoutPlanRequestEntity entity = workoutPlanRequestRepository.findByUserId(userId)
-                    .orElseThrow(() -> new AppException("Workout Plan Request does not exist for user: " + userId, HttpStatus.BAD_REQUEST));
+            WorkoutPlanRequestEntity entity = workoutPlanRequestRepository.findById(id)
+                    .orElseThrow(() -> new AppException("Workout Plan Request does not exist for user: " + id, HttpStatus.BAD_REQUEST));
 
             entity.setStatus("Uploaded");
             WorkoutPlanRequestEntity WorkoutPlanRequestEntity =  workoutPlanRequestRepository.save(entity);

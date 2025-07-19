@@ -13,5 +13,5 @@ public interface WorkoutPlanRequestServiceI {
 
     WorkoutPlanRequestDto deleteWorkoutPlanRequest(long id);
 
-    WorkoutPlanRequestDto updateStatus(String userId);
+    WorkoutPlanRequestDto updateStatus(long id);
 }

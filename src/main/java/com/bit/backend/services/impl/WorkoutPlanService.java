@@ -7,6 +7,7 @@ import com.bit.backend.entities.WorkoutPlanEntity;
 import com.bit.backend.entities.WorkoutPlanRequestEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.WorkoutPlanMapper;
+import com.bit.backend.repositories.AssignTrainerRepository;
 import com.bit.backend.repositories.WorkoutPlanRepository;
 import com.bit.backend.services.WorkoutPlanServiceI;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,12 @@ public class WorkoutPlanService implements WorkoutPlanServiceI {
 
     private final WorkoutPlanRepository workoutPlanRepository;
     private final WorkoutPlanMapper workoutPlanMapper;
+    private final AssignTrainerRepository assignTrainerRepository;
 
-    public WorkoutPlanService(WorkoutPlanRepository workoutPlanRepository, WorkoutPlanMapper workoutPlanMapper) {
+    public WorkoutPlanService(WorkoutPlanRepository workoutPlanRepository, WorkoutPlanMapper workoutPlanMapper, AssignTrainerRepository assignTrainerRepository) {
         this.workoutPlanRepository = workoutPlanRepository;
         this.workoutPlanMapper = workoutPlanMapper;
+        this.assignTrainerRepository = assignTrainerRepository;
     }
 
     @Override

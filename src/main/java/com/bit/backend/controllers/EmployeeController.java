@@ -1,5 +1,6 @@
 package com.bit.backend.controllers;
 
+import com.bit.backend.dtos.AssignTrainerDto;
 import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.exceptions.AppException;
@@ -90,6 +91,16 @@ public class EmployeeController {
             return ResponseEntity.ok(employeeCount);
         } catch (Exception e) {
             throw new AppException("Failed to get Employee Count", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/get-trainers-details/{trainerName}")
+    public ResponseEntity <EmployeeDto> getTrainerByName(@PathVariable String trainerName) {
+        try {
+            EmployeeDto employeeDto = employeeServiceI.getTrainerByName(trainerName);
+            return ResponseEntity.ok(employeeDto);
+        } catch (Exception e) {
+            throw new AppException("Failed to load Trainer records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

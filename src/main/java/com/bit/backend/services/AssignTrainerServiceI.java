@@ -11,4 +11,5 @@ public interface AssignTrainerServiceI {
     AssignTrainerDto updateAssignTrainer(long id, AssignTrainerDto assignTrainerDto);
     List<AssignTrainerDto> getAssignTrainer();
     AssignTrainerDto deleteAssignTrainer(long id);
+    AssignTrainerDto getAssignTrainerByMember(String member);
 }

@@ -20,4 +20,6 @@ public interface EmployeeServiceI {
     EmployeeDto getTrainerById(long id);
 
    Long getEmployeeCount();
+
+    EmployeeDto getTrainerByName(String trainerName);
 }

@@ -3,11 +3,14 @@ package com.bit.backend.controllers;
 import com.bit.backend.dtos.CommonDataDto;
 import com.bit.backend.dtos.CommonDataListDto;
 import com.bit.backend.entities.CommonDataEntity;
+import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.CommonDataServiceI;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/common-data-service")
@@ -53,5 +56,45 @@ public class CommonServiceController {
     public CommonDataListDto saveGroupUserData(@RequestBody CommonDataListDto commonDataListDto, @PathVariable int id) {
         CommonDataListDto savedData = commonDataServiceI.saveGroupUserData(id, commonDataListDto);
         return savedData;
+    }
+
+    @GetMapping("/employee-monthly-attendance")
+    public ResponseEntity<List<Map<String, Object>>> getMonthlyEmployeeAttendance() {
+        try {
+            List<Map<String, Object>> commonTaskStats = commonDataServiceI.getMonthlyEmployeeAttendance();
+            return ResponseEntity.ok(commonTaskStats);
+        } catch (Exception e) {
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/member-monthly-attendance")
+    public ResponseEntity<List<Map<String, Object>>> getMonthlyMemberAttendance() {
+        try {
+            List<Map<String, Object>> commonTaskStats = commonDataServiceI.getMonthlyMemberAttendance();
+            return ResponseEntity.ok(commonTaskStats);
+        } catch (Exception e) {
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/suppliment-orders-count-per-month")
+    public ResponseEntity<List<Map<String, Object>>> getMonthlySupplimentSalesCount() {
+        try {
+            List<Map<String, Object>> commonTaskStats = commonDataServiceI.getMonthlySupplimentSalesCount();
+            return ResponseEntity.ok(commonTaskStats);
+        } catch (Exception e) {
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/suppliment-orders-income-per-month")
+    public ResponseEntity<List<Map<String, Object>>> getMonthlySupplimentSalesIncome() {
+        try {
+            List<Map<String, Object>> commonTaskStats = commonDataServiceI.getMonthlySupplimentSalesIncome();
+            return ResponseEntity.ok(commonTaskStats);
+        } catch (Exception e) {
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

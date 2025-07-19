@@ -1,7 +1,9 @@
 package com.bit.backend.services.impl;
 
+import com.bit.backend.dtos.AssignTrainerDto;
 import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.MemberDto;
+import com.bit.backend.entities.AssignTrainerEntity;
 import com.bit.backend.entities.EmployeeEntity;
 import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.exceptions.AppException;
@@ -111,6 +113,18 @@ public class EmployeeService implements EmployeeServiceI {
         // call repository to get employee count
         long employeeCount = employeeRepository.count();
         return employeeCount;
+    }
+
+    @Override
+    public EmployeeDto getTrainerByName(String trainerName) {
+        try {
+            // db operations and send data
+            EmployeeEntity employeeEntity = employeeRepository.findByFirstName(trainerName);
+            EmployeeDto employeeDto = employeeMapper.toEmployeeDto(employeeEntity);
+            return employeeDto;
+        } catch (Exception e) {
+            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

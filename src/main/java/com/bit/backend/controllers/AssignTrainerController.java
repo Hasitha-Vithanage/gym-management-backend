@@ -2,6 +2,7 @@ package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.AssignTrainerDto;
 import com.bit.backend.dtos.EmployeeDto;
+import com.bit.backend.dtos.OrderDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.AssignTrainerServiceI;
 import org.springframework.http.HttpStatus;
@@ -57,6 +58,16 @@ public class AssignTrainerController {
             return ResponseEntity.ok(assignTrainerDto);
         } catch (Exception e) {
             throw new AppException("Failed to delete the AssignTrainer record. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/get-assign-trainer/{memberName}")
+    public ResponseEntity <AssignTrainerDto> getAssignTrainerByMember(@PathVariable String memberName) {
+        try {
+           AssignTrainerDto assignTrainerDto = assignTrainerServiceI.getAssignTrainerByMember(memberName);
+            return ResponseEntity.ok(assignTrainerDto);
+        } catch (Exception e) {
+            throw new AppException("Failed to load AssignTrainer records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

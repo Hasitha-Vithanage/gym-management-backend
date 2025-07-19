@@ -98,4 +98,16 @@ public class AssignTrainerService implements AssignTrainerServiceI {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public AssignTrainerDto getAssignTrainerByMember(String member) {
+        try {
+            // db operations and send data
+            AssignTrainerEntity assignTrainerEntity = assignTrainerRepository.findByMember(member);
+            AssignTrainerDto assignTrainerDto = assignTrainerMapper.toAssignTrainerDto(assignTrainerEntity);
+            return assignTrainerDto;
+        } catch (Exception e) {
+            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
