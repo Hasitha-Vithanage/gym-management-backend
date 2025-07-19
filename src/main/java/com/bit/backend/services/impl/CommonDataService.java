@@ -5,14 +5,15 @@ import com.bit.backend.dtos.CommonDataListDto;
 import com.bit.backend.entities.CommonDataEntity;
 import com.bit.backend.entities.PrivilegeGroupAuth;
 import com.bit.backend.entities.PrivilegeGroupUser;
+import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.CommonDataMapper;
-import com.bit.backend.repositories.CommonDataRepository;
-import com.bit.backend.repositories.PrivilegeGroupAuthRepository;
-import com.bit.backend.repositories.PrivilegeGroupUserRepository;
+import com.bit.backend.repositories.*;
 import com.bit.backend.services.CommonDataServiceI;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CommonDataService implements CommonDataServiceI {
@@ -21,15 +22,21 @@ public class CommonDataService implements CommonDataServiceI {
     private final CommonDataMapper commonDataMapper;
     private final PrivilegeGroupAuthRepository privilegeGroupAuthRepository;
     private final PrivilegeGroupUserRepository privilegeGroupUserRepository;
+    private final AttendanceRepository attendanceRepository;
+    private final OrderRepository orderRepository;
 
     CommonDataService(CommonDataRepository commonDataRepository,
                       CommonDataMapper commonDataMapper,
                       PrivilegeGroupAuthRepository privilegeGroupAuthRepository,
-                      PrivilegeGroupUserRepository privilegeGroupUserRepository) {
+                      PrivilegeGroupUserRepository privilegeGroupUserRepository,
+                      AttendanceRepository attendanceRepository,
+                      OrderRepository orderRepository) {
         this.commonDataRepository = commonDataRepository;
         this.commonDataMapper = commonDataMapper;
         this.privilegeGroupAuthRepository = privilegeGroupAuthRepository;
         this.privilegeGroupUserRepository = privilegeGroupUserRepository;
+        this.attendanceRepository = attendanceRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -116,5 +123,41 @@ public class CommonDataService implements CommonDataServiceI {
 
         }
         return commonDataListDto;
+    }
+
+    @Override
+    public List<Map<String, Object>> getMonthlyEmployeeAttendance() {
+        try {
+            return attendanceRepository.getMonthlyEmployeeAttendance();
+        } catch (Exception e) {
+            throw new AppException("Request failed with error while getting data to stat charts: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> getMonthlyMemberAttendance() {
+        try {
+            return attendanceRepository.getMonthlyMemberAttendance();
+        } catch (Exception e) {
+            throw new AppException("Request failed with error while getting data to stat charts: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> getMonthlySupplimentSalesCount() {
+        try {
+            return orderRepository.getSupplimentOrderCountByMonth();
+        } catch (Exception e) {
+            throw new AppException("Request failed with error while getting data to stat charts: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> getMonthlySupplimentSalesIncome() {
+        try {
+            return orderRepository.getSupplimentOrderIncomeByMonth();
+        } catch (Exception e) {
+            throw new AppException("Request failed with error while getting data to stat charts: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
