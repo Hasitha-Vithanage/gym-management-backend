@@ -40,6 +40,16 @@ public class MemberLoginController {
         return ResponseEntity.ok(memberLoginDtoList);
     }
 
+    @PutMapping("/member-login/{id}")
+    public ResponseEntity<MemberLoginDto> updateMemberLogin(@RequestBody MemberLoginDto memberLoginDto, @PathVariable long id) {
+        try {
+            MemberLoginDto memberLoginDtoResponse = memberLoginServiceI.updateMemberLogin(memberLoginDto, id);
+            return ResponseEntity.created(URI.create("/member-login" + memberLoginDtoResponse.getId())).body(memberLoginDtoResponse);
+        } catch (Exception e) {
+            throw new AppException("Assign Login failed. Please try again later. " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/member-login/{id}")
     public ResponseEntity<MemberLoginDto> deleteMemberLogin(@PathVariable long id) {
         MemberLoginDto memberLoginDto = memberLoginServiceI.deleteMemberLogin(id);

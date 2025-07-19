@@ -23,15 +23,27 @@ public class MemberLoginEntity {
     @Column(name = "userName")
     private String userName;
 
+    @Column(name="role")
+    private String role;
+
+    @Column(name="userId")
+    private Long userId;
+
+    @Column(name="member")
+    private Long member;
+
     public MemberLoginEntity() {
     }
 
-    public MemberLoginEntity(long id, long memberId, String firstName, String lastName, String userName) {
+    public MemberLoginEntity(long id, long memberId, String firstName, String lastName, String userName, String role, Long userId, Long member) {
         this.id = id;
         this.memberId = memberId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
+        this.role = role;
+        this.userId = userId;
+        this.member = member;
     }
 
     public long getId() {
@@ -72,5 +84,29 @@ public class MemberLoginEntity {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getMember() {
+        return member;
+    }
+
+    public void setMember(Long member) {
+        this.member = member;
     }
 }
