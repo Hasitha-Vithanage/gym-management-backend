@@ -11,4 +11,5 @@ public interface TrainerLoginServiceI {
     TrainerLoginDto addTrainerLoginEntity(TrainerLoginDto trainerLoginDto);
     List<TrainerLoginDto> getTrainerLoginEntity();
     TrainerLoginDto updateTrainerLoginEntity(TrainerLoginDto trainerLoginDto, long id);
+    TrainerLoginDto getEmployeeLoginDataByEmployeeId(long id);
 }

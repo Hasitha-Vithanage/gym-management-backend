@@ -49,4 +49,10 @@ public class TrainerLoginController {
             throw new AppException("Assign Login failed. Please try again later. " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/trainer-user-id/{id}")
+    public ResponseEntity<TrainerLoginDto> getEmployeeLoginData(@PathVariable long id) {
+        TrainerLoginDto trainerLoginDtoResponse = trainerLoginServiceI.getEmployeeLoginDataByEmployeeId(id);
+        return ResponseEntity.created(URI.create("/trainer-user-id" + trainerLoginDtoResponse.getId())).body(trainerLoginDtoResponse);
+    }
 }
