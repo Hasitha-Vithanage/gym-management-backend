@@ -1,0 +1,17 @@
+package com.bit.backend.services;
+
+import com.bit.backend.dtos.MemberDto;
+import com.bit.backend.dtos.MemberLoginDto;
+import com.bit.backend.dtos.TrainerLoginDto;
+
+import java.util.List;
+
+public interface MemberLoginServiceI {
+
+    MemberLoginDto addMemberLoginEntity(MemberLoginDto memberLoginDto);
+
+    List<MemberLoginDto> getMemberLoginEntity();
+    MemberLoginDto deleteMemberLogin(long id);
+    MemberLoginDto updateMemberLogin(MemberLoginDto memberLoginDto, long id);
+    MemberLoginDto getMemberLoginDataByMemberId(long id);
+}
