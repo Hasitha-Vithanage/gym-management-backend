@@ -73,16 +73,34 @@ public class MemberService implements MemberServiceI {
         return savedDto;
     }
 
+//    @Override
+//    public MemberDto deleteMember(long id) {
+//        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
+//        if (!optionalMemberEntity.isPresent()) {
+//            throw new AppException("Member Does Not Exist", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        memberRepository.deleteById(id);
+//        MemberDto deletedDto = memberMapper.toMemberDto(optionalMemberEntity.get());
+//        return deletedDto;
+//    }
+
     @Override
     public MemberDto deleteMember(long id) {
-        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
-        if (!optionalMemberEntity.isPresent()) {
-            throw new AppException("Member Does Not Exist", HttpStatus.BAD_REQUEST);
-        }
+        try {
+            MemberEntity existingMember = memberRepository.findById(id)
+                    .orElseThrow(() -> new AppException("Member does not exist", HttpStatus.BAD_REQUEST));
 
-        memberRepository.deleteById(id);
-        MemberDto deletedDto = memberMapper.toMemberDto(optionalMemberEntity.get());
-        return deletedDto;
+            // Soft delete by setting isDeleted flag to true
+            existingMember.setDeleted(true);
+
+            MemberEntity updatedMember = memberRepository.save(existingMember);
+
+            return memberMapper.toMemberDto(updatedMember);
+
+        } catch (Exception e) {
+            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override

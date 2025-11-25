@@ -25,14 +25,15 @@ public class EmployeeDto {
     private String imageName;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imageType;
-    private boolean isDeleted;
-
+    private Boolean isDeleted;
 
     public EmployeeDto() {
     }
-    
 
-    public EmployeeDto(Long id, String employeeId, String jobTitle, LocalDate dateOfJoining, String firstName, String lastName, String nic, LocalDate dateOfBirth, String gender, String address, String email, String phoneNumber, String emergencyContactNumber, byte[] image, String imageName, String imageType, boolean isDeleted) {
+    public EmployeeDto(Long id, String employeeId, String jobTitle, LocalDate dateOfJoining, String firstName,
+            String lastName, String nic, LocalDate dateOfBirth, String gender, String address, String email,
+            String phoneNumber, String emergencyContactNumber, byte[] image, String imageName, String imageType,
+            Boolean isDeleted) {
         this.id = id;
         this.employeeId = employeeId;
         this.jobTitle = jobTitle;
@@ -182,15 +183,15 @@ public class EmployeeDto {
         this.imageType = imageType;
     }
 
-    public boolean isIsDeleted() {
+    public Boolean isIsDeleted() {
         return this.isDeleted;
     }
 
-    public boolean getIsDeleted() {
+    public Boolean getIsDeleted() {
         return this.isDeleted;
     }
 
-    public void setIsDeleted(boolean isDeleted) {
+    public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 

@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class EmployeeController {
@@ -24,14 +25,16 @@ public class EmployeeController {
         this.employeeServiceI = employeeServiceI;
     }
 
-    @PostMapping(value = {"/employee"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<EmployeeDto> addEmployee(@RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file) {
+    @PostMapping(value = { "/employee" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<EmployeeDto> addEmployee(@RequestPart("employeeForm") EmployeeDto employeeDto,
+            @RequestPart("image") MultipartFile file) {
         try {
             employeeDto.setImage(file.getBytes());
             employeeDto.setImageName(file.getOriginalFilename());
             employeeDto.setImageType(file.getContentType());
             EmployeeDto employeeDtoResponse = employeeServiceI.addEmployeeEntity(employeeDto);
-            return ResponseEntity.created(URI.create("/employee"+employeeDtoResponse.getFirstName())).body(employeeDtoResponse);
+            return ResponseEntity.created(URI.create("/employee" + employeeDtoResponse.getFirstName()))
+                    .body(employeeDtoResponse);
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -43,7 +46,8 @@ public class EmployeeController {
             List<EmployeeDto> employeeDtoList = employeeServiceI.getEmployee();
             return ResponseEntity.ok(employeeDtoList);
         } catch (Exception e) {
-            throw new AppException("Failed to load employee records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to load employee records. Please try again later." + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -57,12 +61,13 @@ public class EmployeeController {
     public ResponseEntity<List<EmployeeDto>> getTrainers() {
         // calling service through interface
 
-        List<EmployeeDto>  employeeDtoList = employeeServiceI.getTrainers();
+        List<EmployeeDto> employeeDtoList = employeeServiceI.getTrainers();
         return ResponseEntity.ok(employeeDtoList);
     }
 
     @PutMapping("employee/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable long id, @RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file) {
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable long id,
+            @RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file) {
         try {
             employeeDto.setImage(file.getBytes());
             employeeDto.setImageName(file.getOriginalFilename());
@@ -70,17 +75,37 @@ public class EmployeeController {
             EmployeeDto employeeDtoResponse = employeeServiceI.updateEmployee(id, employeeDto);
             return ResponseEntity.ok(employeeDtoResponse);
         } catch (Exception e) {
-            throw new AppException("Failed to update the employee information. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to update the employee information. Please try again later." + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("employee/{id}")
-    public ResponseEntity<EmployeeDto> deleteEmployee(@PathVariable long id) {
+    // @DeleteMapping("employee/{id}")
+    // public ResponseEntity<EmployeeDto> deleteEmployee(@PathVariable long id) {
+    // try {
+    // EmployeeDto employeeDto = employeeServiceI.deleteEmployee(id);
+    // return ResponseEntity.ok(employeeDto);
+    // } catch (Exception e) {
+    // throw new AppException("Failed to delete the employee record. Please try
+    // again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+    // }
+
+    @PutMapping("/employee/delete/{id}")
+    public ResponseEntity<EmployeeDto> deleteEmployee(@PathVariable long id, @RequestBody Map<String, Object> request) {
         try {
+            boolean isDelete = (boolean) request.getOrDefault("isDelete", false);
+
+            if (!isDelete) {
+                throw new AppException("Invalid delete request", HttpStatus.BAD_REQUEST);
+            }
+
             EmployeeDto employeeDto = employeeServiceI.deleteEmployee(id);
             return ResponseEntity.ok(employeeDto);
+
         } catch (Exception e) {
-            throw new AppException("Failed to delete the employee record. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete the employee record. Please try again later." + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -95,12 +120,13 @@ public class EmployeeController {
     }
 
     @GetMapping("/get-trainers-details/{trainerName}")
-    public ResponseEntity <EmployeeDto> getTrainerByName(@PathVariable String trainerName) {
+    public ResponseEntity<EmployeeDto> getTrainerByName(@PathVariable String trainerName) {
         try {
             EmployeeDto employeeDto = employeeServiceI.getTrainerByName(trainerName);
             return ResponseEntity.ok(employeeDto);
         } catch (Exception e) {
-            throw new AppException("Failed to load Trainer records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to load Trainer records. Please try again later." + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

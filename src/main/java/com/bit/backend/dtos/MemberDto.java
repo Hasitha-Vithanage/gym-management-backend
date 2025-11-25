@@ -27,11 +27,14 @@ public class MemberDto {
     private String imageName;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String imageType;
+    private Boolean isDeleted;
 
     public MemberDto() {
     }
 
-    public MemberDto(long id, String memberNo, String firstName, String lastName, LocalDate dateOfBirth, String address, String phoneNumber, String email, String nic, String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory, byte[] image, String imageName, String imageType) {
+    public MemberDto(long id, String memberNo, String firstName, String lastName, LocalDate dateOfBirth, String address, String phoneNumber, String email, String nic,
+                     String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory, byte[] image,
+                     String imageName, String imageType, Boolean isDeleted) {
         this.id = id;
         this.memberNo = memberNo;
         this.firstName = firstName;
@@ -50,6 +53,7 @@ public class MemberDto {
         this.image = image;
         this.imageName = imageName;
         this.imageType = imageType;
+        this.isDeleted = isDeleted;
     }
 
     public long getId() {
@@ -194,5 +198,13 @@ public class MemberDto {
 
     public void setImageType(String imageType) {
         this.imageType = imageType;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

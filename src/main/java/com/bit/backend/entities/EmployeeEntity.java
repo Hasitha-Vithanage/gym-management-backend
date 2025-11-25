@@ -60,14 +60,15 @@ public class EmployeeEntity {
     private String imageType;
 
     @Column(name = "is_deleted")
-    private boolean isDeleted;
-
+    private Boolean isDeleted = Boolean.FALSE;
 
     public EmployeeEntity() {
     }
 
-
-    public EmployeeEntity(Long id, String employeeId, String jobTitle, LocalDate dateOfJoining, String firstName, String lastName, String nic, LocalDate dateOfBirth, String gender, String address, String email, String phoneNumber, String emergencyContactNumber, byte[] image, String imageName, String imageType, boolean isDeleted) {
+    public EmployeeEntity(Long id, String employeeId, String jobTitle, LocalDate dateOfJoining, String firstName,
+            String lastName, String nic, LocalDate dateOfBirth, String gender, String address, String email,
+            String phoneNumber, String emergencyContactNumber, byte[] image, String imageName, String imageType,
+            Boolean isDeleted) {
         this.id = id;
         this.employeeId = employeeId;
         this.jobTitle = jobTitle;
@@ -217,15 +218,15 @@ public class EmployeeEntity {
         this.imageType = imageType;
     }
 
-    public boolean isIsDeleted() {
+    public Boolean isIsDeleted() {
         return this.isDeleted;
     }
 
-    public boolean getIsDeleted() {
+    public Boolean getIsDeleted() {
         return this.isDeleted;
     }
 
-    public void setIsDeleted(boolean isDeleted) {
+    public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 

@@ -65,10 +65,15 @@ public class MemberEntity {
     @Column(name = "image_type")
     private String imageType;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
+
     public MemberEntity() {
     }
 
-    public MemberEntity(Long id, String memberNo, String firstName, String lastName, LocalDate dateOfBirth, String address, String phoneNumber, String email, String nic, String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory, byte[] image, String imageName, String imageType) {
+    public MemberEntity(Long id, String memberNo, String firstName, String lastName, LocalDate dateOfBirth, String address, String phoneNumber, String email,
+                        String nic, String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory,
+                        byte[] image, String imageName, String imageType, Boolean isDeleted) {
         this.id = id;
         this.memberNo = memberNo;
         this.firstName = firstName;
@@ -87,6 +92,7 @@ public class MemberEntity {
         this.image = image;
         this.imageName = imageName;
         this.imageType = imageType;
+        this.isDeleted = isDeleted;
     }
 
     public Long getId() {
@@ -231,5 +237,13 @@ public class MemberEntity {
 
     public void setImageType(String imageType) {
         this.imageType = imageType;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

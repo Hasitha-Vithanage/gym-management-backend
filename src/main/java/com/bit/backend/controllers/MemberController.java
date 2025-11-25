@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class MemberController {
@@ -61,10 +62,28 @@ public class MemberController {
         }
     }
 
-    @DeleteMapping("/member/{id}")
-    public ResponseEntity<MemberDto> deleteMember(@PathVariable long id) {
-        MemberDto memberDto = memberServiceI.deleteMember(id);
-        return ResponseEntity.ok().body(memberDto);
+//    @DeleteMapping("/member/{id}")
+//    public ResponseEntity<MemberDto> deleteMember(@PathVariable long id) {
+//        MemberDto memberDto = memberServiceI.deleteMember(id);
+//        return ResponseEntity.ok().body(memberDto);
+//    }
+
+    @PutMapping("/member/delete/{id}")
+    public ResponseEntity<MemberDto> deleteMember(@PathVariable long id, @RequestBody Map<String, Object> request) {
+        try {
+            boolean isDelete = (boolean) request.getOrDefault("isDelete", false);
+
+            if (!isDelete) {
+                throw new AppException("Invalid delete request", HttpStatus.BAD_REQUEST);
+            }
+
+            MemberDto memberDto = memberServiceI.deleteMember(id);
+            return ResponseEntity.ok(memberDto);
+
+        } catch (Exception e) {
+            throw new AppException("Failed to delete the member record. Please try again later." + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/membership-category/{firstName}")

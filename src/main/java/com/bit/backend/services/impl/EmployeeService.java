@@ -75,19 +75,40 @@ public class EmployeeService implements EmployeeServiceI {
         }
     }
 
+    // @Override
+    // public EmployeeDto deleteEmployee(long id) {
+    // try {
+    // Optional<EmployeeEntity> optionalEmployeeEntity =
+    // employeeRepository.findById(id);
+
+    // if (!optionalEmployeeEntity.isPresent()) {
+    // throw new AppException("Employee Does Not Exsist", HttpStatus.BAD_REQUEST);
+    // }
+
+    // employeeRepository.deleteById(id);
+
+    // EmployeeDto employeeDto =
+    // employeeMapper.toEmployeeDto(optionalEmployeeEntity.get());
+    // return employeeDto;
+    // } catch (Exception e) {
+    // throw new AppException("Request failed with error: " + e,
+    // HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+    // }
+
     @Override
     public EmployeeDto deleteEmployee(long id) {
         try {
-            Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.findById(id);
+            EmployeeEntity existingEmployee = employeeRepository.findById(id)
+                    .orElseThrow(() -> new AppException("Employee does not exist", HttpStatus.BAD_REQUEST));
 
-            if (!optionalEmployeeEntity.isPresent()) {
-                throw new AppException("Employee Does Not Exsist", HttpStatus.BAD_REQUEST);
-            }
+            // Soft delete by setting isDeleted flag to true
+            existingEmployee.setIsDeleted(true);
 
-            employeeRepository.deleteById(id);
+            EmployeeEntity updatedEmployee = employeeRepository.save(existingEmployee);
 
-            EmployeeDto employeeDto = employeeMapper.toEmployeeDto(optionalEmployeeEntity.get());
-            return employeeDto;
+            return employeeMapper.toEmployeeDto(updatedEmployee);
+
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
