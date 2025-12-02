@@ -37,7 +37,9 @@ public class UserService implements UserServiceI {
     @Override
     public UserDto login(CredentialsDto credentialsDto) {
         logger.debug("Entering in login Method...");
-        User user = userRepository.findByLogin(credentialsDto.login()).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
+
+        User user = userRepository.findByLoginAndStatus(credentialsDto.login(), "APPROVED")
+                .orElseThrow(() -> new AppException("Unknown or unapproved user", HttpStatus.NOT_FOUND));
 
         if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), user.getPassword())) {
             return userMapper.toUserDto(user);

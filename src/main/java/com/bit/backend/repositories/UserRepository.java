@@ -16,6 +16,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByLogin(String login);
 
+    Optional<User> findByLoginAndStatus(String login, String status);
+
     @Query(nativeQuery = true, value = "select auth_details.auth_id as auth_id, :userId as user_id from " +
                                        "(select * from auth_group_users auth_users where auth_users.user_Id = :userId) auth_users\n" +
                                        "join (select * from ems.auth_group_authentication auth_details) as auth_details\n" +

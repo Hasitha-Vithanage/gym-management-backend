@@ -30,7 +30,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public String sendTrialRequestEmail(String firstName, String lastName, String email, String phoneNumber, String messageContent) {
+    public String sendTrialRequestEmail(String firstName, String lastName, String userName, String email, String password) {
         try {
             // Create a MimeMessage
             MimeMessage message = mailSender.createMimeMessage();
@@ -65,9 +65,8 @@ public class EmailService {
                     "  <div class='container'>" +
                     "    <h2>New Trial Request</h2>" +
                     "    <p><span class='label'>Name:</span> " + firstName + " " + lastName + "</p>" +
+                    "    <p><span class='label'>User Name:</span> " + userName + "</p>" +
                     "    <p><span class='label'>Email:</span> " + email + "</p>" +
-                    "    <p><span class='label'>Phone Number:</span> " + phoneNumber + "</p>" +
-                    "    <p><span class='label'>Message:</span><br>" + messageContent + "</p>" +
                     "    <a href='https://yourdomain.com/accept-request?userId=12345' class='button'>Accept Request</a>" +
                     "    <div class='footer'>This email was generated automatically by Combat Fitness Gym Management System.</div>" +
                     "  </div>" +

@@ -9,13 +9,15 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, String login, String password, String role, Long employeeLoginId, Long customerLoginId) {
+    public User(Long id, String firstName, String lastName, String login, String email, String password, String role, String status, Long employeeLoginId, Long customerLoginId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
+        this.email = email;
         this.password = password;
         this.role = role;
+        this.status = status;
         this.employeeLoginId = employeeLoginId;
         this.customerLoginId = customerLoginId;
     }
@@ -33,11 +35,17 @@ public class User {
     @Column(nullable = false)
     private String login;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(nullable = false)
     private String password;
 
     @Column(name = "role")
     private String role;
+
+    @Column(name = "status")
+    private String status;
 
     @Column(name = "employeeLoginId")
     private Long employeeLoginId;
@@ -77,6 +85,14 @@ public class User {
         this.login = login;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -91,6 +107,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getEmployeeLoginId() {

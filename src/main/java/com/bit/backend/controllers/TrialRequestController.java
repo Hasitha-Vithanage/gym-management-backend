@@ -26,9 +26,9 @@ public class TrialRequestController {
         emailService.sendTrialRequestEmail(
                 data.get("firstName"),
                 data.get("lastName"),
+                data.get("userName"),
                 data.get("email"),
-                data.get("phoneNumber"),
-                data.get("message")
+                data.get("password")
         );
 
         return ResponseEntity.ok("Email Sent Successfully");
