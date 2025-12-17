@@ -1,6 +1,7 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.*;
+import com.bit.backend.entities.EmployeeEntity;
 import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
@@ -153,5 +154,17 @@ public class UserService implements UserServiceI {
         User userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + userId));
         return userMapper.toUserDto(userEntity);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        try {
+            // db operations and send data
+            List<User> userEntityList = userRepository.findAll();
+//            List<EmployeeDto> employeeDtoList = employeeMapper.toEmployeeDto(employeeEntityList);
+            return userEntityList;
+        } catch (Exception e) {
+            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

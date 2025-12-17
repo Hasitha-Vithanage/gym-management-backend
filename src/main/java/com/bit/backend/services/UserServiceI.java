@@ -15,4 +15,5 @@ public interface UserServiceI {
     List<User> checkIfUserNameExistForOtherUsers(String userName, Long userId);
     UserDto updatePassword(String userName, String password, Long userId);
     UserDto getUserById(long userId);
+    List<User> getAllUsers();
 }

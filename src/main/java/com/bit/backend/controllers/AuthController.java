@@ -2,6 +2,8 @@ package com.bit.backend.controllers;
 
 import com.bit.backend.config.UserAuthProvider;
 import com.bit.backend.dtos.*;
+import com.bit.backend.entities.User;
+import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.UserServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +60,17 @@ public class AuthController {
     public ResponseEntity<UserDto> getUserById(@PathVariable long id) {
         UserDto user = userServiceI.getUserById(id);
         return ResponseEntity.ok().body(user);
+    }
+
+    @GetMapping("/get-all-users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        try {
+            List<User> usesList = userServiceI.getAllUsers();
+            return ResponseEntity.ok(usesList);
+        } catch (Exception e) {
+            throw new AppException("Failed to load users records. Please try again later." + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 //    @PostMapping("/system-privileges")
