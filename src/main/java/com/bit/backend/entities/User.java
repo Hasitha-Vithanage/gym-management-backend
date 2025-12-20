@@ -2,6 +2,8 @@ package com.bit.backend.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "app_user")
 public class User {
@@ -9,7 +11,7 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String firstName, String lastName, String login, String email, String password, String role, String status, Long employeeLoginId, Long customerLoginId) {
+    public User(Long id, String firstName, String lastName, String login, String email, String password, String role, String status, LocalDate requestedDate, Long employeeLoginId, Long customerLoginId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -18,6 +20,7 @@ public class User {
         this.password = password;
         this.role = role;
         this.status = status;
+        this.requestedDate = requestedDate;
         this.employeeLoginId = employeeLoginId;
         this.customerLoginId = customerLoginId;
     }
@@ -46,6 +49,9 @@ public class User {
 
     @Column(name = "status")
     private String status;
+
+    @Column(name = "requestedDate")
+    private LocalDate requestedDate;
 
     @Column(name = "employeeLoginId")
     private Long employeeLoginId;
@@ -115,6 +121,14 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public LocalDate getRequestedDate() {
+        return requestedDate;
+    }
+
+    public void setRequestedDate(LocalDate requestedDate) {
+        this.requestedDate = requestedDate;
     }
 
     public Long getEmployeeLoginId() {

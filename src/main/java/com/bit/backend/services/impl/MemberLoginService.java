@@ -41,7 +41,7 @@ public class MemberLoginService implements MemberLoginServiceI {
             memberLoginDto.setPassword(null);
 
             SignUpDto signUpDto = new SignUpDto(memberLoginDto.getFirstName(), memberLoginDto.getLastName(), memberLoginDto.getUserName(), null,
-                    password.toCharArray(), memberLoginDto.getRole(), null, null, memberLoginDto.getMember());
+                    password.toCharArray(), memberLoginDto.getRole(), null, null, null, memberLoginDto.getMember());
 
             /* Check if login already exists for the member */
             MemberLoginEntity memberLoginEntityCheck = memberLoginRepository.findByMember(memberLoginDto.getMember());

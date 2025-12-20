@@ -43,7 +43,7 @@ public class TrainerLoginService implements TrainerLoginServiceI {
             trainerLoginDto.setPassword(null);
 
             SignUpDto signUpDto = new SignUpDto(trainerLoginDto.getFirstName(), trainerLoginDto.getLastName(), trainerLoginDto.getUserName(), null,
-                    password.toCharArray(), trainerLoginDto.getRole(), null, trainerLoginDto.getEmployee(), null);
+                    password.toCharArray(), trainerLoginDto.getRole(), null, null, trainerLoginDto.getEmployee(), null);
 
             /* Check if login already exists for the trainer */
             TrainerLoginEntity trainerLoginEntityCheck = trainerLoginRepository.findByEmployee(trainerLoginDto.getEmployee());

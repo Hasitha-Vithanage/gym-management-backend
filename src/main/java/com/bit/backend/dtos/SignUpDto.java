@@ -1,5 +1,7 @@
 package com.bit.backend.dtos;
 
+import java.time.LocalDate;
+
 public record SignUpDto(
         String firstName,
         String lastName,
@@ -8,6 +10,7 @@ public record SignUpDto(
         char[] password,
         String role,
         String status,
+        LocalDate requestedDate,
         Long employeeLoginId,
         Long customerLoginId) {
 }
