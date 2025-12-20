@@ -16,4 +16,6 @@ public interface UserServiceI {
     UserDto updatePassword(String userName, String password, Long userId);
     UserDto getUserById(long userId);
     List<User> getAllUsers();
+    UserDto approveUser(long userId);
+    UserDto rejectUser(long userId);
 }

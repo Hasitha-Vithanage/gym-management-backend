@@ -167,4 +167,24 @@ public class UserService implements UserServiceI {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public UserDto approveUser(long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
+
+        user.setStatus("Approved");
+        User updatedUser = userRepository.save(user);
+        UserDto userDto = userMapper.toUserDto(updatedUser);
+        return (userDto);
+    }
+
+    @Override
+    public UserDto rejectUser(long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
+
+        user.setStatus("Rejected");
+        User updatedUser = userRepository.save(user);
+        UserDto userDto = userMapper.toUserDto(updatedUser);
+        return (userDto);
+    }
 }

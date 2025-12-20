@@ -4,6 +4,7 @@ import com.bit.backend.config.UserAuthProvider;
 import com.bit.backend.dtos.*;
 import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
+import com.bit.backend.mappers.UserMapper;
 import com.bit.backend.services.UserServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AuthController {
@@ -72,6 +74,35 @@ public class AuthController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/approve-user/{id}")
+    public ResponseEntity<UserDto> approveUser(@PathVariable long id) {
+        try {
+
+            UserDto userDto = userServiceI.approveUser(id);
+
+            return ResponseEntity.ok(userDto);
+
+        } catch (Exception e) {
+            throw new AppException("Failed to approve user request. Please try again later." + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/reject-user/{id}")
+    public ResponseEntity<UserDto> rejectUser(@PathVariable long id) {
+        try {
+
+            UserDto userDto = userServiceI.rejectUser(id);
+
+            return ResponseEntity.ok(userDto);
+
+        } catch (Exception e) {
+            throw new AppException("Failed to reject user request. Please try again later." + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 //    @PostMapping("/system-privileges")
 //    public ResponseEntity<List<Integer>> saveSystemPrivileges(@RequestBody SystemPrivilegeListDto systemPrivilegeListDto) {
