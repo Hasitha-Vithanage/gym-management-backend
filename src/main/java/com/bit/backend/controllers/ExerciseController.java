@@ -1,15 +1,11 @@
 package com.bit.backend.controllers;
 
-import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.ExerciseDto;
 import com.bit.backend.exceptions.AppException;
-import com.bit.backend.services.EmployeeServiceI;
 import com.bit.backend.services.ExerciseServiceI;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
