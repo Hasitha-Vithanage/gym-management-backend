@@ -1,5 +1,6 @@
 package com.bit.backend.controllers;
 
+import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.MembershipCategoryDto;
 import com.bit.backend.dtos.SupplierDto;
@@ -24,14 +25,16 @@ public class MemberController {
         this.memberServiceI = memberServiceI;
     }
 
-    @PostMapping(value = {"/member"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<MemberDto> addMember(@RequestPart("memberForm") MemberDto memberDto, @RequestPart("image") MultipartFile file) {
+    @PostMapping(value = { "/member" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<MemberDto> addMember(@RequestPart("memberForm") MemberDto memberDto,
+                                                   @RequestPart("image") MultipartFile file) {
         try {
             memberDto.setImage(file.getBytes());
             memberDto.setImageName(file.getOriginalFilename());
             memberDto.setImageType(file.getContentType());
             MemberDto memberDtoResponse = memberServiceI.addMemberEntity(memberDto);
-            return ResponseEntity.created(URI.create("/member"+memberDtoResponse.getFirstName())).body(memberDtoResponse);
+            return ResponseEntity.created(URI.create("/member" + memberDtoResponse.getFirstName()))
+                    .body(memberDtoResponse);
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

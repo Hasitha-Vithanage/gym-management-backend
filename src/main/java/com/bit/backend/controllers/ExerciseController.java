@@ -24,7 +24,7 @@ public class ExerciseController {
     public ResponseEntity<ExerciseDto> createExercise(@RequestPart("exerciseForm") ExerciseDto exerciseDto) {
         try {
             ExerciseDto exerciseDtoResponse = exerciseServiceI.createExerciseEntity(exerciseDto);
-            return ResponseEntity.created(URI.create("/exercise" + exerciseDtoResponse.getExerciseName()))
+            return ResponseEntity.created(URI.create("/exercise/" + exerciseDtoResponse.getId()))
                     .body(exerciseDtoResponse);
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);

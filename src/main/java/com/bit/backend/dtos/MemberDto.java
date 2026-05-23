@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class MemberDto {
 
-    private long id;
+    private Long id;
     private String memberNo;
     private String firstName;
     private String lastName;
@@ -32,9 +32,7 @@ public class MemberDto {
     public MemberDto() {
     }
 
-    public MemberDto(long id, String memberNo, String firstName, String lastName, LocalDate dateOfBirth, String address, String phoneNumber, String email, String nic,
-                     String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory, byte[] image,
-                     String imageName, String imageType, Boolean isDeleted) {
+    public MemberDto(Long id, String memberNo, String firstName, String lastName, LocalDate dateOfBirth, String address, String phoneNumber, String email, String nic, String emergencyContactNumber, String bloodType, LocalDate joinedDate, String gender, String injuries, String membershipCategory, byte[] image, String imageName, String imageType, Boolean isDeleted) {
         this.id = id;
         this.memberNo = memberNo;
         this.firstName = firstName;
@@ -56,11 +54,11 @@ public class MemberDto {
         this.isDeleted = isDeleted;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
