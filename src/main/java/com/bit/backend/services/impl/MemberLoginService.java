@@ -3,12 +3,16 @@ package com.bit.backend.services.impl;
 import com.bit.backend.dtos.*;
 import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.entities.MemberLoginEntity;
+import com.bit.backend.entities.PrivilegeGroup;
+import com.bit.backend.entities.PrivilegeGroupUser;
 import com.bit.backend.entities.TrainerLoginEntity;
 import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.MemberLoginMapper;
 import com.bit.backend.mappers.TrainerLoginMapper;
 import com.bit.backend.repositories.MemberLoginRepository;
+import com.bit.backend.repositories.PrivilegeGroupRepository;
+import com.bit.backend.repositories.PrivilegeGroupUserRepository;
 import com.bit.backend.repositories.TrainerLoginRepository;
 import com.bit.backend.services.MemberLoginServiceI;
 import com.bit.backend.services.UserServiceI;
@@ -24,11 +28,17 @@ public class MemberLoginService implements MemberLoginServiceI {
     private final MemberLoginRepository memberLoginRepository;
     private final MemberLoginMapper memberLoginMapper;
     private final UserServiceI userServiceI;
+    private final PrivilegeGroupRepository privilegeGroupRepository;
+    private final PrivilegeGroupUserRepository privilegeGroupUserRepository;
 
-    public MemberLoginService(MemberLoginRepository memberLoginRepository, MemberLoginMapper memberLoginMapper, UserServiceI userServiceI) {
+    public MemberLoginService(MemberLoginRepository memberLoginRepository, MemberLoginMapper memberLoginMapper,
+                              UserServiceI userServiceI, PrivilegeGroupRepository privilegeGroupRepository,
+                              PrivilegeGroupUserRepository privilegeGroupUserRepository) {
         this.memberLoginRepository = memberLoginRepository;
         this.memberLoginMapper = memberLoginMapper;
         this.userServiceI = userServiceI;
+        this.privilegeGroupRepository = privilegeGroupRepository;
+        this.privilegeGroupUserRepository = privilegeGroupUserRepository;
     }
 
     @Override
@@ -41,7 +51,7 @@ public class MemberLoginService implements MemberLoginServiceI {
             memberLoginDto.setPassword(null);
 
             SignUpDto signUpDto = new SignUpDto(memberLoginDto.getFirstName(), memberLoginDto.getLastName(), memberLoginDto.getUserName(), null,
-                    password.toCharArray(), memberLoginDto.getRole(), null, null, null, memberLoginDto.getMember());
+                    password.toCharArray(), memberLoginDto.getRole(), "APPROVED", null, null, memberLoginDto.getMember());
 
             /* Check if login already exists for the member */
             MemberLoginEntity memberLoginEntityCheck = memberLoginRepository.findByMember(memberLoginDto.getMember());
@@ -60,6 +70,17 @@ public class MemberLoginService implements MemberLoginServiceI {
             /*Create User Entity*/
             UserDto userDto = userServiceI.register(signUpDto);
             memberLoginDto.setUserId(userDto.getId());
+
+            /*Assign user to MEMBER privilege group automatically*/
+            Optional<List<PrivilegeGroup>> memberGroupOpt = privilegeGroupRepository.findByGroupNameAndStatus("MEMBER");
+            if (memberGroupOpt.isPresent() && !memberGroupOpt.get().isEmpty()) {
+                PrivilegeGroup memberGroup = memberGroupOpt.get().get(0);
+                PrivilegeGroupUser privilegeGroupUser = new PrivilegeGroupUser();
+                privilegeGroupUser.setAuthGroupId(memberGroup.getId().intValue());
+                privilegeGroupUser.setUserId(userDto.getId().intValue());
+                privilegeGroupUserRepository.save(privilegeGroupUser);
+            }
+
             /*Create Login Entity*/
             MemberLoginEntity memberLoginEntity = memberLoginMapper.toMemberLoginEntity(memberLoginDto);
             MemberLoginEntity savedItem = memberLoginRepository.save(memberLoginEntity);
