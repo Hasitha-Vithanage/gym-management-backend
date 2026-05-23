@@ -6,16 +6,20 @@ public class AssignTrainerDto {
 
     private long id;
     private String member;
+    private Long memberId;
     private String trainer;
+    private Long trainerId;
     private LocalDate date;
 
     public AssignTrainerDto() {
     }
 
-    public AssignTrainerDto(long id, String member, String trainer, LocalDate date) {
+    public AssignTrainerDto(long id, String member, Long memberId, String trainer, Long trainerId, LocalDate date) {
         this.id = id;
         this.member = member;
+        this.memberId = memberId;
         this.trainer = trainer;
+        this.trainerId = trainerId;
         this.date = date;
     }
 
@@ -35,12 +39,28 @@ public class AssignTrainerDto {
         this.member = member;
     }
 
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
+
     public String getTrainer() {
         return trainer;
     }
 
     public void setTrainer(String trainer) {
         this.trainer = trainer;
+    }
+
+    public Long getTrainerId() {
+        return trainerId;
+    }
+
+    public void setTrainerId(Long trainerId) {
+        this.trainerId = trainerId;
     }
 
     public LocalDate getDate() {

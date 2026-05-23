@@ -36,4 +36,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> checkIfUserNameExistForOtherUsers(String userName, Long userId);
 
     List<User> findByFirstName(String trainerName);
+
+    Optional<User> findByEmployeeLoginId(Long employeeLoginId);
 }

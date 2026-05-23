@@ -16,8 +16,14 @@ public class AssignTrainerEntity {
     @Column(name = "member")
     private String member;
 
+    @Column(name = "member_id")
+    private Long memberId;
+
     @Column(name = "trainer")
     private String trainer;
+
+    @Column(name = "trainer_id")
+    private Long trainerId;
 
     @Column(name = "date", updatable = false)
     @CreationTimestamp
@@ -26,10 +32,12 @@ public class AssignTrainerEntity {
     public AssignTrainerEntity() {
     }
 
-    public AssignTrainerEntity(long id, String member, String trainer, LocalDate date) {
+    public AssignTrainerEntity(long id, String member, Long memberId, String trainer, Long trainerId, LocalDate date) {
         this.id = id;
         this.member = member;
+        this.memberId = memberId;
         this.trainer = trainer;
+        this.trainerId = trainerId;
         this.date = date;
     }
 
@@ -49,12 +57,28 @@ public class AssignTrainerEntity {
         this.member = member;
     }
 
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
+
     public String getTrainer() {
         return trainer;
     }
 
     public void setTrainer(String trainer) {
         this.trainer = trainer;
+    }
+
+    public Long getTrainerId() {
+        return trainerId;
+    }
+
+    public void setTrainerId(Long trainerId) {
+        this.trainerId = trainerId;
     }
 
     public LocalDate getDate() {
