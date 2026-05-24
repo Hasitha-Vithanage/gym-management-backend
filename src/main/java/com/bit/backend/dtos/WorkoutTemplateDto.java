@@ -24,6 +24,10 @@ public class WorkoutTemplateDto {
     private List<String> equipmentRequired;
     private String suitableFor;
     private List<String> recommendedBMI;
+    private AgeRange ageRange;
+
+    // Derived
+    private Integer exerciseCount;
 
     // Meta
     private String status;
@@ -188,5 +192,38 @@ public class WorkoutTemplateDto {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public AgeRange getAgeRange() {
+        return ageRange;
+    }
+
+    public void setAgeRange(AgeRange ageRange) {
+        this.ageRange = ageRange;
+    }
+
+    public Integer getExerciseCount() {
+        return exerciseCount;
+    }
+
+    public void setExerciseCount(Integer exerciseCount) {
+        this.exerciseCount = exerciseCount;
+    }
+
+    public static class AgeRange {
+        private Integer min;
+        private Integer max;
+
+        public AgeRange() {}
+
+        public AgeRange(Integer min, Integer max) {
+            this.min = min;
+            this.max = max;
+        }
+
+        public Integer getMin() { return min; }
+        public void setMin(Integer min) { this.min = min; }
+        public Integer getMax() { return max; }
+        public void setMax(Integer max) { this.max = max; }
     }
 }

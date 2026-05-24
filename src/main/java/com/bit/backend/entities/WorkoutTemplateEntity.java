@@ -66,6 +66,13 @@ public class WorkoutTemplateEntity {
     @Column(name = "bmi_category")
     private List<String> recommendedBMI;
 
+    // Age range targeting
+    @Column(name = "min_age")
+    private Integer minAge;
+
+    @Column(name = "max_age")
+    private Integer maxAge;
+
     // Meta
     @Column(name = "status", nullable = false)
     private String status;
@@ -84,7 +91,7 @@ public class WorkoutTemplateEntity {
     public WorkoutTemplateEntity() {
     }
 
-    public WorkoutTemplateEntity(Long id, String templateName, String description, String goal, String difficultyLevel, String intensityLevel, String location, Integer durationMinutes, Integer daysPerWeek, Integer programLengthWeeks, List<String> equipmentRequired, String suitableFor, List<String> recommendedBMI, String status, Boolean isDeleted, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public WorkoutTemplateEntity(Long id, String templateName, String description, String goal, String difficultyLevel, String intensityLevel, String location, Integer durationMinutes, Integer daysPerWeek, Integer programLengthWeeks, List<String> equipmentRequired, String suitableFor, List<String> recommendedBMI, Integer minAge, Integer maxAge, String status, Boolean isDeleted, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.templateName = templateName;
         this.description = description;
@@ -98,6 +105,8 @@ public class WorkoutTemplateEntity {
         this.equipmentRequired = equipmentRequired;
         this.suitableFor = suitableFor;
         this.recommendedBMI = recommendedBMI;
+        this.minAge = minAge;
+        this.maxAge = maxAge;
         this.status = status;
         this.isDeleted = isDeleted;
         this.createdAt = createdAt;
@@ -206,6 +215,22 @@ public class WorkoutTemplateEntity {
 
     public void setRecommendedBMI(List<String> recommendedBMI) {
         this.recommendedBMI = recommendedBMI;
+    }
+
+    public Integer getMinAge() {
+        return minAge;
+    }
+
+    public void setMinAge(Integer minAge) {
+        this.minAge = minAge;
+    }
+
+    public Integer getMaxAge() {
+        return maxAge;
+    }
+
+    public void setMaxAge(Integer maxAge) {
+        this.maxAge = maxAge;
     }
 
     public String getStatus() {

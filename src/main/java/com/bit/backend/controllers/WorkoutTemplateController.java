@@ -41,6 +41,17 @@ public class WorkoutTemplateController {
         }
     }
 
+    @GetMapping("/workout-templates/{id}")
+    public ResponseEntity<WorkoutTemplateDto> getWorkoutTemplateById(@PathVariable long id) {
+        try {
+            WorkoutTemplateDto dto = workoutTemplateServiceI.getWorkoutTemplateById(id);
+            return ResponseEntity.ok(dto);
+        } catch (Exception e) {
+            throw new AppException("Failed to load workout template. Please try again later." + e,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/workout-templates")
     public ResponseEntity<List<WorkoutTemplateDto>> getAllExercise() {
         try {

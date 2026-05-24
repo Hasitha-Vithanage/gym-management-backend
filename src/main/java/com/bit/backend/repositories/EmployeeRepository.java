@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM employee WHERE job_title = \"Trainer\"")
+    @Query(nativeQuery = true, value = "SELECT * FROM employee WHERE job_title = \"Trainer\" AND is_deleted = false || null")
     List<EmployeeEntity> getTrainers();
 
     @Query(nativeQuery = true, value = "SELECT * FROM ems.employee WHERE first_name = ?1 AND job_title = 'Trainer'")
