@@ -13,4 +13,7 @@ public interface UserWorkoutAssignmentRepository extends JpaRepository<UserWorko
 
     // Used to bulk-mark all active assignments as Replaced before creating a new one
     List<UserWorkoutAssignmentEntity> findByUserIdAndStatus(Long userId, String status);
+
+    // Used by trainer progress view to get all currently active assignments
+    List<UserWorkoutAssignmentEntity> findByStatus(String status);
 }
