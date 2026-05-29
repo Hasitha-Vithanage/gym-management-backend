@@ -9,4 +9,6 @@ public interface NotificationServiceI {
     NotificationDto addNotification(NotificationDto notificationDto);
     List<NotificationDto> getUserNotifications(long id);
     boolean changeNotificationStatus(String id);
+    void deleteNotification(long id);
+    void clearAllNotifications(long userId);
 }

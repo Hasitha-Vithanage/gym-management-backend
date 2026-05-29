@@ -19,7 +19,7 @@ public class EquipmentController {
     @PostMapping("/equipments")
     public ResponseEntity<EquipmentDto> addEquipment(@RequestBody EquipmentDto equipmentDto) {
         EquipmentDto equipmentDtoResponse = equipmentServiceI.addEquipmentEntity(equipmentDto);
-        return ResponseEntity.created(URI.create("/equipments/" + equipmentDtoResponse.getEquipmentName())).body(equipmentDtoResponse);
+        return ResponseEntity.created(URI.create("/equipments/" + equipmentDtoResponse.getId())).body(equipmentDtoResponse);
     }
 
     @GetMapping("/equipments")

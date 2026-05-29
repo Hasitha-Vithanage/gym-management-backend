@@ -31,6 +31,16 @@ public class WorkoutPlanRequestController {
         }
     }
 
+    @GetMapping("/my-workout-request/{userId}")
+    public ResponseEntity<WorkoutPlanRequestDto> getLastRequestByUserId(@PathVariable String userId) {
+        try {
+            WorkoutPlanRequestDto dto = workoutPlanRequestServiceI.getLastRequestByUserId(userId);
+            return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            throw new AppException("Failed to load workout request: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/workout-plan-upload")
     public ResponseEntity<List<WorkoutPlanRequestDto>> getWorkoutPlanRequest() {
         try {

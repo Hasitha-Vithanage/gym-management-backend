@@ -30,7 +30,7 @@ public class SupplementInventoryController {
             supplementInventoryDto.setImageName(file.getOriginalFilename());
             supplementInventoryDto.setImageType(file.getContentType());
             SupplementInventoryDto supplementInventoryDtoResponse = supplementInventoryServiceI.addSupplementInventoryEntity(supplementInventoryDto);
-            return ResponseEntity.created(URI.create("/supplement"+supplementInventoryDtoResponse.getProductName())).body(supplementInventoryDtoResponse);
+            return ResponseEntity.created(URI.create("/supplement/" + supplementInventoryDtoResponse.getId())).body(supplementInventoryDtoResponse);
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

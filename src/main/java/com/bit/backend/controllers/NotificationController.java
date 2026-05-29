@@ -40,4 +40,24 @@ public class NotificationController {
         boolean status = notificationServiceI.changeNotificationStatus(id);
         return ResponseEntity.ok(status);
     }
+
+    @DeleteMapping("/notification/{id}")
+    public ResponseEntity<Void> deleteNotification(@PathVariable long id) {
+        try {
+            notificationServiceI.deleteNotification(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            throw new AppException("Failed to delete notification: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/notification/all/{userId}")
+    public ResponseEntity<Void> clearAllNotifications(@PathVariable long userId) {
+        try {
+            notificationServiceI.clearAllNotifications(userId);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            throw new AppException("Failed to clear notifications: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

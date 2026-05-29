@@ -11,4 +11,6 @@ public interface WorkoutPlanRequestRepository extends JpaRepository<WorkoutPlanR
 
     Optional<WorkoutPlanRequestEntity> findByUserId(String userId);
 
+    Optional<WorkoutPlanRequestEntity> findTopByUserIdOrderByIdDesc(String userId);
+
 }

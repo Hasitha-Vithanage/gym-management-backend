@@ -12,6 +12,7 @@ public class TemplateExerciseDto {
     private Integer restSeconds;
     private Integer exerciseOrder;
     private String notes;
+    private String equipmentType;
 
     public TemplateExerciseDto() {}
 
@@ -44,4 +45,7 @@ public class TemplateExerciseDto {
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+
+    public String getEquipmentType() { return equipmentType; }
+    public void setEquipmentType(String equipmentType) { this.equipmentType = equipmentType; }
 }

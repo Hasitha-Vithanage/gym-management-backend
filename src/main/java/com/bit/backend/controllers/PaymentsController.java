@@ -25,7 +25,7 @@ public class PaymentsController {
     public ResponseEntity<PaymentsDto> addPayments(@RequestBody PaymentsDto paymentsDto) {
         try {
             PaymentsDto paymentsDtoResponse = paymentsServiceI.addPaymentsEntity(paymentsDto);
-            return ResponseEntity.created(URI.create("/add-payment" + paymentsDtoResponse.getMember())).body(paymentsDtoResponse);
+            return ResponseEntity.created(URI.create("/add-payment/" + paymentsDtoResponse.getId())).body(paymentsDtoResponse);
         } catch (Exception e) {
             throw new AppException("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

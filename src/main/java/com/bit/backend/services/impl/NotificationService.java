@@ -41,6 +41,16 @@ public class NotificationService implements NotificationServiceI {
     }
 
     @Override
+    public void deleteNotification(long id) {
+        notificationRepository.deleteById(id);
+    }
+
+    @Override
+    public void clearAllNotifications(long userId) {
+        notificationRepository.deleteAllByTargetUser(userId);
+    }
+
+    @Override
     public boolean changeNotificationStatus(String id) {
         Long notificationId = Long.parseLong(id);
 

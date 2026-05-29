@@ -26,7 +26,7 @@ public class AssignTrainerController {
     public ResponseEntity<AssignTrainerDto> addAssignTrainer(@RequestBody AssignTrainerDto assignTrainerDto) {
         try {
             AssignTrainerDto assignTrainerDtoResponse = assignTrainerServiceI.addAssignTrainerEntity(assignTrainerDto);
-            return ResponseEntity.created(URI.create("/assign-trainer" + assignTrainerDtoResponse.getMember())).body(assignTrainerDtoResponse);
+            return ResponseEntity.created(URI.create("/assign-trainer/" + assignTrainerDtoResponse.getId())).body(assignTrainerDtoResponse);
         } catch (Exception e) {
             throw new AppException("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

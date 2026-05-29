@@ -19,7 +19,7 @@ public class SupplierController {
     @PostMapping("/suppliers")
     public ResponseEntity<SupplierDto> addSupplier(@RequestBody SupplierDto supplierDto) {
         SupplierDto supplierDtoResponse = supplierServiceI.addSupplierEntity(supplierDto);
-        return ResponseEntity.created(URI.create("/suppliers" + supplierDtoResponse.getSupplierName())).body(supplierDtoResponse);
+        return ResponseEntity.created(URI.create("/suppliers/" + supplierDtoResponse.getId())).body(supplierDtoResponse);
     }
 
     @GetMapping("/get-suppliers")

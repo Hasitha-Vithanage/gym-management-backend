@@ -10,4 +10,9 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
 
     @Query(nativeQuery = true, value = "select * from notification where target_user = :id order by id desc")
     List<NotificationEntity> getUserNotification(String id);
+
+    @Query(nativeQuery = true, value = "delete from notification where target_user = :userId")
+    @org.springframework.data.jpa.repository.Modifying
+    @org.springframework.transaction.annotation.Transactional
+    void deleteAllByTargetUser(long userId);
 }

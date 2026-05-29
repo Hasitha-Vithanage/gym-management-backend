@@ -33,7 +33,7 @@ public class EmployeeController {
             employeeDto.setImageName(file.getOriginalFilename());
             employeeDto.setImageType(file.getContentType());
             EmployeeDto employeeDtoResponse = employeeServiceI.addEmployeeEntity(employeeDto);
-            return ResponseEntity.created(URI.create("/employee" + employeeDtoResponse.getFirstName()))
+            return ResponseEntity.created(URI.create("/employee/" + employeeDtoResponse.getId()))
                     .body(employeeDtoResponse);
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);

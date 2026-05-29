@@ -37,7 +37,6 @@ public class TrainerLoginService implements TrainerLoginServiceI {
     public TrainerLoginDto addTrainerLoginEntity(TrainerLoginDto trainerLoginDto) {
         try {
             System.out.println("************ In Service *************");
-            trainerLoginDto.setRole("TRAINER");
 
             String password = new String(trainerLoginDto.getPassword());
             trainerLoginDto.setPassword(null);

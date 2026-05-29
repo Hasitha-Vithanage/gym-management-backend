@@ -40,6 +40,13 @@ public class WorkoutPlanRequestService implements WorkoutPlanRequestServiceI {
         }
     }
 
+    @Override
+    public WorkoutPlanRequestDto getLastRequestByUserId(String userId) {
+        return workoutPlanRequestRepository.findTopByUserIdOrderByIdDesc(userId)
+                .map(workoutPlanRequestMapper::toWorkoutPlanRequestDto)
+                .orElse(null);
+    }
+
     // getEmployee method
     @Override
     public List<WorkoutPlanRequestDto> getWorkoutPlanRequest() {

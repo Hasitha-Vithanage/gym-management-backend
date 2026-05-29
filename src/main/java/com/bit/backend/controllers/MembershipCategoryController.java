@@ -27,7 +27,7 @@ public class MembershipCategoryController {
     public ResponseEntity<MembershipCategoryDto> addMembershipCategory(@RequestBody MembershipCategoryDto membershipCategoryDto) {
         try {
             MembershipCategoryDto membershipCategoryDtoResponse = membershipCategoryServiceI.addMembershipCategoryEntity(membershipCategoryDto);
-            return ResponseEntity.created(URI.create("/membership-category" + membershipCategoryDtoResponse.getCategoryName())).body(membershipCategoryDtoResponse);
+            return ResponseEntity.created(URI.create("/membership-category/" + membershipCategoryDtoResponse.getId())).body(membershipCategoryDtoResponse);
         } catch (Exception e) {
             throw new AppException("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
