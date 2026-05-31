@@ -95,6 +95,26 @@ public class MemberController {
         return ResponseEntity.ok(memberDtoList);
     }
 
+    @GetMapping("/member/profile/{userId}")
+    public ResponseEntity<MemberDto> getMemberProfileByUserId(@PathVariable long userId) {
+        try {
+            MemberDto memberDto = memberServiceI.getMemberProfileByUserId(userId);
+            return ResponseEntity.ok(memberDto);
+        } catch (Exception e) {
+            throw new AppException("Failed to load member profile. Please try again." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/member/profile/{userId}")
+    public ResponseEntity<MemberDto> updateMemberProfile(@PathVariable long userId, @RequestBody MemberDto memberDto) {
+        try {
+            MemberDto updated = memberServiceI.updateMemberProfile(userId, memberDto);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            throw new AppException("Failed to update member profile. Please try again." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/member-count")
     public ResponseEntity<Long> getMemberCount() {
         Long memberCount = memberServiceI.getMemberCount();

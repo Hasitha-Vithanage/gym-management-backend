@@ -41,6 +41,40 @@ public class WorkoutPlanRequestController {
         }
     }
 
+    @GetMapping("/workout-plan-request/pending-custom")
+    public ResponseEntity<List<WorkoutPlanRequestDto>> getPendingCustomRequests() {
+        try {
+            return ResponseEntity.ok(workoutPlanRequestServiceI.getRequestsByStatus("Pending Custom"));
+        } catch (Exception e) {
+            throw new AppException("Failed to load pending custom requests: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/workout-plan-request/pending-custom/trainer/{trainerUserId}")
+    public ResponseEntity<List<WorkoutPlanRequestDto>> getPendingCustomRequestsForTrainer(
+            @PathVariable Long trainerUserId) {
+        try {
+            return ResponseEntity.ok(
+                    workoutPlanRequestServiceI.getPendingCustomRequestsForTrainer(trainerUserId));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Failed to load pending requests for trainer: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/workout-plan-request/user/{userId}/status")
+    public ResponseEntity<WorkoutPlanRequestDto> updateStatusByUserId(
+            @PathVariable String userId,
+            @RequestParam String status) {
+        try {
+            WorkoutPlanRequestDto dto = workoutPlanRequestServiceI.updateStatusByUserId(userId, status);
+            return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            throw new AppException("Failed to update request status: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/workout-plan-upload")
     public ResponseEntity<List<WorkoutPlanRequestDto>> getWorkoutPlanRequest() {
         try {

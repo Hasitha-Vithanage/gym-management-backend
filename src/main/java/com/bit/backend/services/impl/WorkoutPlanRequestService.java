@@ -1,28 +1,39 @@
 package com.bit.backend.services.impl;
 
-import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.WorkoutPlanRequestDto;
-import com.bit.backend.entities.EmployeeEntity;
+import com.bit.backend.entities.AssignTrainerEntity;
+import com.bit.backend.entities.User;
 import com.bit.backend.entities.WorkoutPlanRequestEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.WorkoutPlanRequestMapper;
+import com.bit.backend.repositories.AssignTrainerRepository;
+import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.repositories.WorkoutPlanRequestRepository;
 import com.bit.backend.services.WorkoutPlanRequestServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkoutPlanRequestService implements WorkoutPlanRequestServiceI {
 
     private final WorkoutPlanRequestRepository workoutPlanRequestRepository;
     private final WorkoutPlanRequestMapper workoutPlanRequestMapper;
+    private final UserRepository userRepository;
+    private final AssignTrainerRepository assignTrainerRepository;
 
-    public WorkoutPlanRequestService(WorkoutPlanRequestRepository workoutPlanRequestRepository, WorkoutPlanRequestMapper workoutPlanRequestMapper) {
+    public WorkoutPlanRequestService(WorkoutPlanRequestRepository workoutPlanRequestRepository,
+                                     WorkoutPlanRequestMapper workoutPlanRequestMapper,
+                                     UserRepository userRepository,
+                                     AssignTrainerRepository assignTrainerRepository) {
         this.workoutPlanRequestRepository = workoutPlanRequestRepository;
         this.workoutPlanRequestMapper = workoutPlanRequestMapper;
+        this.userRepository = userRepository;
+        this.assignTrainerRepository = assignTrainerRepository;
     }
 
     // addEmployeeEntity method
@@ -41,9 +52,53 @@ public class WorkoutPlanRequestService implements WorkoutPlanRequestServiceI {
     }
 
     @Override
+    public List<WorkoutPlanRequestDto> getRequestsByStatus(String status) {
+        List<WorkoutPlanRequestEntity> entities = workoutPlanRequestRepository.findByStatus(status);
+        return workoutPlanRequestMapper.toWorkoutPlanRequestDto(entities);
+    }
+
+    @Override
+    public List<WorkoutPlanRequestDto> getPendingCustomRequestsForTrainer(Long trainerUserId) {
+        // Get trainer's employee ID from their user account
+        User trainerUser = userRepository.findById(trainerUserId)
+                .orElseThrow(() -> new AppException("Trainer not found", HttpStatus.NOT_FOUND));
+
+        Long employeeId = trainerUser.getEmployeeLoginId();
+        if (employeeId == null) return Collections.emptyList();
+
+        // Get all member IDs (member table IDs) assigned to this trainer
+        List<AssignTrainerEntity> assignments = assignTrainerRepository.findByTrainerId(employeeId);
+        if (assignments.isEmpty()) return Collections.emptyList();
+
+        List<Long> memberTableIds = assignments.stream()
+                .map(AssignTrainerEntity::getMemberId)
+                .collect(Collectors.toList());
+
+        // Resolve member table IDs → user IDs (user.customerLoginId == memberTableId)
+        List<Long> memberUserIds = userRepository.findByCustomerLoginIdIn(memberTableIds)
+                .stream().map(User::getId).collect(Collectors.toList());
+
+        if (memberUserIds.isEmpty()) return Collections.emptyList();
+
+        return workoutPlanRequestMapper.toWorkoutPlanRequestDto(
+                workoutPlanRequestRepository.findByStatusAndMemberUserIdIn("Pending Custom", memberUserIds));
+    }
+
+    @Override
     public WorkoutPlanRequestDto getLastRequestByUserId(String userId) {
         return workoutPlanRequestRepository.findTopByUserIdOrderByIdDesc(userId)
                 .map(workoutPlanRequestMapper::toWorkoutPlanRequestDto)
+                .orElse(null);
+    }
+
+    @Override
+    public WorkoutPlanRequestDto updateStatusByUserId(String userId, String status) {
+        return workoutPlanRequestRepository.findTopByUserIdOrderByIdDesc(userId)
+                .map(entity -> {
+                    entity.setStatus(status);
+                    return workoutPlanRequestMapper.toWorkoutPlanRequestDto(
+                            workoutPlanRequestRepository.save(entity));
+                })
                 .orElse(null);
     }
 

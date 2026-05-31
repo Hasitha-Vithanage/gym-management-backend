@@ -12,6 +12,8 @@ public interface MemberServiceI {
     MemberDto updateMember(long id, MemberDto memberDto);
     MemberDto deleteMember(long id);
     MemberDto getMemberById(long id);
+    MemberDto getMemberProfileByUserId(long userId);
+    MemberDto updateMemberProfile(long userId, MemberDto memberDto);
     List<MemberDto> getMemberByMember(String member);
     long getMemberCount();
     Integer newMembersInThisMonth();

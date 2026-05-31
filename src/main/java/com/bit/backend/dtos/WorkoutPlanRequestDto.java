@@ -6,11 +6,13 @@ public class WorkoutPlanRequestDto {
 
     private long id;
     private String userId;
+    private Long memberUserId;
     private int age;
     private double weight;
     private double height;
     private String fitnessGoal;
     private String experienceLevel;
+    private String gender;
     private long trainerId;
     private String status;
     private LocalDate date;
@@ -45,6 +47,22 @@ public class WorkoutPlanRequestDto {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Long getMemberUserId() {
+        return memberUserId;
+    }
+
+    public void setMemberUserId(Long memberUserId) {
+        this.memberUserId = memberUserId;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public int getAge() {

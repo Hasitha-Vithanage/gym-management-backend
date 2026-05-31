@@ -16,6 +16,9 @@ public class WorkoutPlanRequestEntity {
     @Column(name = "userId")
     private String userId;
 
+    @Column(name = "member_user_id")
+    private Long memberUserId;
+
     @Column(name = "age")
     private int age;
 
@@ -24,6 +27,9 @@ public class WorkoutPlanRequestEntity {
 
     @Column(name = "height")
     private double height;
+
+    @Column(name = "gender")
+    private String gender;
 
     @Column(name = "fitnessGoal")
     private String fitnessGoal;
@@ -80,6 +86,14 @@ public class WorkoutPlanRequestEntity {
         this.userId = userId;
     }
 
+    public Long getMemberUserId() {
+        return memberUserId;
+    }
+
+    public void setMemberUserId(Long memberUserId) {
+        this.memberUserId = memberUserId;
+    }
+
     public int getAge() {
         return age;
     }
@@ -102,6 +116,14 @@ public class WorkoutPlanRequestEntity {
 
     public void setHeight(double height) {
         this.height = height;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getFitnessGoal() {

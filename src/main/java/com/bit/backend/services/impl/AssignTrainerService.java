@@ -22,6 +22,8 @@ import java.util.Optional;
 @Service
 public class AssignTrainerService implements AssignTrainerServiceI {
 
+    private static final int MAX_MEMBERS_PER_TRAINER = 10;
+
     private final AssignTrainerRepository assignTrainerRepository;
     private final AssignTrainerMapper assignTrainerMapper;
     private final UserRepository userRepository;
@@ -42,6 +44,14 @@ public class AssignTrainerService implements AssignTrainerServiceI {
             boolean alreadyAssigned = assignTrainerRepository.existsByMemberId(assignTrainerDto.getMemberId());
             if (alreadyAssigned) {
                 throw new AppException("This member is already assigned to a trainer.", HttpStatus.CONFLICT);
+            }
+
+            long currentCount = assignTrainerRepository.countByTrainerId(assignTrainerDto.getTrainerId());
+            if (currentCount >= MAX_MEMBERS_PER_TRAINER) {
+                throw new AppException(
+                    "This trainer has reached the maximum capacity of " + MAX_MEMBERS_PER_TRAINER + " members. Please choose another trainer.",
+                    HttpStatus.CONFLICT
+                );
             }
 
             MemberEntity member = memberRepository.findById(assignTrainerDto.getMemberId())

@@ -5,11 +5,14 @@ import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.dtos.MembershipCategoryDto;
 import com.bit.backend.entities.EmployeeEntity;
 import com.bit.backend.entities.MemberEntity;
+import com.bit.backend.entities.MemberLoginEntity;
 import com.bit.backend.entities.MembershipCategoryEntity;
 import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.MemberMapper;
+import com.bit.backend.repositories.MemberLoginRepository;
 import com.bit.backend.repositories.MemberRepository;
+import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.MemberServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,10 +25,15 @@ public class MemberService implements MemberServiceI {
 
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
+    private final MemberLoginRepository memberLoginRepository;
+    private final UserRepository userRepository;
 
-    public MemberService(MemberRepository memberRepository, MemberMapper memberMapper) {
+    public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
+                         MemberLoginRepository memberLoginRepository, UserRepository userRepository) {
         this.memberRepository = memberRepository;
         this.memberMapper = memberMapper;
+        this.memberLoginRepository = memberLoginRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -104,6 +112,68 @@ public class MemberService implements MemberServiceI {
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + id));
         return memberMapper.toMemberDto(memberEntity);
+    }
+
+    @Override
+    public MemberDto getMemberProfileByUserId(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
+        if (user.getCustomerLoginId() == null) {
+            throw new AppException("No member profile linked to this account", HttpStatus.NOT_FOUND);
+        }
+        MemberEntity memberEntity = memberRepository.findById(user.getCustomerLoginId())
+                .orElseThrow(() -> new AppException("Member record not found", HttpStatus.NOT_FOUND));
+        return memberMapper.toMemberDto(memberEntity);
+    }
+
+    @Override
+    public MemberDto updateMemberProfile(long userId, MemberDto memberDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
+        if (user.getCustomerLoginId() == null) {
+            throw new AppException("No member profile linked to this account", HttpStatus.NOT_FOUND);
+        }
+        MemberEntity memberEntity = memberRepository.findById(user.getCustomerLoginId())
+                .orElseThrow(() -> new AppException("Member record not found", HttpStatus.NOT_FOUND));
+
+        applyMemberUpdates(memberEntity, memberDto);
+        MemberEntity saved = memberRepository.save(memberEntity);
+
+        applyUserUpdates(user, memberDto);
+        userRepository.save(user);
+
+        syncMemberLogin(userId, memberDto);
+
+        return memberMapper.toMemberDto(saved);
+    }
+
+    private void applyMemberUpdates(MemberEntity entity, MemberDto dto) {
+        if (hasValue(dto.getFirstName())) entity.setFirstName(dto.getFirstName());
+        if (hasValue(dto.getLastName()))  entity.setLastName(dto.getLastName());
+        if (dto.getEmail() != null)       entity.setEmail(dto.getEmail());
+        if (dto.getPhoneNumber() != null) entity.setPhoneNumber(dto.getPhoneNumber());
+        if (dto.getAddress() != null)     entity.setAddress(dto.getAddress());
+        if (dto.getGender() != null)      entity.setGender(dto.getGender());
+        if (dto.getEmergencyContactNumber() != null)
+            entity.setEmergencyContactNumber(dto.getEmergencyContactNumber());
+    }
+
+    private void applyUserUpdates(User user, MemberDto dto) {
+        if (hasValue(dto.getFirstName())) user.setFirstName(dto.getFirstName());
+        if (hasValue(dto.getLastName()))  user.setLastName(dto.getLastName());
+        if (dto.getEmail() != null)       user.setEmail(dto.getEmail());
+    }
+
+    private void syncMemberLogin(long userId, MemberDto dto) {
+        MemberLoginEntity login = memberLoginRepository.findByUserId(userId);
+        if (login == null) return;
+        if (hasValue(dto.getFirstName())) login.setFirstName(dto.getFirstName());
+        if (hasValue(dto.getLastName()))  login.setLastName(dto.getLastName());
+        memberLoginRepository.save(login);
+    }
+
+    private boolean hasValue(String value) {
+        return value != null && !value.isBlank();
     }
 
     @Override

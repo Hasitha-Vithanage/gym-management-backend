@@ -10,7 +10,10 @@ public interface WorkoutPlanRequestServiceI {
 
     WorkoutPlanRequestDto addWorkoutPlanRequestEntity(WorkoutPlanRequestDto workoutPlanRequestDto);
     List<WorkoutPlanRequestDto> getWorkoutPlanRequest();
+    List<WorkoutPlanRequestDto> getRequestsByStatus(String status);
+    List<WorkoutPlanRequestDto> getPendingCustomRequestsForTrainer(Long trainerUserId);
     WorkoutPlanRequestDto getLastRequestByUserId(String userId);
-    WorkoutPlanRequestDto deleteWorkoutPlanRequest(long id);
     WorkoutPlanRequestDto updateStatus(long id);
+    WorkoutPlanRequestDto updateStatusByUserId(String userId, String status);
+    WorkoutPlanRequestDto deleteWorkoutPlanRequest(long id);
 }

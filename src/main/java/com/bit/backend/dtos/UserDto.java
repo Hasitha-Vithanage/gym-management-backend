@@ -9,6 +9,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String login;
+    private String email;
     private String token;
     private String role;
     private Long employeeLoginId;
@@ -17,11 +18,12 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(Long id, String firstName, String lastName, String login, String token, String role, Long employeeLoginId, Long customerLoginId) {
+    public UserDto(Long id, String firstName, String lastName, String login, String email, String token, String role, Long employeeLoginId, Long customerLoginId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
+        this.email = email;
         this.token = token;
         this.role = role;
         this.employeeLoginId = employeeLoginId;
@@ -58,6 +60,14 @@ public class UserDto {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getToken() {

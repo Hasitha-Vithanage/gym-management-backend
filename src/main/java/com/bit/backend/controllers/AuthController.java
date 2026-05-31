@@ -64,6 +64,16 @@ public class AuthController {
         return ResponseEntity.ok().body(user);
     }
 
+    @PutMapping("/user/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable long id, @RequestBody UserDto userDto) {
+        try {
+            UserDto updated = userServiceI.updateUser(id, userDto);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            throw new AppException("Failed to update user. Please try again." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/get-all-users")
     public ResponseEntity<List<User>> getAllUsers() {
         try {

@@ -157,6 +157,23 @@ public class UserService implements UserServiceI {
     }
 
     @Override
+    public UserDto updateUser(long userId, UserDto userDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found with ID: " + userId, HttpStatus.NOT_FOUND));
+        if (userDto.getFirstName() != null && !userDto.getFirstName().isBlank()) {
+            user.setFirstName(userDto.getFirstName());
+        }
+        if (userDto.getLastName() != null && !userDto.getLastName().isBlank()) {
+            user.setLastName(userDto.getLastName());
+        }
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+        User saved = userRepository.save(user);
+        return userMapper.toUserDto(saved);
+    }
+
+    @Override
     public List<User> getAllUsers() {
         try {
             // db operations and send data

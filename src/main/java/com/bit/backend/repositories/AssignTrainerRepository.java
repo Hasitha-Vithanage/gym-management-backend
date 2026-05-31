@@ -14,4 +14,8 @@ public interface AssignTrainerRepository extends JpaRepository<AssignTrainerEnti
 
     AssignTrainerEntity findByMemberId(Long memberId);
 
+    long countByTrainerId(Long trainerId);
+
+    List<AssignTrainerEntity> findByTrainerId(Long trainerId);
+
 }
