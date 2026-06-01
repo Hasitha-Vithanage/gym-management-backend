@@ -1,25 +1,26 @@
 package com.bit.backend.entities;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "bookClass")
 public class BookClassEntity {
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "firstName", nullable = false, unique = true)
+    @Column(name = "userId")
+    private Long userId;
+
+    @Column(name = "firstName")
     private String firstName;
 
-    @Column(name = "lastName", nullable = false)
+    @Column(name = "lastName")
     private String lastName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "phone")
@@ -31,7 +32,12 @@ public class BookClassEntity {
     @Column(name = "bookedBy")
     private String bookedBy;
 
-    // Image fields (can be large, use @Lob)
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "bookedDate")
+    private LocalDate bookedDate;
+
     @Lob
     @Column(name = "image")
     private byte[] image;
@@ -43,98 +49,45 @@ public class BookClassEntity {
     private String imageType;
 
     public BookClassEntity() {
+        // Required by JPA
     }
 
-    public BookClassEntity(Long id, String firstName, String lastName, String email, String phone, long classId, String bookedBy, byte[] image, String imageName, String imageType) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone = phone;
-        this.classId = classId;
-        this.bookedBy = bookedBy;
-        this.image = image;
-        this.imageName = imageName;
-        this.imageType = imageType;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getLastName() {
-        return lastName;
-    }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    public long getClassId() { return classId; }
+    public void setClassId(long classId) { this.classId = classId; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getBookedBy() { return bookedBy; }
+    public void setBookedBy(String bookedBy) { this.bookedBy = bookedBy; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public String getPhone() {
-        return phone;
-    }
+    public LocalDate getBookedDate() { return bookedDate; }
+    public void setBookedDate(LocalDate bookedDate) { this.bookedDate = bookedDate; }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+    public byte[] getImage() { return image; }
+    public void setImage(byte[] image) { this.image = image; }
 
-    public long getClassId() {
-        return classId;
-    }
+    public String getImageName() { return imageName; }
+    public void setImageName(String imageName) { this.imageName = imageName; }
 
-    public void setClassId(long classId) {
-        this.classId = classId;
-    }
-
-    public String getBookedBy() {
-        return bookedBy;
-    }
-
-    public void setBookedBy(String bookedBy) {
-        this.bookedBy = bookedBy;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
-    public String getImageType() {
-        return imageType;
-    }
-
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
-    }
+    public String getImageType() { return imageType; }
+    public void setImageType(String imageType) { this.imageType = imageType; }
 }

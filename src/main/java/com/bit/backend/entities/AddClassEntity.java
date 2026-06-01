@@ -1,9 +1,7 @@
 package com.bit.backend.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -44,9 +42,6 @@ public class AddClassEntity {
 
     @Column(name = "remainingSlots")
     private Integer remainingSlots;
-
-    @Column(name = "fee")
-    private BigDecimal fee;
 
     @Column(name = "status")
     private String status;
@@ -141,14 +136,6 @@ public class AddClassEntity {
 
     public void setRemainingSlots(Integer remainingSlots) {
         this.remainingSlots = remainingSlots;
-    }
-
-    public BigDecimal getFee() {
-        return fee;
-    }
-
-    public void setFee(BigDecimal fee) {
-        this.fee = fee;
     }
 
     public String getStatus() {

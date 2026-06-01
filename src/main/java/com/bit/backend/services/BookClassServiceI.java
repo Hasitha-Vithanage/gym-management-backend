@@ -6,4 +6,5 @@ import com.bit.backend.dtos.BookClassDto;
 public interface BookClassServiceI {
 
     BookClassDto addBookClassEntity(BookClassDto bookClassDto);
+    BookClassDto confirmBooking(long classId, long userId);
 }

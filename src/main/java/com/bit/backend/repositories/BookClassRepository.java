@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface BookClassRepository extends JpaRepository<BookClassEntity, Long> {
 
     Optional<BookClassEntity> findByBookedByAndClassId(String bookedBy, long classId);
+    Optional<BookClassEntity> findByUserIdAndClassId(Long userId, long classId);
+    java.util.List<BookClassEntity> findByUserId(Long userId);
 }

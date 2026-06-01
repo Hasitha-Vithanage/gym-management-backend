@@ -8,10 +8,10 @@ import com.bit.backend.services.impl.BookClassService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 import java.net.URI;
 
@@ -22,6 +22,24 @@ public class BookClassController {
 
     public BookClassController(BookClassServiceI bookClassServiceI) {
         this.bookClassServiceI = bookClassServiceI;
+    }
+
+    @PostMapping("/booking-class/confirm/{classId}")
+    public ResponseEntity<BookClassDto> confirmBooking(
+            @PathVariable long classId,
+            @RequestBody Map<String, Long> body) {
+        try {
+            Long userId = body.get("userId");
+            if (userId == null) {
+                throw new AppException("userId is required", HttpStatus.BAD_REQUEST);
+            }
+            BookClassDto booking = bookClassServiceI.confirmBooking(classId, userId);
+            return ResponseEntity.ok(booking);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Booking failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping(value = "/booking-class", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

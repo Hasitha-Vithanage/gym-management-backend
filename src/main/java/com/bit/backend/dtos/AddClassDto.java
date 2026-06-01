@@ -1,6 +1,5 @@
 package com.bit.backend.dtos;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -17,7 +16,6 @@ public class AddClassDto {
     private String profession;
     private int totalSlots;
     private int remainingSlots;
-    private BigDecimal fee;
     private String status;
 
     // Required for deserialization
@@ -110,14 +108,6 @@ public class AddClassDto {
 
     public void setRemainingSlots(int remainingSlots) {
         this.remainingSlots = remainingSlots;
-    }
-
-    public BigDecimal getFee() {
-        return fee;
-    }
-
-    public void setFee(BigDecimal fee) {
-        this.fee = fee;
     }
 
     public String getStatus() {
