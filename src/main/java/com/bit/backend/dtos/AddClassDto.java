@@ -8,6 +8,7 @@ public class AddClassDto {
 
     private long id;
     private String classTitle;
+    private String classType;
     private String description;
     private LocalDate date;
     private LocalTime startTime;
@@ -19,22 +20,8 @@ public class AddClassDto {
     private BigDecimal fee;
     private String status;
 
+    // Required for deserialization
     public AddClassDto() {
-    }
-
-    public AddClassDto(long id, String classTitle, String description, LocalDate date, LocalTime startTime, LocalTime endTime, String conductorName, String profession, int totalSlots, int remainingSlots, BigDecimal fee, String status) {
-        this.id = id;
-        this.classTitle = classTitle;
-        this.description = description;
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.conductorName = conductorName;
-        this.profession = profession;
-        this.totalSlots = totalSlots;
-        this.remainingSlots = remainingSlots;
-        this.fee = fee;
-        this.status = status;
     }
 
     public long getId() {
@@ -51,6 +38,14 @@ public class AddClassDto {
 
     public void setClassTitle(String classTitle) {
         this.classTitle = classTitle;
+    }
+
+    public String getClassType() {
+        return classType;
+    }
+
+    public void setClassType(String classType) {
+        this.classType = classType;
     }
 
     public String getDescription() {

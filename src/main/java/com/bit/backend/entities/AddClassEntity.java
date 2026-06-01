@@ -18,6 +18,9 @@ public class AddClassEntity {
     @Column(name = "classTitle")
     private String classTitle;
 
+    @Column(name = "classType")
+    private String classType;
+
     @Column(name = "description")
     private String description;
 
@@ -48,22 +51,8 @@ public class AddClassEntity {
     @Column(name = "status")
     private String status;
 
+    // Required by JPA
     public AddClassEntity() {
-    }
-
-    public AddClassEntity(long id, String classTitle, String description, LocalDate date, LocalTime startTime, LocalTime endTime, String conductorName, String profession, Integer totalSlots, Integer remainingSlots, BigDecimal fee, String status) {
-        this.id = id;
-        this.classTitle = classTitle;
-        this.description = description;
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.conductorName = conductorName;
-        this.profession = profession;
-        this.totalSlots = totalSlots;
-        this.remainingSlots = remainingSlots;
-        this.fee = fee;
-        this.status = status;
     }
 
     public long getId() {
@@ -80,6 +69,14 @@ public class AddClassEntity {
 
     public void setClassTitle(String classTitle) {
         this.classTitle = classTitle;
+    }
+
+    public String getClassType() {
+        return classType;
+    }
+
+    public void setClassType(String classType) {
+        this.classType = classType;
     }
 
     public String getDescription() {
