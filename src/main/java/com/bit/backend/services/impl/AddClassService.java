@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AddClassService implements AddClassServiceI {
@@ -39,7 +38,7 @@ public class AddClassService implements AddClassServiceI {
     @Override
     public List<AddClassDto> getAddClass() {
         try {
-            List<AddClassEntity> entities = addClassRepository.findAll();
+            List<AddClassEntity> entities = addClassRepository.findAllByIsDeletedFalse();
             return addClassMapper.toAddClassDto(entities);
         } catch (Exception e) {
             throw new AppException("Failed to load the class schedule. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -87,21 +86,19 @@ public class AddClassService implements AddClassServiceI {
 
     @Override
     public AddClassDto getClassById(long id) {
-        // Use AppException so RestExceptionHandler can return the correct HTTP status.
-        AddClassEntity entity = addClassRepository.findById(id)
+        AddClassEntity entity = addClassRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new AppException("Class not found.", HttpStatus.NOT_FOUND));
         return addClassMapper.toAddClassDto(entity);
     }
 
     @Override
     public AddClassDto deleteAddClass(long id) {
-        Optional<AddClassEntity> existing = addClassRepository.findById(id);
-        if (existing.isEmpty()) {
-            throw new AppException("Class not found. It may have already been deleted.", HttpStatus.NOT_FOUND);
-        }
+        AddClassEntity existing = addClassRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new AppException("Class not found. It may have already been deleted.", HttpStatus.NOT_FOUND));
         try {
-            addClassRepository.deleteById(id);
-            return addClassMapper.toAddClassDto(existing.get());
+            existing.setDeleted(true);
+            addClassRepository.save(existing);
+            return addClassMapper.toAddClassDto(existing);
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {

@@ -46,6 +46,9 @@ public class AddClassEntity {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = Boolean.FALSE;
+
     public AddClassEntity() {
         // Required by JPA
     }
@@ -144,5 +147,13 @@ public class AddClassEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

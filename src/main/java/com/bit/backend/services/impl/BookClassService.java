@@ -68,7 +68,7 @@ public class BookClassService implements BookClassServiceI {
         }
 
         // === Step 3: Check remaining slots ===
-        Optional<AddClassEntity> addClassEntityOpt = addClassRepository.findById(bookClassDto.getClassId());
+        Optional<AddClassEntity> addClassEntityOpt = addClassRepository.findByIdAndIsDeletedFalse(bookClassDto.getClassId());
         if (addClassEntityOpt.isEmpty()) {
             throw new AppException("Class not found. It may have been removed.", HttpStatus.NOT_FOUND);
         }
@@ -97,8 +97,8 @@ public class BookClassService implements BookClassServiceI {
     @Override
     @Transactional
     public BookClassDto confirmBooking(long classId, long userId) {
-        // Check class exists and is bookable
-        AddClassEntity classEntity = addClassRepository.findById(classId)
+        // Check class exists, is not deleted, and is bookable
+        AddClassEntity classEntity = addClassRepository.findByIdAndIsDeletedFalse(classId)
                 .orElseThrow(() -> new AppException("Class not found. It may have been removed.", HttpStatus.NOT_FOUND));
 
         if (!"Scheduled".equalsIgnoreCase(classEntity.getStatus())) {

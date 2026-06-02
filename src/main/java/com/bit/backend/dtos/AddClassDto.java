@@ -17,6 +17,7 @@ public class AddClassDto {
     private int totalSlots;
     private int remainingSlots;
     private String status;
+    private Boolean isDeleted;
 
     // Required for deserialization
     public AddClassDto() {
@@ -116,5 +117,13 @@ public class AddClassDto {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }
