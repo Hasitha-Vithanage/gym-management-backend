@@ -34,8 +34,8 @@ public class AddClassEntity {
     @Column(name = "conductorName")
     private String conductorName;
 
-    @Column(name = "profession")
-    private String profession;
+    @Column(name = "trainerEmployeeId")
+    private Long trainerEmployeeId;
 
     @Column(name = "totalSlots")
     private Integer totalSlots;
@@ -46,8 +46,8 @@ public class AddClassEntity {
     @Column(name = "status")
     private String status;
 
-    // Required by JPA
     public AddClassEntity() {
+        // Required by JPA
     }
 
     public long getId() {
@@ -114,12 +114,12 @@ public class AddClassEntity {
         this.conductorName = conductorName;
     }
 
-    public String getProfession() {
-        return profession;
+    public Long getTrainerEmployeeId() {
+        return trainerEmployeeId;
     }
 
-    public void setProfession(String profession) {
-        this.profession = profession;
+    public void setTrainerEmployeeId(Long trainerEmployeeId) {
+        this.trainerEmployeeId = trainerEmployeeId;
     }
 
     public Integer getTotalSlots() {

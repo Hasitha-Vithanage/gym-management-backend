@@ -13,7 +13,7 @@ public class AddClassDto {
     private LocalTime startTime;
     private LocalTime endTime;
     private String conductorName;
-    private String profession;
+    private Long trainerEmployeeId;
     private int totalSlots;
     private int remainingSlots;
     private String status;
@@ -86,12 +86,12 @@ public class AddClassDto {
         this.conductorName = conductorName;
     }
 
-    public String getProfession() {
-        return profession;
+    public Long getTrainerEmployeeId() {
+        return trainerEmployeeId;
     }
 
-    public void setProfession(String profession) {
-        this.profession = profession;
+    public void setTrainerEmployeeId(Long trainerEmployeeId) {
+        this.trainerEmployeeId = trainerEmployeeId;
     }
 
     public int getTotalSlots() {

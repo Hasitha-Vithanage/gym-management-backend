@@ -71,7 +71,7 @@ public class AddClassService implements AddClassServiceI {
             existing.setStartTime(addClassDto.getStartTime());
             existing.setEndTime(addClassDto.getEndTime());
             existing.setConductorName(addClassDto.getConductorName());
-            existing.setProfession(addClassDto.getProfession());
+            existing.setTrainerEmployeeId(addClassDto.getTrainerEmployeeId());
             existing.setTotalSlots(newTotal);
             existing.setRemainingSlots(newRemaining);
             existing.setStatus(addClassDto.getStatus());
