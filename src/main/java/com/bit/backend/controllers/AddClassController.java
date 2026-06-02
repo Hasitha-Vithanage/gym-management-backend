@@ -1,8 +1,6 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.AddClassDto;
-import com.bit.backend.dtos.EmployeeDto;
-import com.bit.backend.dtos.SupplementInventoryDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.AddClassServiceI;
 import org.springframework.http.HttpStatus;
@@ -24,47 +22,56 @@ public class AddClassController {
     @PostMapping("/add-class")
     public ResponseEntity<AddClassDto> addClass(@RequestBody AddClassDto addClassDto) {
         try {
-            AddClassDto addClassDtoResponse = addClassServiceI.addAddClassEntity(addClassDto);
-            return ResponseEntity.created(URI.create("/add-class" + addClassDtoResponse.getId())).body(addClassDtoResponse);
+            AddClassDto response = addClassServiceI.addAddClassEntity(addClassDto);
+            return ResponseEntity.created(URI.create("/add-class/" + response.getId())).body(response);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Class Scheduling failed. Please try again later. " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to schedule the class. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/add-class")
     public ResponseEntity<List<AddClassDto>> getAllClasses() {
-try{
-    List<AddClassDto> addClassDtoList = addClassServiceI.getAddClass();
-    return ResponseEntity.ok(addClassDtoList);
-}
-catch(Exception e){
-    throw new AppException("Failed to load classes.", HttpStatus.INTERNAL_SERVER_ERROR);
-}
+        try {
+            return ResponseEntity.ok(addClassServiceI.getAddClass());
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Failed to load classes. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/add-class/{id}")
     public ResponseEntity<AddClassDto> updateAddClass(@PathVariable long id, @RequestBody AddClassDto addClassDto) {
         try {
-            AddClassDto addClassDtoResponse = addClassServiceI.updateAddClass(id, addClassDto);
-            return ResponseEntity.ok(addClassDtoResponse);
+            return ResponseEntity.ok(addClassServiceI.updateAddClass(id, addClassDto));
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to update the class information. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to update the class. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/book-class-submit/{id}")
     public ResponseEntity<AddClassDto> getAddClassById(@PathVariable long id) {
-        AddClassDto addClassDto = addClassServiceI.getClassById(id);
-        return ResponseEntity.ok().body(addClassDto);
+        try {
+            return ResponseEntity.ok(addClassServiceI.getClassById(id));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Failed to load class details. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/add-class/{id}")
-    public ResponseEntity<AddClassDto> deleteEmployee(@PathVariable long id) {
+    public ResponseEntity<AddClassDto> deleteClass(@PathVariable long id) {
         try {
-            AddClassDto addClassDto = addClassServiceI.deleteAddClass(id);
-            return ResponseEntity.ok(addClassDto);
+            return ResponseEntity.ok(addClassServiceI.deleteAddClass(id));
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to delete the class record. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete the class. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

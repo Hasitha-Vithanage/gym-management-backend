@@ -43,19 +43,19 @@ public class BookClassService implements BookClassServiceI {
 
         // === Step 1: Validate input ===
         if (bookClassDto.getFirstName() == null || bookClassDto.getFirstName().trim().isEmpty()) {
-            throw new AppException("First name is required", HttpStatus.BAD_REQUEST);
+            throw new AppException("First name is required to complete the booking.", HttpStatus.BAD_REQUEST);
         }
         if (bookClassDto.getLastName() == null || bookClassDto.getLastName().trim().isEmpty()) {
-            throw new AppException("Last name is required", HttpStatus.BAD_REQUEST);
+            throw new AppException("Last name is required to complete the booking.", HttpStatus.BAD_REQUEST);
         }
         if (bookClassDto.getEmail() == null || !isValidEmail(bookClassDto.getEmail())) {
-            throw new AppException("Valid email is required", HttpStatus.BAD_REQUEST);
+            throw new AppException("A valid email address is required to complete the booking.", HttpStatus.BAD_REQUEST);
         }
         if (bookClassDto.getBookedBy() == null || bookClassDto.getBookedBy().trim().isEmpty()) {
-            throw new AppException("BookedBy (user) is required", HttpStatus.BAD_REQUEST);
+            throw new AppException("Unable to identify your account. Please log in again.", HttpStatus.BAD_REQUEST);
         }
         if (bookClassDto.getClassId() <= 0) {
-            throw new AppException("Valid classId is required", HttpStatus.BAD_REQUEST);
+            throw new AppException("Invalid class selection. Please go back and try again.", HttpStatus.BAD_REQUEST);
         }
 
 
@@ -64,23 +64,23 @@ public class BookClassService implements BookClassServiceI {
         Optional<BookClassEntity> existingBooking = bookClassRepository
                 .findByBookedByAndClassId(bookClassDto.getBookedBy(), bookClassDto.getClassId());
         if (existingBooking.isPresent()) {
-            throw new AppException("User has already booked this class", HttpStatus.BAD_REQUEST);
+            throw new AppException("You have already booked this class.", HttpStatus.CONFLICT);
         }
 
         // === Step 3: Check remaining slots ===
         Optional<AddClassEntity> addClassEntityOpt = addClassRepository.findById(bookClassDto.getClassId());
         if (addClassEntityOpt.isEmpty()) {
-            throw new AppException("Class not found", HttpStatus.NOT_FOUND);
+            throw new AppException("Class not found. It may have been removed.", HttpStatus.NOT_FOUND);
         }
 
         AddClassEntity addClassEntity = addClassEntityOpt.get();
 
         if (!"Scheduled".equalsIgnoreCase(addClassEntity.getStatus())) {
-            throw new AppException("Only scheduled classes can be booked", HttpStatus.BAD_REQUEST);
+            throw new AppException("This class is no longer available for booking.", HttpStatus.BAD_REQUEST);
         }
 
         if (addClassEntity.getRemainingSlots() < 1) {
-            throw new AppException("No available slots", HttpStatus.BAD_REQUEST);
+            throw new AppException("This class is fully booked. No slots are available.", HttpStatus.CONFLICT);
         }
 
         // === Step 4: All good, book the class ===
@@ -99,23 +99,23 @@ public class BookClassService implements BookClassServiceI {
     public BookClassDto confirmBooking(long classId, long userId) {
         // Check class exists and is bookable
         AddClassEntity classEntity = addClassRepository.findById(classId)
-                .orElseThrow(() -> new AppException("Class not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException("Class not found. It may have been removed.", HttpStatus.NOT_FOUND));
 
         if (!"Scheduled".equalsIgnoreCase(classEntity.getStatus())) {
-            throw new AppException("This class is not available for booking", HttpStatus.BAD_REQUEST);
+            throw new AppException("This class is no longer available for booking.", HttpStatus.BAD_REQUEST);
         }
         if (classEntity.getRemainingSlots() < 1) {
-            throw new AppException("No slots available — this class is fully booked", HttpStatus.CONFLICT);
+            throw new AppException("This class is fully booked. No slots are available.", HttpStatus.CONFLICT);
         }
 
         // Check member hasn't already booked this class
         if (bookClassRepository.findByUserIdAndClassId(userId, classId).isPresent()) {
-            throw new AppException("You have already booked this class", HttpStatus.CONFLICT);
+            throw new AppException("You have already booked this class.", HttpStatus.CONFLICT);
         }
 
         // Fetch user → get customerLoginId → fetch member details
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException("Unable to retrieve your account details. Please log in again.", HttpStatus.NOT_FOUND));
 
         String firstName = user.getFirstName();
         String lastName  = user.getLastName();

@@ -1,11 +1,7 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.AddClassDto;
-import com.bit.backend.dtos.EmployeeDto;
-import com.bit.backend.dtos.SupplementInventoryDto;
 import com.bit.backend.entities.AddClassEntity;
-import com.bit.backend.entities.EmployeeEntity;
-import com.bit.backend.entities.SupplementInventoryEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AddClassMapper;
 import com.bit.backend.repositories.AddClassRepository;
@@ -29,75 +25,67 @@ public class AddClassService implements AddClassServiceI {
 
     @Override
     public AddClassDto addAddClassEntity(AddClassDto addClassDto) {
-    try {
-        AddClassEntity addClassEntity = addClassMapper.toAddClassEntity(addClassDto);
-        AddClassEntity savedEntity = addClassRepository.save(addClassEntity);
-        AddClassDto responseAddClassDto = addClassMapper.toAddClassDto(savedEntity);
-        return responseAddClassDto;
-    }
-    catch (Exception e) {
-        throw new AppException("Request error with: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+        try {
+            AddClassEntity entity = addClassMapper.toAddClassEntity(addClassDto);
+            AddClassEntity saved  = addClassRepository.save(entity);
+            return addClassMapper.toAddClassDto(saved);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Failed to schedule the class. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     public List<AddClassDto> getAddClass() {
-    try{
-        List<AddClassEntity> addClassEntityList = addClassRepository.findAll();
-        List<AddClassDto> addClassDtoList = addClassMapper.toAddClassDto(addClassEntityList);
-        return addClassDtoList;
-    }
-    catch (Exception e) {
-        throw new AppException("Request error with: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+        try {
+            List<AddClassEntity> entities = addClassRepository.findAll();
+            return addClassMapper.toAddClassDto(entities);
+        } catch (Exception e) {
+            throw new AppException("Failed to load the class schedule. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     public AddClassDto updateAddClass(long id, AddClassDto addClassDto) {
+        // Check existence first — throw before entering the generic try-catch so the
+        // "not found" message is never overwritten by a generic server error.
+        if (!addClassRepository.existsById(id)) {
+            throw new AppException("Class not found. It may have been removed.", HttpStatus.NOT_FOUND);
+        }
         try {
-            Optional<AddClassEntity> optionalAddClassEntity = addClassRepository.findById(id);
-
-            if (!optionalAddClassEntity.isPresent()) {
-                throw new AppException("Class Does Not Exist", HttpStatus.BAD_REQUEST);
-            }
-
-            AddClassEntity newAddClassEntity = addClassMapper.toAddClassEntity(addClassDto);
-            newAddClassEntity.setId(id);
-            AddClassEntity addClassEntity = addClassRepository.save(newAddClassEntity);
-            AddClassDto responseAddClassDto = addClassMapper.toAddClassDto(addClassEntity);
-            return responseAddClassDto;
+            AddClassEntity entity = addClassMapper.toAddClassEntity(addClassDto);
+            entity.setId(id);
+            AddClassEntity saved = addClassRepository.save(entity);
+            return addClassMapper.toAddClassDto(saved);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to update class details. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public AddClassDto getClassById(long id) {
-        Optional<AddClassEntity> optionalAddClassEntity = addClassRepository.findById(id);
-
-        AddClassEntity entity = optionalAddClassEntity
-                .orElseThrow(() -> new RuntimeException("Class not found with ID: " + id));
-
-        AddClassDto addClassDto = addClassMapper.toAddClassDto(entity);
-
-        return addClassDto;
+        // Use AppException so RestExceptionHandler can return the correct HTTP status.
+        AddClassEntity entity = addClassRepository.findById(id)
+                .orElseThrow(() -> new AppException("Class not found.", HttpStatus.NOT_FOUND));
+        return addClassMapper.toAddClassDto(entity);
     }
 
     @Override
     public AddClassDto deleteAddClass(long id) {
+        Optional<AddClassEntity> existing = addClassRepository.findById(id);
+        if (existing.isEmpty()) {
+            throw new AppException("Class not found. It may have already been deleted.", HttpStatus.NOT_FOUND);
+        }
         try {
-            Optional<AddClassEntity> optionalAddClassEntity = addClassRepository.findById(id);
-
-            if (!optionalAddClassEntity.isPresent()) {
-                throw new AppException("Class Does Not Exsist", HttpStatus.BAD_REQUEST);
-            }
-
             addClassRepository.deleteById(id);
-
-            AddClassDto addClassDto = addClassMapper.toAddClassDto(optionalAddClassEntity.get());
-            return addClassDto;
+            return addClassMapper.toAddClassDto(existing.get());
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete the class. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
