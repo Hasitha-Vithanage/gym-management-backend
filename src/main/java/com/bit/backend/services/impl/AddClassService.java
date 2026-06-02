@@ -48,15 +48,35 @@ public class AddClassService implements AddClassServiceI {
 
     @Override
     public AddClassDto updateAddClass(long id, AddClassDto addClassDto) {
-        // Check existence first — throw before entering the generic try-catch so the
-        // "not found" message is never overwritten by a generic server error.
-        if (!addClassRepository.existsById(id)) {
-            throw new AppException("Class not found. It may have been removed.", HttpStatus.NOT_FOUND);
-        }
+        AddClassEntity existing = addClassRepository.findById(id)
+                .orElseThrow(() -> new AppException("Class not found. It may have been removed.", HttpStatus.NOT_FOUND));
         try {
-            AddClassEntity entity = addClassMapper.toAddClassEntity(addClassDto);
-            entity.setId(id);
-            AddClassEntity saved = addClassRepository.save(entity);
+            int oldTotal    = existing.getTotalSlots();
+            int newTotal    = addClassDto.getTotalSlots();
+            int bookedCount = oldTotal - existing.getRemainingSlots();
+
+            if (newTotal < bookedCount) {
+                throw new AppException(
+                    "Cannot reduce total slots below the number of members already booked (" + bookedCount + ").",
+                    HttpStatus.BAD_REQUEST
+                );
+            }
+
+            int newRemaining = existing.getRemainingSlots() + (newTotal - oldTotal);
+
+            existing.setClassTitle(addClassDto.getClassTitle());
+            existing.setClassType(addClassDto.getClassType());
+            existing.setDescription(addClassDto.getDescription());
+            existing.setDate(addClassDto.getDate());
+            existing.setStartTime(addClassDto.getStartTime());
+            existing.setEndTime(addClassDto.getEndTime());
+            existing.setConductorName(addClassDto.getConductorName());
+            existing.setProfession(addClassDto.getProfession());
+            existing.setTotalSlots(newTotal);
+            existing.setRemainingSlots(newRemaining);
+            existing.setStatus(addClassDto.getStatus());
+
+            AddClassEntity saved = addClassRepository.save(existing);
             return addClassMapper.toAddClassDto(saved);
         } catch (AppException e) {
             throw e;
