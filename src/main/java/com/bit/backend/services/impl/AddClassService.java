@@ -24,6 +24,7 @@ public class AddClassService implements AddClassServiceI {
 
     @Override
     public AddClassDto addAddClassEntity(AddClassDto addClassDto) {
+        checkTimeOverlap(addClassDto, 0L);
         try {
             AddClassEntity entity = addClassMapper.toAddClassEntity(addClassDto);
             AddClassEntity saved  = addClassRepository.save(entity);
@@ -60,6 +61,8 @@ public class AddClassService implements AddClassServiceI {
                     HttpStatus.BAD_REQUEST
                 );
             }
+
+            checkTimeOverlap(addClassDto, id);
 
             int newRemaining = existing.getRemainingSlots() + (newTotal - oldTotal);
 
@@ -103,6 +106,21 @@ public class AddClassService implements AddClassServiceI {
             throw e;
         } catch (Exception e) {
             throw new AppException("Failed to delete the class. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void checkTimeOverlap(AddClassDto dto, long excludeId) {
+        List<AddClassEntity> sameDay = addClassRepository.findByDateAndIsDeletedFalse(dto.getDate());
+        for (AddClassEntity e : sameDay) {
+            if (e.getId() == excludeId) continue;
+            if (e.getStartTime().isBefore(dto.getEndTime()) &&
+                e.getEndTime().isAfter(dto.getStartTime())) {
+                throw new AppException(
+                    "Time slot conflict: '" + e.getClassTitle() + "' is already scheduled from " +
+                    e.getStartTime() + " to " + e.getEndTime() + " on this date. Please choose a different time.",
+                    HttpStatus.CONFLICT
+                );
+            }
         }
     }
 }

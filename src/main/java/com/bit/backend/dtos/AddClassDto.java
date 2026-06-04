@@ -17,10 +17,9 @@ public class AddClassDto {
     private int totalSlots;
     private int remainingSlots;
     private String status;
-    private Boolean isDeleted;
 
-    // Required for deserialization
     public AddClassDto() {
+        // Required for deserialization
     }
 
     public long getId() {
@@ -119,11 +118,4 @@ public class AddClassDto {
         this.status = status;
     }
 
-    public Boolean getDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
-    }
 }
