@@ -39,7 +39,7 @@ public class AddClassService implements AddClassServiceI {
     @Override
     public List<AddClassDto> getAddClass() {
         try {
-            List<AddClassEntity> entities = addClassRepository.findAllByIsDeletedFalse();
+            List<AddClassEntity> entities = addClassRepository.findAllByIsDeletedFalseOrIsDeletedIsNull();
             return addClassMapper.toAddClassDto(entities);
         } catch (Exception e) {
             throw new AppException("Failed to load the class schedule. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,14 +89,16 @@ public class AddClassService implements AddClassServiceI {
 
     @Override
     public AddClassDto getClassById(long id) {
-        AddClassEntity entity = addClassRepository.findByIdAndIsDeletedFalse(id)
+        AddClassEntity entity = addClassRepository.findById(id)
+                .filter(e -> !Boolean.TRUE.equals(e.getDeleted()))
                 .orElseThrow(() -> new AppException("Class not found.", HttpStatus.NOT_FOUND));
         return addClassMapper.toAddClassDto(entity);
     }
 
     @Override
     public AddClassDto deleteAddClass(long id) {
-        AddClassEntity existing = addClassRepository.findByIdAndIsDeletedFalse(id)
+        AddClassEntity existing = addClassRepository.findById(id)
+                .filter(e -> !Boolean.TRUE.equals(e.getDeleted()))
                 .orElseThrow(() -> new AppException("Class not found. It may have already been deleted.", HttpStatus.NOT_FOUND));
         try {
             existing.setDeleted(true);
@@ -110,10 +112,10 @@ public class AddClassService implements AddClassServiceI {
     }
 
     private void checkTimeOverlap(AddClassDto dto, long excludeId) {
-        List<AddClassEntity> sameDay = addClassRepository.findByDateAndIsDeletedFalse(dto.getDate());
-        for (AddClassEntity e : sameDay) {
-            if (e.getId() == excludeId) continue;
-            if (e.getStartTime().isBefore(dto.getEndTime()) &&
+        List<AddClassEntity> all = addClassRepository.findAllByIsDeletedFalseOrIsDeletedIsNull();
+        for (AddClassEntity e : all) {
+            if (e.getId() != excludeId && e.getDate().equals(dto.getDate()) &&
+                e.getStartTime().isBefore(dto.getEndTime()) &&
                 e.getEndTime().isAfter(dto.getStartTime())) {
                 throw new AppException(
                     "Time slot conflict: '" + e.getClassTitle() + "' is already scheduled from " +
