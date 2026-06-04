@@ -1,6 +1,7 @@
 package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.BookClassDto;
+import com.bit.backend.dtos.MyBookingDto;
 import com.bit.backend.entities.AddClassEntity;
 import com.bit.backend.entities.BookClassEntity;
 import com.bit.backend.entities.MemberEntity;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -154,6 +157,95 @@ public class BookClassService implements BookClassServiceI {
         addClassRepository.save(classEntity);
 
         return bookClassMapper.toBookClassDto(saved);
+    }
+
+    @Override
+    public List<MyBookingDto> getMyBookings(long userId) {
+        try {
+            List<BookClassEntity> bookings = bookClassRepository.findByUserId(userId);
+            List<MyBookingDto> result = new ArrayList<>();
+
+            for (BookClassEntity booking : bookings) {
+                Optional<AddClassEntity> classOpt = addClassRepository.findById(booking.getClassId());
+                if (classOpt.isEmpty()) continue;
+
+                AddClassEntity cls = classOpt.get();
+                MyBookingDto dto = new MyBookingDto();
+
+                dto.setBookingId(booking.getId());
+                dto.setUserId(booking.getUserId());
+                dto.setBookingStatus(booking.getStatus());
+                dto.setBookedDate(booking.getBookedDate());
+
+                dto.setClassId(cls.getId());
+                dto.setClassTitle(cls.getClassTitle());
+                dto.setClassType(cls.getClassType());
+                dto.setDescription(cls.getDescription());
+                dto.setClassDate(cls.getDate());
+                dto.setStartTime(cls.getStartTime());
+                dto.setEndTime(cls.getEndTime());
+                dto.setConductorName(cls.getConductorName());
+                dto.setTrainerEmployeeId(cls.getTrainerEmployeeId());
+                dto.setClassStatus(cls.getStatus());
+                dto.setTotalSlots(cls.getTotalSlots());
+                dto.setRemainingSlots(cls.getRemainingSlots());
+
+                result.add(dto);
+            }
+
+            result.sort((a, b) -> b.getClassDate().compareTo(a.getClassDate()));
+            return result;
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Failed to load your bookings. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void cancelBooking(long bookingId, long userId) {
+
+        // Step 1: Find the booking
+        BookClassEntity booking = bookClassRepository.findById(bookingId)
+                .orElseThrow(() -> new AppException(
+                    "Booking not found. It may have already been removed.", HttpStatus.NOT_FOUND));
+
+        // Step 2: Verify the booking belongs to the requesting user
+        if (booking.getUserId() == null || !booking.getUserId().equals(userId)) {
+            throw new AppException(
+                "You are not authorised to cancel this booking.", HttpStatus.FORBIDDEN);
+        }
+
+        // Step 3: Check booking is still active
+        if ("CANCELLED".equalsIgnoreCase(booking.getStatus())) {
+            throw new AppException(
+                "This booking has already been cancelled.", HttpStatus.CONFLICT);
+        }
+
+        // Step 4: Find the class
+        Optional<AddClassEntity> classOpt = addClassRepository.findById(booking.getClassId());
+
+        // Step 5: Validate class state if the class still exists
+        if (classOpt.isPresent()) {
+            AddClassEntity cls = classOpt.get();
+
+            if ("Completed".equalsIgnoreCase(cls.getStatus())) {
+                throw new AppException(
+                    "Cannot cancel a booking for a class that has already been completed.",
+                    HttpStatus.CONFLICT);
+            }
+
+            // Step 6: Free up the slot if class is still scheduled
+            if ("Scheduled".equalsIgnoreCase(cls.getStatus())) {
+                cls.setRemainingSlots(cls.getRemainingSlots() + 1);
+                addClassRepository.save(cls);
+            }
+        }
+
+        // Step 7: Mark the booking as cancelled
+        booking.setStatus("CANCELLED");
+        bookClassRepository.save(booking);
     }
 
     private boolean isValidEmail(String email) {

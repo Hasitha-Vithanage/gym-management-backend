@@ -1,6 +1,7 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.BookClassDto;
+import com.bit.backend.dtos.MyBookingDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.BookClassServiceI;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,6 +21,35 @@ public class BookClassController {
 
     public BookClassController(BookClassServiceI bookClassServiceI) {
         this.bookClassServiceI = bookClassServiceI;
+    }
+
+    @GetMapping("/my-bookings/{userId}")
+    public ResponseEntity<List<MyBookingDto>> getMyBookings(@PathVariable long userId) {
+        try {
+            return ResponseEntity.ok(bookClassServiceI.getMyBookings(userId));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Failed to load your bookings. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/my-bookings/{bookingId}/cancel")
+    public ResponseEntity<Void> cancelBooking(
+            @PathVariable long bookingId,
+            @RequestBody Map<String, Long> body) {
+        try {
+            Long userId = body.get("userId");
+            if (userId == null) {
+                throw new AppException("Unable to identify your account. Please log in again.", HttpStatus.BAD_REQUEST);
+            }
+            bookClassServiceI.cancelBooking(bookingId, userId);
+            return ResponseEntity.ok().build();
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Failed to cancel the booking. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/booking-class/confirm/{classId}")
