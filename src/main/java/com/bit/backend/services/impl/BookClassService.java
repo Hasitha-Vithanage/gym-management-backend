@@ -25,6 +25,9 @@ import java.util.Optional;
 @Service
 public class BookClassService implements BookClassServiceI {
 
+    private static final String STATUS_CANCELLED = "CANCELLED";
+    private static final String STATUS_SCHEDULED = "Scheduled";
+
     private final BookClassRepository bookClassRepository;
     private final BookClassMapper bookClassMapper;
     private final AddClassRepository addClassRepository;
@@ -63,10 +66,12 @@ public class BookClassService implements BookClassServiceI {
 
 
 
-        // === Step 2: Check if user already booked the same class ===
-        Optional<BookClassEntity> existingBooking = bookClassRepository
-                .findByBookedByAndClassId(bookClassDto.getBookedBy(), bookClassDto.getClassId());
-        if (existingBooking.isPresent()) {
+        // === Step 2: Check if user already has an active booking for the same class ===
+        boolean hasActiveBooking = bookClassRepository
+                .findByBookedByAndClassId(bookClassDto.getBookedBy(), bookClassDto.getClassId())
+                .stream()
+                .anyMatch(b -> !STATUS_CANCELLED.equalsIgnoreCase(b.getStatus()));
+        if (hasActiveBooking) {
             throw new AppException("You have already booked this class.", HttpStatus.CONFLICT);
         }
 
@@ -79,7 +84,7 @@ public class BookClassService implements BookClassServiceI {
 
         AddClassEntity addClassEntity = addClassEntityOpt.get();
 
-        if (!"Scheduled".equalsIgnoreCase(addClassEntity.getStatus())) {
+        if (!STATUS_SCHEDULED.equalsIgnoreCase(addClassEntity.getStatus())) {
             throw new AppException("This class is no longer available for booking.", HttpStatus.BAD_REQUEST);
         }
 
@@ -106,7 +111,7 @@ public class BookClassService implements BookClassServiceI {
                 .filter(e -> !Boolean.TRUE.equals(e.getDeleted()))
                 .orElseThrow(() -> new AppException("Class not found. It may have been removed.", HttpStatus.NOT_FOUND));
 
-        if (!"Scheduled".equalsIgnoreCase(classEntity.getStatus())) {
+        if (!STATUS_SCHEDULED.equalsIgnoreCase(classEntity.getStatus())) {
             throw new AppException("This class is no longer available for booking.", HttpStatus.BAD_REQUEST);
         }
         if (classEntity.getRemainingSlots() < 1) {
@@ -114,7 +119,10 @@ public class BookClassService implements BookClassServiceI {
         }
 
         // Check member hasn't already booked this class
-        if (bookClassRepository.findByUserIdAndClassId(userId, classId).isPresent()) {
+        boolean alreadyBooked = bookClassRepository.findByUserIdAndClassId(userId, classId)
+                .stream()
+                .anyMatch(b -> !STATUS_CANCELLED.equalsIgnoreCase(b.getStatus()));
+        if (alreadyBooked) {
             throw new AppException("You have already booked this class.", HttpStatus.CONFLICT);
         }
 
@@ -218,7 +226,7 @@ public class BookClassService implements BookClassServiceI {
         }
 
         // Step 3: Check booking is still active
-        if ("CANCELLED".equalsIgnoreCase(booking.getStatus())) {
+        if (STATUS_CANCELLED.equalsIgnoreCase(booking.getStatus())) {
             throw new AppException(
                 "This booking has already been cancelled.", HttpStatus.CONFLICT);
         }
@@ -237,14 +245,14 @@ public class BookClassService implements BookClassServiceI {
             }
 
             // Step 6: Free up the slot if class is still scheduled
-            if ("Scheduled".equalsIgnoreCase(cls.getStatus())) {
+            if (STATUS_SCHEDULED.equalsIgnoreCase(cls.getStatus())) {
                 cls.setRemainingSlots(cls.getRemainingSlots() + 1);
                 addClassRepository.save(cls);
             }
         }
 
         // Step 7: Mark the booking as cancelled
-        booking.setStatus("CANCELLED");
+        booking.setStatus(STATUS_CANCELLED);
         bookClassRepository.save(booking);
     }
 

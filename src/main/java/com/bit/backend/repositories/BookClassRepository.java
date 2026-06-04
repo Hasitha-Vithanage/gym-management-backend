@@ -4,11 +4,11 @@ import com.bit.backend.entities.AssignTrainerEntity;
 import com.bit.backend.entities.BookClassEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface BookClassRepository extends JpaRepository<BookClassEntity, Long> {
 
-    Optional<BookClassEntity> findByBookedByAndClassId(String bookedBy, long classId);
-    Optional<BookClassEntity> findByUserIdAndClassId(Long userId, long classId);
-    java.util.List<BookClassEntity> findByUserId(Long userId);
+    List<BookClassEntity> findByBookedByAndClassId(String bookedBy, long classId);
+    List<BookClassEntity> findByUserIdAndClassId(Long userId, long classId);
+    List<BookClassEntity> findByUserId(Long userId);
 }
