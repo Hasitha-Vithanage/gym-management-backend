@@ -5,6 +5,7 @@ import com.bit.backend.entities.AddClassEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.AddClassMapper;
 import com.bit.backend.repositories.AddClassRepository;
+import com.bit.backend.repositories.BookClassRepository;
 import com.bit.backend.services.AddClassServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,17 @@ import java.util.List;
 @Service
 public class AddClassService implements AddClassServiceI {
 
+    private static final String STATUS_CONFIRMED = "CONFIRMED";
+
     private final AddClassRepository addClassRepository;
     private final AddClassMapper addClassMapper;
+    private final BookClassRepository bookClassRepository;
 
-    public AddClassService(AddClassRepository addClassRepository, AddClassMapper addClassMapper) {
+    public AddClassService(AddClassRepository addClassRepository, AddClassMapper addClassMapper,
+                           BookClassRepository bookClassRepository) {
         this.addClassRepository = addClassRepository;
         this.addClassMapper = addClassMapper;
+        this.bookClassRepository = bookClassRepository;
     }
 
     @Override
@@ -100,6 +106,16 @@ public class AddClassService implements AddClassServiceI {
         AddClassEntity existing = addClassRepository.findById(id)
                 .filter(e -> !Boolean.TRUE.equals(e.getDeleted()))
                 .orElseThrow(() -> new AppException("Class not found. It may have already been deleted.", HttpStatus.NOT_FOUND));
+
+        long activeBookings = bookClassRepository.countByClassIdAndStatus(id, STATUS_CONFIRMED);
+        if (activeBookings > 0) {
+            throw new AppException(
+                "Cannot delete this class. " + activeBookings + " member(s) have active bookings. " +
+                "Please cancel the class instead so members can be notified.",
+                HttpStatus.CONFLICT
+            );
+        }
+
         try {
             existing.setDeleted(true);
             addClassRepository.save(existing);

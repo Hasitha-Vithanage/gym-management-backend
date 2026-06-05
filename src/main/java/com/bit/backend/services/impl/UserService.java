@@ -189,7 +189,7 @@ public class UserService implements UserServiceI {
     public UserDto approveUser(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
 
-        user.setStatus("Approved");
+        user.setStatus("APPROVED");
         User updatedUser = userRepository.save(user);
         UserDto userDto = userMapper.toUserDto(updatedUser);
         return (userDto);
@@ -199,7 +199,7 @@ public class UserService implements UserServiceI {
     public UserDto rejectUser(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
 
-        user.setStatus("Rejected");
+        user.setStatus("REJECTED");
         User updatedUser = userRepository.save(user);
         UserDto userDto = userMapper.toUserDto(updatedUser);
         return (userDto);

@@ -11,4 +11,5 @@ public interface BookClassRepository extends JpaRepository<BookClassEntity, Long
     List<BookClassEntity> findByBookedByAndClassId(String bookedBy, long classId);
     List<BookClassEntity> findByUserIdAndClassId(Long userId, long classId);
     List<BookClassEntity> findByUserId(Long userId);
+    long countByClassIdAndStatus(long classId, String status);
 }
