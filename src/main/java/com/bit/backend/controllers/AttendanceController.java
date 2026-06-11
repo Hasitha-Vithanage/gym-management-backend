@@ -1,13 +1,15 @@
 package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.AttendanceDto;
-import com.bit.backend.services.AssignTrainerServiceI;
 import com.bit.backend.services.AttendanceServiceI;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class AttendanceController {
@@ -19,16 +21,16 @@ public class AttendanceController {
     }
 
     @PostMapping("/memberService/mark-attendance/present/{memberNo}")
-    public ResponseEntity<AttendanceDto> markMemberAttendancePresent(
-            @PathVariable String memberNo,
-            @RequestBody AttendanceDto dto) {
-
+    public ResponseEntity<AttendanceDto> markMemberAttendancePresent(@PathVariable String memberNo) {
+        AttendanceDto dto = new AttendanceDto();
         dto.setAttendanceType("member");
         dto.setMember(memberNo);
-//        dto.setAttendanceStatus("present");
+        return ResponseEntity.ok(attendanceServiceI.addAttendanceEntity(dto));
+    }
 
-        AttendanceDto saved = attendanceServiceI.addAttendanceEntity(dto);
-        return ResponseEntity.ok(saved);
+    @GetMapping("/memberService/attendance/today")
+    public ResponseEntity<List<AttendanceDto>> getTodayCheckIns() {
+        return ResponseEntity.ok(attendanceServiceI.getTodayMemberCheckIns());
     }
 
     @PostMapping("/employeeService/mark-attendance/present/{employeeId}")
@@ -40,8 +42,7 @@ public class AttendanceController {
         dto.setEmployee(employeeId);
         dto.setAttendanceStatus("present");
 
-        AttendanceDto saved = attendanceServiceI.addAttendanceEntity(dto);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(attendanceServiceI.addAttendanceEntity(dto));
     }
 
     @PostMapping("/employeeService/mark-attendance/{employeeId}")
@@ -51,9 +52,7 @@ public class AttendanceController {
 
         dto.setAttendanceType("employee");
         dto.setEmployee(employeeId);
-        dto.setAttendanceStatus(dto.getAttendanceStatus());
 
-        AttendanceDto saved = attendanceServiceI.addAttendanceEntity(dto);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(attendanceServiceI.addAttendanceEntity(dto));
     }
 }

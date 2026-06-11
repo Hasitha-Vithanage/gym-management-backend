@@ -3,6 +3,7 @@ package com.bit.backend.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "attendance")
@@ -26,6 +27,9 @@ public class AttendanceEntity {
 
     @Column(name = "attendanceStatus") // "present" or "absent"
     private String attendanceStatus;
+
+    @Column(name = "check_in_time")
+    private LocalDateTime checkInTime;
 
     public AttendanceEntity() {
     }
@@ -85,5 +89,13 @@ public class AttendanceEntity {
 
     public void setAttendanceStatus(String attendanceStatus) {
         this.attendanceStatus = attendanceStatus;
+    }
+
+    public LocalDateTime getCheckInTime() {
+        return checkInTime;
+    }
+
+    public void setCheckInTime(LocalDateTime checkInTime) {
+        this.checkInTime = checkInTime;
     }
 }

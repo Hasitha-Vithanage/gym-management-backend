@@ -1,15 +1,21 @@
 package com.bit.backend.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AttendanceDto {
 
-    private Long id; // Optional if updating
+    private Long id;
     private LocalDate attendanceDate;
     private String attendanceType;
     private String employee;
     private String member;
     private String attendanceStatus;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime checkInTime;
 
     public AttendanceDto() {
     }
@@ -69,5 +75,13 @@ public class AttendanceDto {
 
     public void setAttendanceStatus(String attendanceStatus) {
         this.attendanceStatus = attendanceStatus;
+    }
+
+    public LocalDateTime getCheckInTime() {
+        return checkInTime;
+    }
+
+    public void setCheckInTime(LocalDateTime checkInTime) {
+        this.checkInTime = checkInTime;
     }
 }
