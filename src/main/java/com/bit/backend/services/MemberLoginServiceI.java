@@ -14,4 +14,5 @@ public interface MemberLoginServiceI {
     MemberLoginDto deleteMemberLogin(long id);
     MemberLoginDto updateMemberLogin(MemberLoginDto memberLoginDto, long id);
     MemberLoginDto getMemberLoginDataByMemberId(long id);
+    MemberLoginDto toggleLoginStatus(long id);
 }

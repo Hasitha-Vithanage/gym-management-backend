@@ -19,4 +19,5 @@ public interface UserServiceI {
     List<User> getAllUsers();
     UserDto approveUser(long userId);
     UserDto rejectUser(long userId);
+    void setUserStatus(Long userId, String status);
 }

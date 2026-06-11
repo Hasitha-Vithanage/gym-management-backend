@@ -48,14 +48,14 @@ public class TrainerLoginService implements TrainerLoginServiceI {
             TrainerLoginEntity trainerLoginEntityCheck = trainerLoginRepository.findByEmployee(trainerLoginDto.getEmployee());
 
             if (trainerLoginEntityCheck != null) {
-                throw new AppException("Login already exists for the trainer", HttpStatus.NOT_FOUND);
+                throw new AppException("A login already exists for this employee.", HttpStatus.CONFLICT);
             }
 
             /* Check if user already exists for the trainer*/
             UserDto oUser = userServiceI.findByLogin(trainerLoginDto.getUserName());
 
             if (oUser != null) {
-                throw new AppException("User name already exists for the trainer", HttpStatus.NOT_FOUND);
+                throw new AppException("This username is already taken. Please choose a different one.", HttpStatus.CONFLICT);
             }
 
             /*Create User Entity*/
@@ -67,6 +67,8 @@ public class TrainerLoginService implements TrainerLoginServiceI {
             TrainerLoginDto savedTrainerLoginDto = trainerLoginMapper.toTrainerLoginDto(savedItem);
 
             return savedTrainerLoginDto;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -110,6 +112,8 @@ public class TrainerLoginService implements TrainerLoginServiceI {
 
             return savedTrainerLoginDto;
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -121,5 +125,20 @@ public class TrainerLoginService implements TrainerLoginServiceI {
         return trainerLoginMapper.toTrainerLoginDto(trainerLoginEntity);
     }
 
+    @Override
+    public TrainerLoginDto toggleLoginStatus(long id) {
+        TrainerLoginEntity login = trainerLoginRepository.findById(id)
+                .orElseThrow(() -> new AppException("Login record not found.", HttpStatus.NOT_FOUND));
+
+        boolean newActive = !login.isActive();
+        login.setActive(newActive);
+        trainerLoginRepository.save(login);
+
+        if (login.getUserId() != null) {
+            userServiceI.setUserStatus(login.getUserId(), newActive ? "APPROVED" : "INACTIVE");
+        }
+
+        return trainerLoginMapper.toTrainerLoginDto(login);
+    }
 
 }

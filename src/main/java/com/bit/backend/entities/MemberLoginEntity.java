@@ -32,6 +32,9 @@ public class MemberLoginEntity {
     @Column(name="member")
     private Long member;
 
+    @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean active = true;
+
     public MemberLoginEntity() {
     }
 
@@ -108,5 +111,13 @@ public class MemberLoginEntity {
 
     public void setMember(Long member) {
         this.member = member;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -2,14 +2,13 @@ package com.bit.backend.services.impl;
 
 import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.MemberDto;
-import com.bit.backend.dtos.MembershipCategoryDto;
 import com.bit.backend.entities.EmployeeEntity;
 import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.entities.MemberLoginEntity;
-import com.bit.backend.entities.MembershipCategoryEntity;
 import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.MemberMapper;
+import com.bit.backend.repositories.AssignTrainerRepository;
 import com.bit.backend.repositories.MemberLoginRepository;
 import com.bit.backend.repositories.MemberRepository;
 import com.bit.backend.repositories.UserRepository;
@@ -27,13 +26,16 @@ public class MemberService implements MemberServiceI {
     private final MemberMapper memberMapper;
     private final MemberLoginRepository memberLoginRepository;
     private final UserRepository userRepository;
+    private final AssignTrainerRepository assignTrainerRepository;
 
     public MemberService(MemberRepository memberRepository, MemberMapper memberMapper,
-                         MemberLoginRepository memberLoginRepository, UserRepository userRepository) {
+                         MemberLoginRepository memberLoginRepository, UserRepository userRepository,
+                         AssignTrainerRepository assignTrainerRepository) {
         this.memberRepository = memberRepository;
         this.memberMapper = memberMapper;
         this.memberLoginRepository = memberLoginRepository;
         this.userRepository = userRepository;
+        this.assignTrainerRepository = assignTrainerRepository;
     }
 
     @Override
@@ -95,13 +97,29 @@ public class MemberService implements MemberServiceI {
             MemberEntity existingMember = memberRepository.findById(id)
                     .orElseThrow(() -> new AppException("Member does not exist", HttpStatus.BAD_REQUEST));
 
-            // Soft delete by setting isDeleted flag to true
+            MemberLoginEntity login = memberLoginRepository.findByMember(id);
+            if (login != null && login.isActive()) {
+                throw new AppException(
+                    "This member has an active login account. Please deactivate the login before deleting.",
+                    HttpStatus.CONFLICT);
+            }
+
+            if (assignTrainerRepository.existsByMemberId(id)) {
+                throw new AppException(
+                    "This member is assigned to a trainer. Please remove the trainer assignment before deleting.",
+                    HttpStatus.CONFLICT);
+            }
+
+            if (login != null) {
+                memberLoginRepository.delete(login);
+            }
+
             existingMember.setDeleted(true);
-
             MemberEntity updatedMember = memberRepository.save(existingMember);
-
             return memberMapper.toMemberDto(updatedMember);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

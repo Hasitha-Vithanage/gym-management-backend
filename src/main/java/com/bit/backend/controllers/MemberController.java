@@ -2,7 +2,6 @@ package com.bit.backend.controllers;
 
 import com.bit.backend.dtos.EmployeeDto;
 import com.bit.backend.dtos.MemberDto;
-import com.bit.backend.dtos.MembershipCategoryDto;
 import com.bit.backend.dtos.SupplierDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.MemberServiceI;
@@ -83,9 +82,10 @@ public class MemberController {
             MemberDto memberDto = memberServiceI.deleteMember(id);
             return ResponseEntity.ok(memberDto);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to delete the member record. Please try again later." + e,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete the member record. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

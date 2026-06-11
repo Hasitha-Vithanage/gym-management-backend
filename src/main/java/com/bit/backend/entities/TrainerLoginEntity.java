@@ -31,6 +31,9 @@ public class TrainerLoginEntity {
     @Column(name="employee")
     private Long employee;
 
+    @Column(name = "active", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean active = true;
+
     public TrainerLoginEntity() {
     }
 
@@ -107,5 +110,13 @@ public class TrainerLoginEntity {
 
     public void setEmployee(Long employee) {
         this.employee = employee;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

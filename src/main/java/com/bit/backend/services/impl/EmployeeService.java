@@ -6,9 +6,13 @@ import com.bit.backend.dtos.MemberDto;
 import com.bit.backend.entities.AssignTrainerEntity;
 import com.bit.backend.entities.EmployeeEntity;
 import com.bit.backend.entities.MemberEntity;
+import com.bit.backend.entities.TrainerLoginEntity;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.EmployeeMapper;
+import com.bit.backend.repositories.AddClassRepository;
+import com.bit.backend.repositories.AssignTrainerRepository;
 import com.bit.backend.repositories.EmployeeRepository;
+import com.bit.backend.repositories.TrainerLoginRepository;
 import com.bit.backend.services.EmployeeServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,10 +26,18 @@ public class EmployeeService implements EmployeeServiceI {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final TrainerLoginRepository trainerLoginRepository;
+    private final AddClassRepository addClassRepository;
+    private final AssignTrainerRepository assignTrainerRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper,
+                           TrainerLoginRepository trainerLoginRepository, AddClassRepository addClassRepository,
+                           AssignTrainerRepository assignTrainerRepository) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
+        this.trainerLoginRepository = trainerLoginRepository;
+        this.addClassRepository = addClassRepository;
+        this.assignTrainerRepository = assignTrainerRepository;
     }
 
     // addEmployeeEntity method
@@ -102,13 +114,35 @@ public class EmployeeService implements EmployeeServiceI {
             EmployeeEntity existingEmployee = employeeRepository.findById(id)
                     .orElseThrow(() -> new AppException("Employee does not exist", HttpStatus.BAD_REQUEST));
 
-            // Soft delete by setting isDeleted flag to true
+            TrainerLoginEntity login = trainerLoginRepository.findByEmployee(id);
+            if (login != null && login.isActive()) {
+                throw new AppException(
+                    "This employee has an active login account. Please deactivate the login before deleting.",
+                    HttpStatus.CONFLICT);
+            }
+
+            if (assignTrainerRepository.existsByTrainerId(id)) {
+                throw new AppException(
+                    "This employee is assigned to one or more members. Please remove those trainer assignments before deleting.",
+                    HttpStatus.CONFLICT);
+            }
+
+            if (addClassRepository.existsScheduledClassByTrainer(id)) {
+                throw new AppException(
+                    "This employee is assigned to one or more upcoming classes. Please reassign those classes before deleting.",
+                    HttpStatus.CONFLICT);
+            }
+
+            if (login != null) {
+                trainerLoginRepository.delete(login);
+            }
+
             existingEmployee.setIsDeleted(true);
-
             EmployeeEntity updatedEmployee = employeeRepository.save(existingEmployee);
-
             return employeeMapper.toEmployeeDto(updatedEmployee);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

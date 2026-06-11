@@ -103,9 +103,10 @@ public class EmployeeController {
             EmployeeDto employeeDto = employeeServiceI.deleteEmployee(id);
             return ResponseEntity.ok(employeeDto);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to delete the employee record. Please try again later." + e,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete the employee record. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

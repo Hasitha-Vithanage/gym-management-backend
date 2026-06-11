@@ -204,4 +204,12 @@ public class UserService implements UserServiceI {
         UserDto userDto = userMapper.toUserDto(updatedUser);
         return (userDto);
     }
+
+    @Override
+    public void setUserStatus(Long userId, String status) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
+        user.setStatus(status);
+        userRepository.save(user);
+    }
 }

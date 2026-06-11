@@ -12,6 +12,8 @@ public interface AssignTrainerRepository extends JpaRepository<AssignTrainerEnti
 
     boolean existsByMemberId(Long memberId);
 
+    boolean existsByTrainerId(Long trainerId);
+
     AssignTrainerEntity findByMemberId(Long memberId);
 
     long countByTrainerId(Long trainerId);

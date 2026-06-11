@@ -57,14 +57,14 @@ public class MemberLoginService implements MemberLoginServiceI {
             MemberLoginEntity memberLoginEntityCheck = memberLoginRepository.findByMember(memberLoginDto.getMember());
 
             if (memberLoginEntityCheck != null) {
-                throw new AppException("Login already exists for the member", HttpStatus.NOT_FOUND);
+                throw new AppException("A login already exists for this member.", HttpStatus.CONFLICT);
             }
 
             /* Check if user already exists for the trainer*/
             UserDto oUser = userServiceI.findByLogin(memberLoginDto.getUserName());
 
             if (oUser != null) {
-                throw new AppException("User name already exists for the member", HttpStatus.NOT_FOUND);
+                throw new AppException("This username is already taken. Please choose a different one.", HttpStatus.CONFLICT);
             }
 
             /*Create User Entity*/
@@ -86,6 +86,8 @@ public class MemberLoginService implements MemberLoginServiceI {
             MemberLoginEntity savedItem = memberLoginRepository.save(memberLoginEntity);
             MemberLoginDto savedMemberLoginDto = memberLoginMapper.toMemberLoginDto(savedItem);
             return savedMemberLoginDto;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -124,7 +126,7 @@ public class MemberLoginService implements MemberLoginServiceI {
            List<User> userList = userServiceI.checkIfUserNameExistForOtherUsers(memberLoginDto.getUserName(), memberLoginDto.getUserId());
 
            if (userList != null && userList.size() > 0) {
-               throw new AppException("User name found for other users!", HttpStatus.NOT_FOUND);
+               throw new AppException("This username is already taken. Please choose a different one.", HttpStatus.CONFLICT);
            }
 
            MemberLoginEntity oldMemberLoginEntity = optionalMemberLoginEntity.get();
@@ -137,6 +139,8 @@ public class MemberLoginService implements MemberLoginServiceI {
            UserDto userDto = userServiceI.updatePassword(memberLoginDto.getUserName(), memberLoginDto.getPassword(), memberLoginDto.getUserId());
 
            return savedMemberLoginDto;
+       } catch (AppException e) {
+           throw e;
        } catch (Exception e) {
            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
        }
@@ -146,6 +150,22 @@ public class MemberLoginService implements MemberLoginServiceI {
     public MemberLoginDto getMemberLoginDataByMemberId(long id) {
         MemberLoginEntity memberLoginEntity = memberLoginRepository.findByMember(id);
         return memberLoginMapper.toMemberLoginDto(memberLoginEntity);
+    }
+
+    @Override
+    public MemberLoginDto toggleLoginStatus(long id) {
+        MemberLoginEntity login = memberLoginRepository.findById(id)
+                .orElseThrow(() -> new AppException("Login record not found.", HttpStatus.NOT_FOUND));
+
+        boolean newActive = !login.isActive();
+        login.setActive(newActive);
+        memberLoginRepository.save(login);
+
+        if (login.getUserId() != null) {
+            userServiceI.setUserStatus(login.getUserId(), newActive ? "APPROVED" : "INACTIVE");
+        }
+
+        return memberLoginMapper.toMemberLoginDto(login);
     }
 
 }

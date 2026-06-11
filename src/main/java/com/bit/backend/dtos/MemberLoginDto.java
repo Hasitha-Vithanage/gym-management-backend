@@ -11,6 +11,7 @@ public class MemberLoginDto {
     private String role;
     private Long userId;
     private Long member;
+    private boolean active;
 
     public MemberLoginDto() {
     }
@@ -97,5 +98,13 @@ public class MemberLoginDto {
 
     public void setMember(Long member) {
         this.member = member;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

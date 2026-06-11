@@ -11,6 +11,7 @@ public class TrainerLoginDto {
     private String role;
     private Long userId;
     private Long employee;
+    private boolean active;
 
     public TrainerLoginDto() {
     }
@@ -97,5 +98,13 @@ public class TrainerLoginDto {
 
     public void setEmployee(Long employee) {
         this.employee = employee;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

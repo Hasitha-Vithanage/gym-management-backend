@@ -27,8 +27,10 @@ public class MemberLoginController {
         try {
             MemberLoginDto memberLoginDtoResponse = memberLoginServiceI.addMemberLoginEntity(memberLoginDto);
             return ResponseEntity.created(URI.create("/member-login" + memberLoginDtoResponse.getId())).body(memberLoginDtoResponse);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Assign Login failed. Please try again later. " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Assign Login failed. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -45,8 +47,10 @@ public class MemberLoginController {
         try {
             MemberLoginDto memberLoginDtoResponse = memberLoginServiceI.updateMemberLogin(memberLoginDto, id);
             return ResponseEntity.created(URI.create("/member-login" + memberLoginDtoResponse.getId())).body(memberLoginDtoResponse);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Assign Login failed. Please try again later. " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Assign Login failed. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -60,5 +64,17 @@ public class MemberLoginController {
     public ResponseEntity<MemberLoginDto> getMemberLoginData(@PathVariable long id) {
         MemberLoginDto memberLoginDto = memberLoginServiceI.getMemberLoginDataByMemberId(id);
         return ResponseEntity.created(URI.create("/member-user-id" + memberLoginDto.getId())).body(memberLoginDto);
+    }
+
+    @PatchMapping("/member-login/{id}/status")
+    public ResponseEntity<MemberLoginDto> toggleMemberLoginStatus(@PathVariable long id) {
+        try {
+            MemberLoginDto result = memberLoginServiceI.toggleLoginStatus(id);
+            return ResponseEntity.ok(result);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Failed to update login status. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
