@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface ProgressTrackingRepository extends JpaRepository<ProgressTrackingEntity, Long> {
 
@@ -21,6 +22,6 @@ public interface ProgressTrackingRepository extends JpaRepository<ProgressTracki
             "FROM ProgressTrackingEntity p WHERE p.userName = :userName GROUP BY p.date ORDER BY p.date")
     List<Map<String, Object>> getWeightOverTimeByUser(@Param("userName") String userName);
 
-
-
+    // Returns the most recent progress record for a member — used by meal plan auto-suggest to get latest BMI
+    Optional<ProgressTrackingEntity> findTopByUserNameOrderByDateDesc(String userName);
 }
