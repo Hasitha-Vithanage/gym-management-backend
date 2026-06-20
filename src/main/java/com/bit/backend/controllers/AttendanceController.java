@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AttendanceController {
@@ -31,6 +33,32 @@ public class AttendanceController {
     @GetMapping("/memberService/attendance/today")
     public ResponseEntity<List<AttendanceDto>> getTodayCheckIns() {
         return ResponseEntity.ok(attendanceServiceI.getTodayMemberCheckIns());
+    }
+
+    @GetMapping("/memberService/attendance/history/{memberNo}")
+    public ResponseEntity<List<AttendanceDto>> getMemberAttendanceHistory(
+            @PathVariable String memberNo,
+            @RequestParam int year,
+            @RequestParam int month) {
+        return ResponseEntity.ok(attendanceServiceI.getMemberAttendanceHistory(memberNo, year, month));
+    }
+
+    @GetMapping("/memberService/attendance/daily-counts")
+    public ResponseEntity<List<Map<String, Object>>> getDailyMemberCheckIns(
+            @RequestParam int year,
+            @RequestParam int month) {
+        return ResponseEntity.ok(attendanceServiceI.getDailyMemberCheckIns(year, month));
+    }
+
+    @GetMapping("/memberService/attendance/peak-hours")
+    public ResponseEntity<List<Map<String, Object>>> getMemberPeakHours() {
+        return ResponseEntity.ok(attendanceServiceI.getMemberPeakHours());
+    }
+
+    @GetMapping("/memberService/attendance/at-risk")
+    public ResponseEntity<List<Map<String, Object>>> getAtRiskMembers(
+            @RequestParam(defaultValue = "14") int days) {
+        return ResponseEntity.ok(attendanceServiceI.getAtRiskMembers(days));
     }
 
     @PostMapping("/employeeService/mark-attendance/present/{employeeId}")

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AttendanceService implements AttendanceServiceI {
@@ -52,5 +53,25 @@ public class AttendanceService implements AttendanceServiceI {
         List<AttendanceEntity> entities = attendanceRepository
                 .findByAttendanceDateAndAttendanceTypeOrderByCheckInTimeDesc(LocalDate.now(), MEMBER_TYPE);
         return attendanceMapper.toAttendanceDto(entities);
+    }
+
+    public List<AttendanceDto> getMemberAttendanceHistory(String memberNo, int year, int month) {
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+        List<AttendanceEntity> entities = attendanceRepository
+                .findByMemberAndAttendanceDateBetweenAndAttendanceType(memberNo, start, end, MEMBER_TYPE);
+        return attendanceMapper.toAttendanceDto(entities);
+    }
+
+    public List<Map<String, Object>> getDailyMemberCheckIns(int year, int month) {
+        return attendanceRepository.getDailyMemberCheckIns(year, month);
+    }
+
+    public List<Map<String, Object>> getMemberPeakHours() {
+        return attendanceRepository.getMemberPeakHours();
+    }
+
+    public List<Map<String, Object>> getAtRiskMembers(int days) {
+        return attendanceRepository.getAtRiskMembers(days);
     }
 }
