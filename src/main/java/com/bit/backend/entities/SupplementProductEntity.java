@@ -40,6 +40,16 @@ public class SupplementProductEntity {
     @Column(name = "is_deleted")
     private Boolean isDeleted = Boolean.FALSE;
 
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
+
+    @Column(name = "image_name")
+    private String imageName;
+
+    @Column(name = "image_type")
+    private String imageType;
+
     public SupplementProductEntity() {}
 
     public SupplementProductEntity(Long id, String productName, String brand, String category,
@@ -86,4 +96,13 @@ public class SupplementProductEntity {
 
     public Boolean getIsDeleted() { return isDeleted; }
     public void setIsDeleted(Boolean isDeleted) { this.isDeleted = isDeleted; }
+
+    public byte[] getImage() { return image; }
+    public void setImage(byte[] image) { this.image = image; }
+
+    public String getImageName() { return imageName; }
+    public void setImageName(String imageName) { this.imageName = imageName; }
+
+    public String getImageType() { return imageType; }
+    public void setImageType(String imageType) { this.imageType = imageType; }
 }

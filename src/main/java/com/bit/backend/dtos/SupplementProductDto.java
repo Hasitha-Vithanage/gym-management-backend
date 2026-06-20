@@ -1,5 +1,6 @@
 package com.bit.backend.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class SupplementProductDto {
@@ -14,6 +15,13 @@ public class SupplementProductDto {
     private List<String> tags;
     private Boolean isActive;
     private Boolean isDeleted;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private byte[] image;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String imageName;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String imageType;
 
     public SupplementProductDto() {}
 
@@ -61,4 +69,13 @@ public class SupplementProductDto {
 
     public Boolean getIsDeleted() { return isDeleted; }
     public void setIsDeleted(Boolean isDeleted) { this.isDeleted = isDeleted; }
+
+    public byte[] getImage() { return image; }
+    public void setImage(byte[] image) { this.image = image; }
+
+    public String getImageName() { return imageName; }
+    public void setImageName(String imageName) { this.imageName = imageName; }
+
+    public String getImageType() { return imageType; }
+    public void setImageType(String imageType) { this.imageType = imageType; }
 }

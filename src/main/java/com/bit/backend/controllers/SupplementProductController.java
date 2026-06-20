@@ -4,8 +4,10 @@ import com.bit.backend.dtos.SupplementProductDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.SupplementProductServiceI;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -20,9 +22,16 @@ public class SupplementProductController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity<SupplementProductDto> createProduct(@RequestBody SupplementProductDto dto) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<SupplementProductDto> createProduct(
+            @RequestPart("productForm") SupplementProductDto dto,
+            @RequestPart(value = "image", required = false) MultipartFile file) {
         try {
+            if (file != null && !file.isEmpty()) {
+                dto.setImage(file.getBytes());
+                dto.setImageName(file.getOriginalFilename());
+                dto.setImageType(file.getContentType());
+            }
             SupplementProductDto response = service.createProduct(dto);
             return ResponseEntity.created(URI.create("/supplements/" + response.getId())).body(response);
         } catch (Exception e) {
@@ -48,9 +57,17 @@ public class SupplementProductController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SupplementProductDto> updateProduct(@PathVariable Long id, @RequestBody SupplementProductDto dto) {
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<SupplementProductDto> updateProduct(
+            @PathVariable Long id,
+            @RequestPart("productForm") SupplementProductDto dto,
+            @RequestPart(value = "image", required = false) MultipartFile file) {
         try {
+            if (file != null && !file.isEmpty()) {
+                dto.setImage(file.getBytes());
+                dto.setImageName(file.getOriginalFilename());
+                dto.setImageType(file.getContentType());
+            }
             return ResponseEntity.ok(service.updateProduct(id, dto));
         } catch (Exception e) {
             throw new AppException("Failed to update product: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
