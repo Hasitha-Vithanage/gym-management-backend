@@ -1,93 +1,49 @@
 package com.bit.backend.dtos;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class FeedbackDto {
 
-    private long id;
+    private Long id;
     private String category;
-    private String trainer;
+    private String targetName;
     private int rating;
     private boolean anonymous;
     private String feedback;
-    private LocalDate date;
-    private String username;
+    private String submittedBy;
+    private LocalDateTime submittedAt;
+    private String status;
+    private String adminRemarks;
 
-    public FeedbackDto() {
-    }
+    public FeedbackDto() {}
 
-    public FeedbackDto(long id, String category, String trainer, int rating, boolean anonymous, String feedback, LocalDate date, String username) {
-        this.id = id;
-        this.category = category;
-        this.trainer = trainer;
-        this.rating = rating;
-        this.anonymous = anonymous;
-        this.feedback = feedback;
-        this.date = date;
-        this.username = username;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public long getId() {
-        return id;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    public String getTargetName() { return targetName; }
+    public void setTargetName(String targetName) { this.targetName = targetName; }
 
-    public String getCategory() {
-        return category;
-    }
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public boolean isAnonymous() { return anonymous; }
+    public void setAnonymous(boolean anonymous) { this.anonymous = anonymous; }
 
-    public String getTrainer() {
-        return trainer;
-    }
+    public String getFeedback() { return feedback; }
+    public void setFeedback(String feedback) { this.feedback = feedback; }
 
-    public void setTrainer(String trainer) {
-        this.trainer = trainer;
-    }
+    public String getSubmittedBy() { return submittedBy; }
+    public void setSubmittedBy(String submittedBy) { this.submittedBy = submittedBy; }
 
-    public int getRating() {
-        return rating;
-    }
+    public LocalDateTime getSubmittedAt() { return submittedAt; }
+    public void setSubmittedAt(LocalDateTime submittedAt) { this.submittedAt = submittedAt; }
 
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public boolean isAnonymous() {
-        return anonymous;
-    }
-
-    public void setAnonymous(boolean anonymous) {
-        this.anonymous = anonymous;
-    }
-
-    public String getFeedback() {
-        return feedback;
-    }
-
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getAdminRemarks() { return adminRemarks; }
+    public void setAdminRemarks(String adminRemarks) { this.adminRemarks = adminRemarks; }
 }

@@ -1,113 +1,72 @@
 package com.bit.backend.entities;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "rating-feedback")
+@Table(name = "feedback")
 public class FeedbackEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "category")
     private String category;
 
-    @Column(name = "trainer")
-    private String trainer;
+    @Column(name = "target_name")
+    private String targetName;
 
     @Column(name = "rating")
     private int rating;
 
     @Column(name = "anonymous")
-    private Boolean anonymous;
+    private boolean anonymous;
 
-    @Column(name = "feedback")
+    @Column(name = "feedback", length = 1000)
     private String feedback;
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "submitted_by")
+    private String submittedBy;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "submitted_at")
+    private LocalDateTime submittedAt;
 
-    public FeedbackEntity() {
-    }
+    @Column(name = "status")
+    private String status;
 
-    public FeedbackEntity(long id, String category, String trainer, int rating, Boolean anonymous, String feedback, LocalDate date, String username) {
-        this.id = id;
-        this.category = category;
-        this.trainer = trainer;
-        this.rating = rating;
-        this.anonymous = anonymous;
-        this.feedback = feedback;
-        this.date = date;
-        this.username = username;
-    }
+    @Column(name = "admin_remarks", length = 500)
+    private String adminRemarks;
 
-    public long getId() {
-        return id;
-    }
+    public FeedbackEntity() {}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getCategory() {
-        return category;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public String getTargetName() { return targetName; }
+    public void setTargetName(String targetName) { this.targetName = targetName; }
 
-    public String getTrainer() {
-        return trainer;
-    }
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
 
-    public void setTrainer(String trainer) {
-        this.trainer = trainer;
-    }
+    public boolean isAnonymous() { return anonymous; }
+    public void setAnonymous(boolean anonymous) { this.anonymous = anonymous; }
 
-    public int getRating() {
-        return rating;
-    }
+    public String getFeedback() { return feedback; }
+    public void setFeedback(String feedback) { this.feedback = feedback; }
 
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
+    public String getSubmittedBy() { return submittedBy; }
+    public void setSubmittedBy(String submittedBy) { this.submittedBy = submittedBy; }
 
-    public Boolean getAnonymous() {
-        return anonymous;
-    }
+    public LocalDateTime getSubmittedAt() { return submittedAt; }
+    public void setSubmittedAt(LocalDateTime submittedAt) { this.submittedAt = submittedAt; }
 
-    public void setAnonymous(Boolean anonymous) {
-        this.anonymous = anonymous;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public String getFeedback() {
-        return feedback;
-    }
-
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getAdminRemarks() { return adminRemarks; }
+    public void setAdminRemarks(String adminRemarks) { this.adminRemarks = adminRemarks; }
 }
