@@ -1,5 +1,6 @@
 package com.bit.backend.dtos;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,9 @@ public class EquipmentDto {
     private Date purchaseDate;
     private String addedBy;
     private String remarks;
+    private String status;
+    private LocalDate lastMaintenance;
+    private LocalDate nextMaintenance;
 
     public EquipmentDto() {
     }
@@ -180,5 +184,29 @@ public class EquipmentDto {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDate getLastMaintenance() {
+        return lastMaintenance;
+    }
+
+    public void setLastMaintenance(LocalDate lastMaintenance) {
+        this.lastMaintenance = lastMaintenance;
+    }
+
+    public LocalDate getNextMaintenance() {
+        return nextMaintenance;
+    }
+
+    public void setNextMaintenance(LocalDate nextMaintenance) {
+        this.nextMaintenance = nextMaintenance;
     }
 }

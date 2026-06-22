@@ -9,7 +9,9 @@ import com.bit.backend.services.EquipmentServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -67,5 +69,29 @@ public class EquipmentService implements EquipmentServiceI {
         equipmentRepository.deleteById(id);
         EquipmentDto deletedDto = equipmentMapper.toEquipmentDto(optionalEquipmentEntity.get());
         return deletedDto;
+    }
+
+    @Override
+    public EquipmentDto updateStatus(long id, String status) {
+        EquipmentEntity entity = equipmentRepository.findById(id)
+                .orElseThrow(() -> new AppException("Equipment Does Not Exist", HttpStatus.BAD_REQUEST));
+        entity.setStatus(status);
+        return equipmentMapper.toEquipmentDto(equipmentRepository.save(entity));
+    }
+
+    @Override
+    public Map<String, Long> getStatusSummary() {
+        Map<String, Long> summary = new HashMap<>();
+        summary.put("total", equipmentRepository.count());
+        summary.put("active", equipmentRepository.countByStatus("ACTIVE"));
+        summary.put("maintenance", equipmentRepository.countByStatus("MAINTENANCE"));
+        summary.put("outOfService", equipmentRepository.countByStatus("OUT_OF_SERVICE"));
+        summary.put("overdue", (long) equipmentRepository.findOverdue().size());
+        return summary;
+    }
+
+    @Override
+    public List<EquipmentDto> getOverdueEquipments() {
+        return equipmentMapper.toEquipmentDtoList(equipmentRepository.findOverdue());
     }
 }

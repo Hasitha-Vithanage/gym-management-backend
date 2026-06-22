@@ -3,6 +3,7 @@ package com.bit.backend.entities;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -62,6 +63,15 @@ public class EquipmentEntity {
 
     @Column
     private String remarks;
+
+    @Column(name = "status")
+    private String status = "ACTIVE";
+
+    @Column(name = "last_maintenance")
+    private LocalDate lastMaintenance;
+
+    @Column(name = "next_maintenance")
+    private LocalDate nextMaintenance;
 
     public EquipmentEntity() {
     }
@@ -220,5 +230,29 @@ public class EquipmentEntity {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDate getLastMaintenance() {
+        return lastMaintenance;
+    }
+
+    public void setLastMaintenance(LocalDate lastMaintenance) {
+        this.lastMaintenance = lastMaintenance;
+    }
+
+    public LocalDate getNextMaintenance() {
+        return nextMaintenance;
+    }
+
+    public void setNextMaintenance(LocalDate nextMaintenance) {
+        this.nextMaintenance = nextMaintenance;
     }
 }

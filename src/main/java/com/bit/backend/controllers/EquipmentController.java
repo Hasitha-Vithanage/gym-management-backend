@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class EquipmentController {
@@ -38,5 +39,21 @@ public class EquipmentController {
     public ResponseEntity<EquipmentDto> deleteEquipment(@PathVariable long id) {
         EquipmentDto equipmentDto = equipmentServiceI.deleteEquipment(id);
         return ResponseEntity.ok().body(equipmentDto);
+    }
+
+    @PatchMapping("/equipments/{id}/status")
+    public ResponseEntity<EquipmentDto> updateStatus(@PathVariable long id, @RequestBody Map<String, String> body) {
+        EquipmentDto updated = equipmentServiceI.updateStatus(id, body.get("status"));
+        return ResponseEntity.ok(updated);
+    }
+
+    @GetMapping("/equipments/summary")
+    public ResponseEntity<Map<String, Long>> getStatusSummary() {
+        return ResponseEntity.ok(equipmentServiceI.getStatusSummary());
+    }
+
+    @GetMapping("/equipments/overdue")
+    public ResponseEntity<List<EquipmentDto>> getOverdueEquipments() {
+        return ResponseEntity.ok(equipmentServiceI.getOverdueEquipments());
     }
 }
