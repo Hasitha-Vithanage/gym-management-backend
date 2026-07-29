@@ -22,4 +22,8 @@ public interface EmployeeServiceI {
    Long getEmployeeCount();
 
     EmployeeDto getTrainerByName(String trainerName);
+
+    EmployeeDto getEmployeeProfileByUserId(long userId);
+
+    EmployeeDto updateEmployeeProfile(long userId, EmployeeDto employeeDto);
 }

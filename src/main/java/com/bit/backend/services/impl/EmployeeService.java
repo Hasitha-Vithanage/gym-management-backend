@@ -7,12 +7,14 @@ import com.bit.backend.entities.AssignTrainerEntity;
 import com.bit.backend.entities.EmployeeEntity;
 import com.bit.backend.entities.MemberEntity;
 import com.bit.backend.entities.TrainerLoginEntity;
+import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.EmployeeMapper;
 import com.bit.backend.repositories.AddClassRepository;
 import com.bit.backend.repositories.AssignTrainerRepository;
 import com.bit.backend.repositories.EmployeeRepository;
 import com.bit.backend.repositories.TrainerLoginRepository;
+import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.EmployeeServiceI;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,15 +31,17 @@ public class EmployeeService implements EmployeeServiceI {
     private final TrainerLoginRepository trainerLoginRepository;
     private final AddClassRepository addClassRepository;
     private final AssignTrainerRepository assignTrainerRepository;
+    private final UserRepository userRepository;
 
     public EmployeeService(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper,
                            TrainerLoginRepository trainerLoginRepository, AddClassRepository addClassRepository,
-                           AssignTrainerRepository assignTrainerRepository) {
+                           AssignTrainerRepository assignTrainerRepository, UserRepository userRepository) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
         this.trainerLoginRepository = trainerLoginRepository;
         this.addClassRepository = addClassRepository;
         this.assignTrainerRepository = assignTrainerRepository;
+        this.userRepository = userRepository;
     }
 
     // addEmployeeEntity method
@@ -180,6 +184,68 @@ public class EmployeeService implements EmployeeServiceI {
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public EmployeeDto getEmployeeProfileByUserId(long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
+        if (user.getEmployeeLoginId() == null) {
+            throw new AppException("No employee profile linked to this account", HttpStatus.NOT_FOUND);
+        }
+        EmployeeEntity employeeEntity = employeeRepository.findById(user.getEmployeeLoginId())
+                .orElseThrow(() -> new AppException("Employee record not found", HttpStatus.NOT_FOUND));
+        return employeeMapper.toEmployeeDto(employeeEntity);
+    }
+
+    @Override
+    public EmployeeDto updateEmployeeProfile(long userId, EmployeeDto employeeDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
+        if (user.getEmployeeLoginId() == null) {
+            throw new AppException("No employee profile linked to this account", HttpStatus.NOT_FOUND);
+        }
+        EmployeeEntity employeeEntity = employeeRepository.findById(user.getEmployeeLoginId())
+                .orElseThrow(() -> new AppException("Employee record not found", HttpStatus.NOT_FOUND));
+
+        applyEmployeeUpdates(employeeEntity, employeeDto);
+        EmployeeEntity saved = employeeRepository.save(employeeEntity);
+
+        applyUserUpdates(user, employeeDto);
+        userRepository.save(user);
+
+        syncTrainerLogin(userId, employeeDto);
+
+        return employeeMapper.toEmployeeDto(saved);
+    }
+
+    private void applyEmployeeUpdates(EmployeeEntity entity, EmployeeDto dto) {
+        if (hasValue(dto.getFirstName())) entity.setFirstName(dto.getFirstName());
+        if (hasValue(dto.getLastName()))  entity.setLastName(dto.getLastName());
+        if (dto.getEmail() != null)       entity.setEmail(dto.getEmail());
+        if (dto.getPhoneNumber() != null) entity.setPhoneNumber(dto.getPhoneNumber());
+        if (dto.getAddress() != null)     entity.setAddress(dto.getAddress());
+        if (dto.getGender() != null)      entity.setGender(dto.getGender());
+        if (dto.getEmergencyContactNumber() != null)
+            entity.setEmergencyContactNumber(dto.getEmergencyContactNumber());
+    }
+
+    private void applyUserUpdates(User user, EmployeeDto dto) {
+        if (hasValue(dto.getFirstName())) user.setFirstName(dto.getFirstName());
+        if (hasValue(dto.getLastName()))  user.setLastName(dto.getLastName());
+        if (dto.getEmail() != null)       user.setEmail(dto.getEmail());
+    }
+
+    private void syncTrainerLogin(long userId, EmployeeDto dto) {
+        TrainerLoginEntity login = trainerLoginRepository.findByUserId(userId);
+        if (login == null) return;
+        if (hasValue(dto.getFirstName())) login.setFirstName(dto.getFirstName());
+        if (hasValue(dto.getLastName()))  login.setLastName(dto.getLastName());
+        trainerLoginRepository.save(login);
+    }
+
+    private boolean hasValue(String value) {
+        return value != null && !value.isBlank();
     }
 
 }

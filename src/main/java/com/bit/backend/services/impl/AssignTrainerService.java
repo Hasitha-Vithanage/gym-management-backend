@@ -96,8 +96,15 @@ public class AssignTrainerService implements AssignTrainerServiceI {
                 throw new AppException("AssignTrainer Does Not Exist", HttpStatus.BAD_REQUEST);
             }
 
+            MemberEntity member = memberRepository.findById(assignTrainerDto.getMemberId())
+                    .orElseThrow(() -> new AppException("Member not found", HttpStatus.BAD_REQUEST));
+            EmployeeEntity trainer = employeeRepository.findById(assignTrainerDto.getTrainerId())
+                    .orElseThrow(() -> new AppException("Trainer not found", HttpStatus.BAD_REQUEST));
+
             AssignTrainerEntity newAssignTrainerEntity = assignTrainerMapper.toAssignTrainerEntity(assignTrainerDto);
             newAssignTrainerEntity.setId(id);
+            newAssignTrainerEntity.setMember(member.getFirstName() + " " + member.getLastName());
+            newAssignTrainerEntity.setTrainer(trainer.getFirstName() + " " + trainer.getLastName());
             AssignTrainerEntity assignTrainerEntity = assignTrainerRepository.save(newAssignTrainerEntity);
             AssignTrainerDto responseAssignTrainerDto = assignTrainerMapper.toAssignTrainerDto(assignTrainerEntity);
             return responseAssignTrainerDto;

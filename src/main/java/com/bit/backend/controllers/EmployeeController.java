@@ -131,4 +131,17 @@ public class EmployeeController {
         }
     }
 
+    @GetMapping("/employee/profile/{userId}")
+    public ResponseEntity<EmployeeDto> getEmployeeProfileByUserId(@PathVariable long userId) {
+        EmployeeDto employeeDto = employeeServiceI.getEmployeeProfileByUserId(userId);
+        return ResponseEntity.ok(employeeDto);
+    }
+
+    @PutMapping("/employee/profile/{userId}")
+    public ResponseEntity<EmployeeDto> updateEmployeeProfile(@PathVariable long userId,
+            @RequestBody EmployeeDto employeeDto) {
+        EmployeeDto updated = employeeServiceI.updateEmployeeProfile(userId, employeeDto);
+        return ResponseEntity.ok(updated);
+    }
+
 }

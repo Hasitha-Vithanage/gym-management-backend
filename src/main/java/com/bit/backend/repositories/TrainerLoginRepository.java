@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TrainerLoginRepository extends JpaRepository<TrainerLoginEntity, Long> {
     TrainerLoginEntity findByEmployee(Long employee);
+    TrainerLoginEntity findByUserId(Long userId);
 }

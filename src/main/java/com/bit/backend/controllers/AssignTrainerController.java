@@ -27,8 +27,10 @@ public class AssignTrainerController {
         try {
             AssignTrainerDto assignTrainerDtoResponse = assignTrainerServiceI.addAssignTrainerEntity(assignTrainerDto);
             return ResponseEntity.created(URI.create("/assign-trainer/" + assignTrainerDtoResponse.getId())).body(assignTrainerDtoResponse);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("" + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to assign trainer. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -37,8 +39,10 @@ public class AssignTrainerController {
         try {
             List<AssignTrainerDto> assignTrainerDtoList = assignTrainerServiceI.getAssignTrainer();
             return ResponseEntity.ok(assignTrainerDtoList);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to load AssignTrainer records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to load AssignTrainer records. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -47,8 +51,10 @@ public class AssignTrainerController {
         try {
             AssignTrainerDto assignTrainerDtoResponse = assignTrainerServiceI.updateAssignTrainer(id, assignTrainerDto);
             return ResponseEntity.ok(assignTrainerDtoResponse);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to update the AssignTrainer information. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to update the AssignTrainer information. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -57,8 +63,10 @@ public class AssignTrainerController {
         try {
             AssignTrainerDto assignTrainerDto = assignTrainerServiceI.deleteAssignTrainer(id);
             return ResponseEntity.ok(assignTrainerDto);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to delete the AssignTrainer record. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete the AssignTrainer record. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -67,8 +75,10 @@ public class AssignTrainerController {
         try {
            AssignTrainerDto assignTrainerDto = assignTrainerServiceI.getAssignTrainerByMember(memberName);
             return ResponseEntity.ok(assignTrainerDto);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to load AssignTrainer records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to load AssignTrainer records. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -77,8 +87,10 @@ public class AssignTrainerController {
         try {
             User user = assignTrainerServiceI.getTrainerByMember(id);
             return ResponseEntity.ok(user);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to load AssignTrainer records. Please try again later." + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to load AssignTrainer records. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

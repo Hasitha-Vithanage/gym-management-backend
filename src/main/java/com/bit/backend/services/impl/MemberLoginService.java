@@ -83,6 +83,9 @@ public class MemberLoginService implements MemberLoginServiceI {
 
             /*Create Login Entity*/
             MemberLoginEntity memberLoginEntity = memberLoginMapper.toMemberLoginEntity(memberLoginDto);
+            // MemberLoginDto.active has no value from the frontend on create and defaults
+            // to false, which overwrites the entity's own "active = true" default via the mapper.
+            memberLoginEntity.setActive(true);
             MemberLoginEntity savedItem = memberLoginRepository.save(memberLoginEntity);
             MemberLoginDto savedMemberLoginDto = memberLoginMapper.toMemberLoginDto(savedItem);
             return savedMemberLoginDto;
@@ -149,6 +152,9 @@ public class MemberLoginService implements MemberLoginServiceI {
     @Override
     public MemberLoginDto getMemberLoginDataByMemberId(long id) {
         MemberLoginEntity memberLoginEntity = memberLoginRepository.findByMember(id);
+        if (memberLoginEntity == null) {
+            throw new AppException("No login account found for this member", HttpStatus.NOT_FOUND);
+        }
         return memberLoginMapper.toMemberLoginDto(memberLoginEntity);
     }
 

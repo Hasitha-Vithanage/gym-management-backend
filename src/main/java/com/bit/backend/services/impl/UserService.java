@@ -3,9 +3,13 @@ package com.bit.backend.services.impl;
 import com.bit.backend.dtos.*;
 import com.bit.backend.entities.EmployeeEntity;
 import com.bit.backend.entities.MemberEntity;
+import com.bit.backend.entities.MemberLoginEntity;
+import com.bit.backend.entities.TrainerLoginEntity;
 import com.bit.backend.entities.User;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.mappers.UserMapper;
+import com.bit.backend.repositories.MemberLoginRepository;
+import com.bit.backend.repositories.TrainerLoginRepository;
 import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.services.UserServiceI;
 import jakarta.persistence.Tuple;
@@ -26,13 +30,18 @@ public class UserService implements UserServiceI {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final MemberLoginRepository memberLoginRepository;
+    private final TrainerLoginRepository trainerLoginRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper,
+                        MemberLoginRepository memberLoginRepository, TrainerLoginRepository trainerLoginRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
+        this.memberLoginRepository = memberLoginRepository;
+        this.trainerLoginRepository = trainerLoginRepository;
     }
 
     @Override
@@ -133,7 +142,7 @@ public class UserService implements UserServiceI {
         try {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException("Unknown User", HttpStatus.NOT_FOUND));
 
-        if (password.length() > 0) {
+        if (password != null && !password.isEmpty()) {
             /*Update password only if it not matches with the old password*/
             if (!passwordEncoder.matches(CharBuffer.wrap(password), user.getPassword())) {
                 user.setPassword(passwordEncoder.encode(CharBuffer.wrap(password)));
@@ -211,5 +220,33 @@ public class UserService implements UserServiceI {
                 .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
         user.setStatus(status);
         userRepository.save(user);
+    }
+
+    @Override
+    public UserDto changeOwnLogin(long userId, String userName, String password) {
+        if (userName == null || userName.isBlank()) {
+            throw new AppException("Username is required", HttpStatus.BAD_REQUEST);
+        }
+
+        List<User> conflicts = checkIfUserNameExistForOtherUsers(userName, userId);
+        if (conflicts != null && !conflicts.isEmpty()) {
+            throw new AppException("This username is already taken. Please choose a different one.", HttpStatus.CONFLICT);
+        }
+
+        UserDto updated = updatePassword(userName, password, userId);
+
+        MemberLoginEntity memberLogin = memberLoginRepository.findByUserId(userId);
+        if (memberLogin != null) {
+            memberLogin.setUserName(userName);
+            memberLoginRepository.save(memberLogin);
+        }
+
+        TrainerLoginEntity trainerLogin = trainerLoginRepository.findByUserId(userId);
+        if (trainerLogin != null) {
+            trainerLogin.setUserName(userName);
+            trainerLoginRepository.save(trainerLogin);
+        }
+
+        return updated;
     }
 }

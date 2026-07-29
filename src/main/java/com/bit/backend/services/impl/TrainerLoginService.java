@@ -63,6 +63,9 @@ public class TrainerLoginService implements TrainerLoginServiceI {
             trainerLoginDto.setUserId(userDto.getId());
             /*Create Login Entity*/
             TrainerLoginEntity trainerLoginEntity = trainerLoginMapper.toTrainerLoginEntity(trainerLoginDto);
+            // TrainerLoginDto.active has no value from the frontend on create and defaults
+            // to false, which overwrites the entity's own "active = true" default via the mapper.
+            trainerLoginEntity.setActive(true);
             TrainerLoginEntity savedItem = trainerLoginRepository.save(trainerLoginEntity);
             TrainerLoginDto savedTrainerLoginDto = trainerLoginMapper.toTrainerLoginDto(savedItem);
 
@@ -122,6 +125,9 @@ public class TrainerLoginService implements TrainerLoginServiceI {
     @Override
     public TrainerLoginDto getEmployeeLoginDataByEmployeeId(long id) {
         TrainerLoginEntity trainerLoginEntity = trainerLoginRepository.findByEmployee(id);
+        if (trainerLoginEntity == null) {
+            throw new AppException("No login account found for this trainer", HttpStatus.NOT_FOUND);
+        }
         return trainerLoginMapper.toTrainerLoginDto(trainerLoginEntity);
     }
 

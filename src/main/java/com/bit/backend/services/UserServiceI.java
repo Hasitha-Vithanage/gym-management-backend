@@ -20,4 +20,5 @@ public interface UserServiceI {
     UserDto approveUser(long userId);
     UserDto rejectUser(long userId);
     void setUserStatus(Long userId, String status);
+    UserDto changeOwnLogin(long userId, String userName, String password);
 }

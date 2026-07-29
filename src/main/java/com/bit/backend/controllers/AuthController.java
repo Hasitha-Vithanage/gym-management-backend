@@ -113,6 +113,12 @@ public class AuthController {
         }
     }
 
+    @PutMapping("/user/change-login/{id}")
+    public ResponseEntity<UserDto> changeLogin(@PathVariable long id, @RequestBody ChangeLoginDto changeLoginDto) {
+        UserDto updated = userServiceI.changeOwnLogin(id, changeLoginDto.getUserName(), changeLoginDto.getPassword());
+        return ResponseEntity.ok(updated);
+    }
+
 
 //    @PostMapping("/system-privileges")
 //    public ResponseEntity<List<Integer>> saveSystemPrivileges(@RequestBody SystemPrivilegeListDto systemPrivilegeListDto) {
