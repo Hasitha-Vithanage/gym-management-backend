@@ -14,6 +14,7 @@ public class SupplierDto {
     private List<String> equipmentType;
     private boolean status;
     private String remarks;
+    private Boolean isDeleted = Boolean.FALSE;
 
     public SupplierDto() {
     }
@@ -109,6 +110,14 @@ public class SupplierDto {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }
 

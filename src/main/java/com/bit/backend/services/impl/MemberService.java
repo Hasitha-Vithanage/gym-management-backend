@@ -45,10 +45,17 @@ public class MemberService implements MemberServiceI {
         try {
             System.out.println("************ In Service *************");
 
+            if (memberDto.getNic() != null && !memberDto.getNic().isBlank()
+                    && memberRepository.existsByNic(memberDto.getNic())) {
+                throw new AppException("This NIC is already registered to another member.", HttpStatus.CONFLICT);
+            }
+
             MemberEntity memberEntity = memberMapper.toMemberEntity(memberDto);
             MemberEntity savedItem = memberRepository.save(memberEntity);
             MemberDto savedDto = memberMapper.toMemberDto(savedItem);
             return savedDto;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -71,6 +78,10 @@ public class MemberService implements MemberServiceI {
             throw new AppException("Member Does Not Exist", HttpStatus.BAD_REQUEST);
         }
 
+        if (memberDto.getNic() != null && !memberDto.getNic().isBlank()
+                && memberRepository.existsByNicAndIdNot(memberDto.getNic(), id)) {
+            throw new AppException("This NIC is already registered to another member.", HttpStatus.CONFLICT);
+        }
 
         MemberEntity newMemberEntity = memberMapper.toMemberEntity(memberDto);
         newMemberEntity.setId(id);

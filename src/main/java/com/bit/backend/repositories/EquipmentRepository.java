@@ -11,4 +11,6 @@ public interface EquipmentRepository extends JpaRepository<EquipmentEntity, Long
 
     @Query("SELECT e FROM EquipmentEntity e WHERE e.nextMaintenance IS NOT NULL AND e.nextMaintenance < CURRENT_DATE AND e.status = 'ACTIVE'")
     List<EquipmentEntity> findOverdue();
+
+    long countBySupplier(Long supplier);
 }

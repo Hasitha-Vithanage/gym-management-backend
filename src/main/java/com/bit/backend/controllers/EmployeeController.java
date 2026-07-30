@@ -35,8 +35,10 @@ public class EmployeeController {
             EmployeeDto employeeDtoResponse = employeeServiceI.addEmployeeEntity(employeeDto);
             return ResponseEntity.created(URI.create("/employee/" + employeeDtoResponse.getId()))
                     .body(employeeDtoResponse);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to register employee. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -74,8 +76,10 @@ public class EmployeeController {
             employeeDto.setImageType(file.getContentType());
             EmployeeDto employeeDtoResponse = employeeServiceI.updateEmployee(id, employeeDto);
             return ResponseEntity.ok(employeeDtoResponse);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to update the employee information. Please try again later." + e,
+            throw new AppException("Failed to update the employee information. Please try again later.",
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

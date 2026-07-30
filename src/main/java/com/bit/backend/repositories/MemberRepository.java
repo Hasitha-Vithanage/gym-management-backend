@@ -17,4 +17,8 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
     boolean existsByMemberNo(String memberNo);
 
+    boolean existsByNic(String nic);
+
+    boolean existsByNicAndIdNot(String nic, Long id);
+
 }

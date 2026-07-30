@@ -50,10 +50,17 @@ public class EmployeeService implements EmployeeServiceI {
         try {
             System.out.println("************ In Service *************");
 
+            if (employeeDto.getNic() != null && !employeeDto.getNic().isBlank()
+                    && employeeRepository.existsByNic(employeeDto.getNic())) {
+                throw new AppException("This NIC is already registered to another employee.", HttpStatus.CONFLICT);
+            }
+
             EmployeeEntity employeeEntity = employeeMapper.toEmployeeEntity(employeeDto);
             EmployeeEntity savedItem = employeeRepository.save(employeeEntity);
             EmployeeDto savedEmployeeDto = employeeMapper.toEmployeeDto(savedItem);
             return savedEmployeeDto;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -81,11 +88,18 @@ public class EmployeeService implements EmployeeServiceI {
                 throw new AppException("Employee Does Not Exist", HttpStatus.BAD_REQUEST);
             }
 
+            if (employeeDto.getNic() != null && !employeeDto.getNic().isBlank()
+                    && employeeRepository.existsByNicAndIdNot(employeeDto.getNic(), id)) {
+                throw new AppException("This NIC is already registered to another employee.", HttpStatus.CONFLICT);
+            }
+
             EmployeeEntity newEmployeeEntity = employeeMapper.toEmployeeEntity(employeeDto);
             newEmployeeEntity.setId(id);
             EmployeeEntity employeeEntity = employeeRepository.save(newEmployeeEntity);
             EmployeeDto responseEmployeeDto = employeeMapper.toEmployeeDto(employeeEntity);
             return responseEmployeeDto;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -25,8 +25,10 @@ public class WorkoutTemplateController {
             WorkoutTemplateDto workoutTemplateDtoResponse = workoutTemplateServiceI.createWorkoutTemplateEntity(workoutTemplateDto);
             return ResponseEntity.created(URI.create("/workout-templates" + workoutTemplateDtoResponse.getId()))
                     .body(workoutTemplateDtoResponse);
+                } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to create template. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -35,9 +37,10 @@ public class WorkoutTemplateController {
         try {
             WorkoutTemplateDto workoutTemplateDtoResponse = workoutTemplateServiceI.editWorkoutTemplate(id, workoutTemplateDto);
             return ResponseEntity.ok(workoutTemplateDtoResponse);
+                } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to update the workout template information. Please try again later." + e,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to create template. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

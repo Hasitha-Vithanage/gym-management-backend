@@ -23,20 +23,20 @@ public class CommonDataService implements CommonDataServiceI {
     private final PrivilegeGroupAuthRepository privilegeGroupAuthRepository;
     private final PrivilegeGroupUserRepository privilegeGroupUserRepository;
     private final AttendanceRepository attendanceRepository;
-    private final OrderRepository orderRepository;
+    private final SupplementOrderRepository supplementOrderRepository;
 
     CommonDataService(CommonDataRepository commonDataRepository,
                       CommonDataMapper commonDataMapper,
                       PrivilegeGroupAuthRepository privilegeGroupAuthRepository,
                       PrivilegeGroupUserRepository privilegeGroupUserRepository,
                       AttendanceRepository attendanceRepository,
-                      OrderRepository orderRepository) {
+                      SupplementOrderRepository supplementOrderRepository) {
         this.commonDataRepository = commonDataRepository;
         this.commonDataMapper = commonDataMapper;
         this.privilegeGroupAuthRepository = privilegeGroupAuthRepository;
         this.privilegeGroupUserRepository = privilegeGroupUserRepository;
         this.attendanceRepository = attendanceRepository;
-        this.orderRepository = orderRepository;
+        this.supplementOrderRepository = supplementOrderRepository;
     }
 
     @Override
@@ -146,7 +146,7 @@ public class CommonDataService implements CommonDataServiceI {
     @Override
     public List<Map<String, Object>> getMonthlySupplimentSalesCount() {
         try {
-            return orderRepository.getSupplimentOrderCountByMonth();
+            return supplementOrderRepository.getSupplementOrderCountByMonth();
         } catch (Exception e) {
             throw new AppException("Request failed with error while getting data to stat charts: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -155,7 +155,7 @@ public class CommonDataService implements CommonDataServiceI {
     @Override
     public List<Map<String, Object>> getMonthlySupplimentSalesIncome() {
         try {
-            return orderRepository.getSupplimentOrderIncomeByMonth();
+            return supplementOrderRepository.getSupplementOrderIncomeByMonth();
         } catch (Exception e) {
             throw new AppException("Request failed with error while getting data to stat charts: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

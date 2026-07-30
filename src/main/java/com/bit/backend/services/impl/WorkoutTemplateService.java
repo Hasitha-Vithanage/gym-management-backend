@@ -30,10 +30,17 @@ public class WorkoutTemplateService implements WorkoutTemplateServiceI {
         try {
             System.out.println("************ In Service *************");
 
+             if (workoutTemplateDto.getTemplateName() != null && !workoutTemplateDto.getTemplateName().isBlank()
+                    && workoutTemplateRepository.existsByTemplateNameIgnoreCaseAndIsDeletedFalse(workoutTemplateDto.getTemplateName())) {
+                throw new AppException("A workout template with this name already exists.", HttpStatus.CONFLICT);
+            }
+
             WorkoutTemplateEntity workoutTemplateEntity = workoutTemplateMapper.toWorkoutTemplateEntity(workoutTemplateDto);
             WorkoutTemplateEntity savedItem = workoutTemplateRepository.save(workoutTemplateEntity);
             WorkoutTemplateDto savedWorkoutTemplateDto = workoutTemplateMapper.toWorkoutTemplateDto(savedItem);
             return savedWorkoutTemplateDto;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -47,12 +54,18 @@ public class WorkoutTemplateService implements WorkoutTemplateServiceI {
             if (!optionalWorkoutTemplateEntity.isPresent()) {
                 throw new AppException("Workout Template Does Not Exist", HttpStatus.BAD_REQUEST);
             }
+            if (workoutTemplateDto.getTemplateName() != null && !workoutTemplateDto.getTemplateName().isBlank()
+                    && workoutTemplateRepository.existsByTemplateNameIgnoreCaseAndIsDeletedFalse(workoutTemplateDto.getTemplateName())) {
+                throw new AppException("A workout template with this name already exists.", HttpStatus.CONFLICT);
+            }
 
             WorkoutTemplateEntity newWorkoutTemplateEntity = workoutTemplateMapper.toWorkoutTemplateEntity(workoutTemplateDto);
             newWorkoutTemplateEntity.setId(id);
             WorkoutTemplateEntity workoutTemplateEntity = workoutTemplateRepository.save(newWorkoutTemplateEntity);
             WorkoutTemplateDto responseWorkoutTemplateDto = workoutTemplateMapper.toWorkoutTemplateDto(workoutTemplateEntity);
             return responseWorkoutTemplateDto;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }

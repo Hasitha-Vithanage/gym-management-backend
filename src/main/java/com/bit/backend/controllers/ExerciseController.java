@@ -26,8 +26,10 @@ public class ExerciseController {
             ExerciseDto exerciseDtoResponse = exerciseServiceI.createExerciseEntity(exerciseDto);
             return ResponseEntity.created(URI.create("/exercise/" + exerciseDtoResponse.getId()))
                     .body(exerciseDtoResponse);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to create exercise. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -36,8 +38,10 @@ public class ExerciseController {
         try {
             ExerciseDto exerciseDtoResponse = exerciseServiceI.editExercise(id, exerciseDto);
             return ResponseEntity.ok(exerciseDtoResponse);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Failed to update the exercise information. Please try again later." + e,
+            throw new AppException("Failed to update the exercise information. Please try again later.",
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

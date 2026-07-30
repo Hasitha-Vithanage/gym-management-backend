@@ -41,6 +41,9 @@ public class SupplierEntity {
     @Column(name = "remarks")
     private String remarks;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = Boolean.FALSE;
+
     public SupplierEntity() {
     }
 
@@ -135,5 +138,13 @@ public class SupplierEntity {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
     }
 }

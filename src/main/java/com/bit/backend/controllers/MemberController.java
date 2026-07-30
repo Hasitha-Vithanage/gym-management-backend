@@ -34,8 +34,10 @@ public class MemberController {
             MemberDto memberDtoResponse = memberServiceI.addMemberEntity(memberDto);
             return ResponseEntity.created(URI.create("/member/" + memberDtoResponse.getId()))
                     .body(memberDtoResponse);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to register member. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -59,8 +61,10 @@ public class MemberController {
             memberDto.setImageType(file.getContentType());
             MemberDto memberDtoResponse = memberServiceI.updateMember(id, memberDto);
             return ResponseEntity.ok(memberDtoResponse);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to update member. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

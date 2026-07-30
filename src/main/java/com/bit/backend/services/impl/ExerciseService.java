@@ -28,10 +28,17 @@ public class ExerciseService implements ExerciseServiceI {
         try {
             System.out.println("************ In Service *************");
 
+            if (exerciseDto.getExerciseName() != null && !exerciseDto.getExerciseName().isBlank()
+                    && exerciseRepository.existsByExerciseNameIgnoreCaseAndIsDeletedFalse(exerciseDto.getExerciseName())) {
+                throw new AppException("An exercise with this name already exists.", HttpStatus.CONFLICT);
+            }
+
             ExerciseEntity exerciseEntity = exerciseMapper.toExerciseEntity(exerciseDto);
             ExerciseEntity savedItem = exerciseRepository.save(exerciseEntity);
             ExerciseDto savedExerciseDto = exerciseMapper.toExerciseDto(savedItem);
             return savedExerciseDto;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -46,11 +53,18 @@ public class ExerciseService implements ExerciseServiceI {
                 throw new AppException("Exercise Does Not Exist", HttpStatus.BAD_REQUEST);
             }
 
+            if (exerciseDto.getExerciseName() != null && !exerciseDto.getExerciseName().isBlank()
+                    && exerciseRepository.existsByExerciseNameIgnoreCaseAndIsDeletedFalseAndIdNot(exerciseDto.getExerciseName(), id)) {
+                throw new AppException("An exercise with this name already exists.", HttpStatus.CONFLICT);
+            }
+
             ExerciseEntity newExerciseEntity = exerciseMapper.toExerciseEntity(exerciseDto);
             newExerciseEntity.setId(id);
             ExerciseEntity exerciseEntity = exerciseRepository.save(newExerciseEntity);
             ExerciseDto responseExerciseDto = exerciseMapper.toExerciseDto(exerciseEntity);
             return responseExerciseDto;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException("Request failed with error: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
