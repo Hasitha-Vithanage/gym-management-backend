@@ -45,43 +45,10 @@ public class ProgressTrackingEntity {
     @Column(name = "userName")
     private String userName;
 
-    // frontImage fields (can be large, use @Lob)
-    @Lob
-    @Column(name = "frontImage")
-    private byte[] frontImage;
-
-    @Column(name = "frontImageName")
-    private String frontImageName;
-
-    @Column(name = "frontImageType")
-    private String frontImageType;
-
-    // sideImage fields
-    @Lob
-    @Column(name = "sideImage")
-    private byte[] sideImage;
-
-    @Column(name = "sideImageName")
-    private String sideImageName;
-
-    @Column(name = "sideImageType")
-    private String sideImageType;
-
-    // backImage fields
-    @Lob
-    @Column(name = "backImage")
-    private byte[] backImage;
-
-    @Column(name = "backImageName")
-    private String backImageName;
-
-    @Column(name = "backImageType")
-    private String backImageType;
-
     public ProgressTrackingEntity() {
     }
 
-    public ProgressTrackingEntity(Long id, LocalDate date, double weight, double height, double waist, double hip, double neck, double bmi, double bodyFat, String gender, String remarks, String userName, byte[] frontImage, String frontImageName, String frontImageType, byte[] sideImage, String sideImageName, String sideImageType, byte[] backImage, String backImageName, String backImageType) {
+    public ProgressTrackingEntity(Long id, LocalDate date, double weight, double height, double waist, double hip, double neck, double bmi, double bodyFat, String gender, String remarks, String userName) {
         this.id = id;
         this.date = date;
         this.weight = weight;
@@ -94,15 +61,6 @@ public class ProgressTrackingEntity {
         this.gender = gender;
         this.remarks = remarks;
         this.userName = userName;
-        this.frontImage = frontImage;
-        this.frontImageName = frontImageName;
-        this.frontImageType = frontImageType;
-        this.sideImage = sideImage;
-        this.sideImageName = sideImageName;
-        this.sideImageType = sideImageType;
-        this.backImage = backImage;
-        this.backImageName = backImageName;
-        this.backImageType = backImageType;
     }
 
     public Long getId() {
@@ -199,77 +157,5 @@ public class ProgressTrackingEntity {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public byte[] getFrontImage() {
-        return frontImage;
-    }
-
-    public void setFrontImage(byte[] frontImage) {
-        this.frontImage = frontImage;
-    }
-
-    public String getFrontImageName() {
-        return frontImageName;
-    }
-
-    public void setFrontImageName(String frontImageName) {
-        this.frontImageName = frontImageName;
-    }
-
-    public String getFrontImageType() {
-        return frontImageType;
-    }
-
-    public void setFrontImageType(String frontImageType) {
-        this.frontImageType = frontImageType;
-    }
-
-    public byte[] getSideImage() {
-        return sideImage;
-    }
-
-    public void setSideImage(byte[] sideImage) {
-        this.sideImage = sideImage;
-    }
-
-    public String getSideImageName() {
-        return sideImageName;
-    }
-
-    public void setSideImageName(String sideImageName) {
-        this.sideImageName = sideImageName;
-    }
-
-    public String getSideImageType() {
-        return sideImageType;
-    }
-
-    public void setSideImageType(String sideImageType) {
-        this.sideImageType = sideImageType;
-    }
-
-    public byte[] getBackImage() {
-        return backImage;
-    }
-
-    public void setBackImage(byte[] backImage) {
-        this.backImage = backImage;
-    }
-
-    public String getBackImageName() {
-        return backImageName;
-    }
-
-    public void setBackImageName(String backImageName) {
-        this.backImageName = backImageName;
-    }
-
-    public String getBackImageType() {
-        return backImageType;
-    }
-
-    public void setBackImageType(String backImageType) {
-        this.backImageType = backImageType;
     }
 }

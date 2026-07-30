@@ -4,13 +4,10 @@ import com.bit.backend.dtos.ProgressTrackingDto;
 import com.bit.backend.exceptions.AppException;
 import com.bit.backend.services.ProgressTrackingServiceI;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -23,26 +20,11 @@ public class ProgressTrackingController {
         this.progressTrackingServiceI = progressTrackingServiceI;
     }
 
-    @PostMapping(value = {"/progress-tracking/{userName}"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping("/progress-tracking/{userName}")
     public ResponseEntity<ProgressTrackingDto> addProgressTrackingEntity(@PathVariable String userName,
-                                                                         @RequestPart("progressForm") ProgressTrackingDto progressTrackingDto,
-                                                                         @RequestPart("frontImage") MultipartFile frontImage,
-                                                                         @RequestPart("sideImage") MultipartFile sideImage,
-                                                                         @RequestPart("backImage") MultipartFile backImage) {
+                                                                         @RequestBody ProgressTrackingDto progressTrackingDto) {
         try {
             progressTrackingDto.setUserName(userName);
-
-            progressTrackingDto.setFrontImage(frontImage.getBytes());
-            progressTrackingDto.setFrontImageName(frontImage.getOriginalFilename());
-            progressTrackingDto.setFrontImageType(frontImage.getContentType());
-
-            progressTrackingDto.setSideImage(sideImage.getBytes());
-            progressTrackingDto.setSideImageName(sideImage.getOriginalFilename());
-            progressTrackingDto.setSideImageType(sideImage.getContentType());
-
-            progressTrackingDto.setBackImage(backImage.getBytes());
-            progressTrackingDto.setBackImageName(backImage.getOriginalFilename());
-            progressTrackingDto.setBackImageType(backImage.getContentType());
 
             ProgressTrackingDto progressTrackingDtoResponse = progressTrackingServiceI.addProgressTrackingEntity(progressTrackingDto);
             return ResponseEntity.created(URI.create("/progress-tracking" + progressTrackingDtoResponse.getId())).body(progressTrackingDtoResponse);
