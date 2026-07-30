@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "equipment")
@@ -22,11 +21,6 @@ public class EquipmentEntity {
 
     @Column
     private String machineName;
-
-    @ElementCollection
-    @CollectionTable(name = "equipment_muscle_groups", joinColumns = @JoinColumn(name = "equipment_id"))
-    @Column(name = "muscle_group")
-    private List<String> muscleGroups;
 
     @Column
     private String brandName;
@@ -76,12 +70,11 @@ public class EquipmentEntity {
     public EquipmentEntity() {
     }
 
-    public EquipmentEntity(long id, String category, Long supplier, String machineName, List<String> muscleGroups, String brandName, String model, String type, String sizeStandard, String barLength, String weight, String equipmentName, Integer quantity, String condition, Date purchaseDate, String addedBy, String remarks) {
+    public EquipmentEntity(long id, String category, Long supplier, String machineName, String brandName, String model, String type, String sizeStandard, String barLength, String weight, String equipmentName, Integer quantity, String condition, Date purchaseDate, String addedBy, String remarks) {
         this.id = id;
         this.category = category;
         this.supplier = supplier;
         this.machineName = machineName;
-        this.muscleGroups = muscleGroups;
         this.brandName = brandName;
         this.model = model;
         this.type = type;
@@ -126,14 +119,6 @@ public class EquipmentEntity {
 
     public void setMachineName(String machineName) {
         this.machineName = machineName;
-    }
-
-    public List<String> getMuscleGroups() {
-        return muscleGroups;
-    }
-
-    public void setMuscleGroups(List<String> muscleGroups) {
-        this.muscleGroups = muscleGroups;
     }
 
     public String getBrandName() {

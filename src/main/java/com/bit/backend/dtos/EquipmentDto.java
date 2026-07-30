@@ -2,7 +2,6 @@ package com.bit.backend.dtos;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 
 public class EquipmentDto {
 
@@ -10,7 +9,6 @@ public class EquipmentDto {
     private String category;
     private Long supplier;
     private String machineName;
-    private List<String> muscleGroups;
     private String brandName;
     private String model;
     private String type;
@@ -30,12 +28,11 @@ public class EquipmentDto {
     public EquipmentDto() {
     }
 
-    public EquipmentDto(Long id, String category, Long supplier, String machineName, List<String> muscleGroups, String brandName, String model, String type, String sizeStandard, String barLength, String weight, String equipmentName, Integer quantity, String condition, Date purchaseDate, String addedBy, String remarks) {
+    public EquipmentDto(Long id, String category, Long supplier, String machineName, String brandName, String model, String type, String sizeStandard, String barLength, String weight, String equipmentName, Integer quantity, String condition, Date purchaseDate, String addedBy, String remarks) {
         this.id = id;
         this.category = category;
         this.supplier = supplier;
         this.machineName = machineName;
-        this.muscleGroups = muscleGroups;
         this.brandName = brandName;
         this.model = model;
         this.type = type;
@@ -80,14 +77,6 @@ public class EquipmentDto {
 
     public void setMachineName(String machineName) {
         this.machineName = machineName;
-    }
-
-    public List<String> getMuscleGroups() {
-        return muscleGroups;
-    }
-
-    public void setMuscleGroups(List<String> muscleGroups) {
-        this.muscleGroups = muscleGroups;
     }
 
     public String getBrandName() {
