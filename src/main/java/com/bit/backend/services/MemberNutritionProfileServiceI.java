@@ -10,4 +10,6 @@ public interface MemberNutritionProfileServiceI {
     List<MemberNutritionProfileDto> getAllProfiles();
     boolean hasProfile(String userId);
     MemberNutritionProfileDto getProfileByUserId(String userId);
+    List<MemberNutritionProfileDto> getPendingRequestsForTrainer(Long trainerUserId);
+    MemberNutritionProfileDto updateStatusByUserId(String userId, String status);
 }

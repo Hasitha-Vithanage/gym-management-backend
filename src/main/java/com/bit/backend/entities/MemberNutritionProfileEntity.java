@@ -39,7 +39,7 @@ public class MemberNutritionProfileEntity {
     @PrePersist
     public void prePersist() {
         if (this.status == null) {
-            this.status = "Active";
+            this.status = "Pending";
         }
     }
 

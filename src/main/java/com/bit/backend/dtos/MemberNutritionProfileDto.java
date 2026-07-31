@@ -13,6 +13,7 @@ public class MemberNutritionProfileDto {
     private String allergies;
     private String status;
     private String additionalNotes;
+    private Long memberUserId;
 
     public MemberNutritionProfileDto() {
     }
@@ -53,4 +54,7 @@ public class MemberNutritionProfileDto {
 
     public String getAdditionalNotes() { return additionalNotes; }
     public void setAdditionalNotes(String additionalNotes) { this.additionalNotes = additionalNotes; }
+
+    public Long getMemberUserId() { return memberUserId; }
+    public void setMemberUserId(Long memberUserId) { this.memberUserId = memberUserId; }
 }

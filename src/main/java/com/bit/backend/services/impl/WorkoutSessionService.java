@@ -4,10 +4,12 @@ import com.bit.backend.dtos.MemberProgressSummaryDto;
 import com.bit.backend.dtos.WorkoutSessionDto;
 import com.bit.backend.dtos.WorkoutSessionExerciseDto;
 import com.bit.backend.dtos.WorkoutSessionSummaryDto;
+import com.bit.backend.entities.User;
 import com.bit.backend.entities.UserWorkoutAssignmentEntity;
 import com.bit.backend.entities.WorkoutSessionEntity;
 import com.bit.backend.entities.WorkoutSessionExerciseEntity;
 import com.bit.backend.entities.WorkoutTemplateEntity;
+import com.bit.backend.repositories.UserRepository;
 import com.bit.backend.repositories.UserWorkoutAssignmentRepository;
 import com.bit.backend.repositories.WorkoutSessionExerciseRepository;
 import com.bit.backend.repositories.WorkoutSessionRepository;
@@ -32,15 +34,18 @@ public class WorkoutSessionService implements WorkoutSessionServiceI {
     private final WorkoutSessionExerciseRepository exerciseRepo;
     private final UserWorkoutAssignmentRepository assignmentRepo;
     private final WorkoutTemplateRepository templateRepo;
+    private final UserRepository userRepo;
 
     public WorkoutSessionService(WorkoutSessionRepository sessionRepo,
                                  WorkoutSessionExerciseRepository exerciseRepo,
                                  UserWorkoutAssignmentRepository assignmentRepo,
-                                 WorkoutTemplateRepository templateRepo) {
+                                 WorkoutTemplateRepository templateRepo,
+                                 UserRepository userRepo) {
         this.sessionRepo = sessionRepo;
         this.exerciseRepo = exerciseRepo;
         this.assignmentRepo = assignmentRepo;
         this.templateRepo = templateRepo;
+        this.userRepo = userRepo;
     }
 
     @Override
@@ -173,6 +178,9 @@ public class WorkoutSessionService implements WorkoutSessionServiceI {
             MemberProgressSummaryDto dto = new MemberProgressSummaryDto();
             dto.setUserId(assignment.getUserId());
             dto.setProgramStartDate(assignment.getStartDate());
+
+            userRepo.findById(assignment.getUserId()).ifPresent(user ->
+                dto.setMemberName((user.getFirstName() + " " + user.getLastName()).trim()));
 
             long weeksElapsed = ChronoUnit.WEEKS.between(assignment.getStartDate(), today);
             dto.setCurrentProgramWeek((int) weeksElapsed + 1);

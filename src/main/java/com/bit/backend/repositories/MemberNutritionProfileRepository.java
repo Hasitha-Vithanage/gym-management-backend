@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberNutritionProfileRepository extends JpaRepository<MemberNutritionProfileEntity, Long> {
@@ -13,4 +14,6 @@ public interface MemberNutritionProfileRepository extends JpaRepository<MemberNu
     boolean existsByUserId(@Param("userId") String userId);
 
     Optional<MemberNutritionProfileEntity> findTopByUserIdOrderByIdDesc(String userId);
+
+    List<MemberNutritionProfileEntity> findByStatusAndUserIdIn(String status, List<String> userIds);
 }

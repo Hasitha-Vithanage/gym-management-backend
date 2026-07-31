@@ -38,4 +38,15 @@ public class MemberNutritionProfileController {
     public ResponseEntity<MemberNutritionProfileDto> getProfileByUserId(@PathVariable String userId) {
         return ResponseEntity.ok(service.getProfileByUserId(userId));
     }
+
+    @GetMapping("/pending-custom/trainer/{trainerUserId}")
+    public ResponseEntity<List<MemberNutritionProfileDto>> getPendingRequestsForTrainer(@PathVariable Long trainerUserId) {
+        return ResponseEntity.ok(service.getPendingRequestsForTrainer(trainerUserId));
+    }
+
+    @PutMapping("/user/{userId}/status")
+    public ResponseEntity<MemberNutritionProfileDto> updateStatusByUserId(@PathVariable String userId, @RequestParam String status) {
+        MemberNutritionProfileDto dto = service.updateStatusByUserId(userId, status);
+        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    }
 }
