@@ -59,10 +59,13 @@ public class TemplateExerciseService implements TemplateExerciseServiceI {
     public List<TemplateExerciseDto> saveAllExercises(Long templateId, List<TemplateExerciseDto> exercises) {
         try {
             templateExerciseRepository.deleteByTemplateId(templateId);
+            templateExerciseRepository.flush();
             List<TemplateExerciseEntity> entities = exercises.stream()
                     .map(dto -> {
                         dto.setTemplateId(templateId);
-                        return templateExerciseMapper.toEntity(dto);
+                        TemplateExerciseEntity entity = templateExerciseMapper.toEntity(dto);
+                        entity.setId(null);
+                        return entity;
                     })
                     .toList();
             List<TemplateExerciseEntity> saved = templateExerciseRepository.saveAll(entities);

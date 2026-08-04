@@ -66,11 +66,14 @@ public class TemplateMealItemService implements TemplateMealItemServiceI {
     public List<TemplateMealItemDto> saveAllMealItems(Long templateId, List<TemplateMealItemDto> items) {
         try {
             mealItemRepository.deleteByTemplateId(templateId);
+            mealItemRepository.flush();
 
             List<TemplateMealItemEntity> entities = items.stream()
                     .map(dto -> {
                         dto.setTemplateId(templateId);
-                        return mealItemMapper.toEntity(dto);
+                        TemplateMealItemEntity entity = mealItemMapper.toEntity(dto);
+                        entity.setId(null);
+                        return entity;
                     })
                     .toList();
 
