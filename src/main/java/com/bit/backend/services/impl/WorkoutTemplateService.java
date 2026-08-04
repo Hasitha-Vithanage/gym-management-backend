@@ -55,7 +55,7 @@ public class WorkoutTemplateService implements WorkoutTemplateServiceI {
                 throw new AppException("Workout Template Does Not Exist", HttpStatus.BAD_REQUEST);
             }
             if (workoutTemplateDto.getTemplateName() != null && !workoutTemplateDto.getTemplateName().isBlank()
-                    && workoutTemplateRepository.existsByTemplateNameIgnoreCaseAndIsDeletedFalse(workoutTemplateDto.getTemplateName())) {
+                    && workoutTemplateRepository.existsByTemplateNameIgnoreCaseAndIsDeletedFalseAndIdNot(workoutTemplateDto.getTemplateName(), id)) {
                 throw new AppException("A workout template with this name already exists.", HttpStatus.CONFLICT);
             }
 

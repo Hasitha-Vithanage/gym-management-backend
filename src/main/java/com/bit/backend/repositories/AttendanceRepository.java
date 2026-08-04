@@ -47,6 +47,7 @@ public interface AttendanceRepository extends JpaRepository<AttendanceEntity, Lo
         "FROM attendance a " +
         "LEFT JOIN member m ON m.member_no = a.member " +
         "WHERE a.attendance_type = 'member' " +
+        "AND (m.is_deleted IS NULL OR m.is_deleted = false) " +
         "GROUP BY a.member, m.first_name, m.last_name " +
         "HAVING MAX(a.attendance_date) < DATE_SUB(CURDATE(), INTERVAL :days DAY) " +
         "ORDER BY MAX(a.attendance_date) ASC")
