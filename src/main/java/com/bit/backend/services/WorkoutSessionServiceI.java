@@ -14,6 +14,8 @@ public interface WorkoutSessionServiceI {
 
     WorkoutSessionDto completeSession(Long sessionId, List<WorkoutSessionExerciseDto> exercises);
 
+    void cancelSession(Long sessionId);
+
     WorkoutSessionSummaryDto getMemberSummary(Long memberId, Long assignmentId);
 
     List<WorkoutSessionDto> getMemberSessions(Long memberId);

@@ -91,6 +91,17 @@ public class WorkoutSessionService implements WorkoutSessionServiceI {
     }
 
     @Override
+    public void cancelSession(Long sessionId) {
+        sessionRepo.findById(sessionId).ifPresent(session -> {
+            // Only a still-in-progress session can be cancelled this way — a session
+            // already marked COMPLETED must never be removed through this endpoint.
+            if ("PARTIAL".equals(session.getStatus())) {
+                sessionRepo.deleteById(sessionId);
+            }
+        });
+    }
+
+    @Override
     public WorkoutSessionSummaryDto getMemberSummary(Long memberId, Long assignmentId) {
         WorkoutSessionSummaryDto summary = new WorkoutSessionSummaryDto();
         LocalDate today = LocalDate.now();
@@ -98,9 +109,12 @@ public class WorkoutSessionService implements WorkoutSessionServiceI {
 
         // Scope all session stats to the current assignment so cycle tracking is accurate.
         // Secondary sort by id DESC resolves ties when multiple sessions share the same date.
-        List<WorkoutSessionEntity> assignmentSessions = assignmentId != null
+        List<WorkoutSessionEntity> assignmentSessions = (assignmentId != null
                 ? sessionRepo.findByAssignmentIdOrderBySessionDateDescIdDesc(assignmentId)
-                : sessionRepo.findByMemberIdOrderBySessionDateDesc(memberId);
+                : sessionRepo.findByMemberIdOrderBySessionDateDesc(memberId))
+                .stream()
+                .filter(s -> "COMPLETED".equals(s.getStatus()))
+                .collect(Collectors.toList());
 
         summary.setTotalSessionsCompleted(assignmentSessions.size());
 

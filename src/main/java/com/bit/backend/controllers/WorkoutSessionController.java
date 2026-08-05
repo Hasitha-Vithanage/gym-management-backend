@@ -33,6 +33,12 @@ public class WorkoutSessionController {
         return ResponseEntity.ok(sessionService.completeSession(id, exercises));
     }
 
+    @DeleteMapping("/workout-sessions/{id}")
+    public ResponseEntity<Void> cancelSession(@PathVariable Long id) {
+        sessionService.cancelSession(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/workout-sessions/member/{memberId}/summary")
     public ResponseEntity<WorkoutSessionSummaryDto> getMemberSummary(
             @PathVariable Long memberId,
