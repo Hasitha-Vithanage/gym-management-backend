@@ -83,8 +83,22 @@ public class MemberService implements MemberServiceI {
             throw new AppException("This NIC is already registered to another member.", HttpStatus.CONFLICT);
         }
 
+        MemberEntity existingMemberEntity = optionalMemberEntity.get();
+
         MemberEntity newMemberEntity = memberMapper.toMemberEntity(memberDto);
         newMemberEntity.setId(id);
+
+        // Deletion is handled exclusively by the dedicated delete endpoint, so this
+        // edit flow must never let a missing isDeleted on the incoming DTO null it out.
+        newMemberEntity.setDeleted(existingMemberEntity.getDeleted());
+
+        // Only replace the stored photo when the request actually uploaded a new one.
+        if (newMemberEntity.getImage() == null) {
+            newMemberEntity.setImage(existingMemberEntity.getImage());
+            newMemberEntity.setImageName(existingMemberEntity.getImageName());
+            newMemberEntity.setImageType(existingMemberEntity.getImageType());
+        }
+
         MemberEntity savedItem = memberRepository.save(newMemberEntity);
         MemberDto savedDto = memberMapper.toMemberDto(savedItem);
         return savedDto;

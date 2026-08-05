@@ -69,11 +69,13 @@ public class EmployeeController {
 
     @PutMapping("employee/{id}")
     public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable long id,
-            @RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart("image") MultipartFile file) {
+            @RequestPart("employeeForm") EmployeeDto employeeDto, @RequestPart(value = "image", required = false) MultipartFile file) {
         try {
-            employeeDto.setImage(file.getBytes());
-            employeeDto.setImageName(file.getOriginalFilename());
-            employeeDto.setImageType(file.getContentType());
+            if (file != null && !file.isEmpty()) {
+                employeeDto.setImage(file.getBytes());
+                employeeDto.setImageName(file.getOriginalFilename());
+                employeeDto.setImageType(file.getContentType());
+            }
             EmployeeDto employeeDtoResponse = employeeServiceI.updateEmployee(id, employeeDto);
             return ResponseEntity.ok(employeeDtoResponse);
         } catch (AppException e) {

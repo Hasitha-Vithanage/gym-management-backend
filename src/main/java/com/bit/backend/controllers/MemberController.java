@@ -54,11 +54,13 @@ public class MemberController {
     }
 
     @PutMapping("/member/{id}")
-    public ResponseEntity<MemberDto> updateMember(@PathVariable long id, @RequestPart("memberForm") MemberDto memberDto, @RequestPart("image") MultipartFile file) {
+    public ResponseEntity<MemberDto> updateMember(@PathVariable long id, @RequestPart("memberForm") MemberDto memberDto, @RequestPart(value = "image", required = false) MultipartFile file) {
         try {
-            memberDto.setImage(file.getBytes());
-            memberDto.setImageName(file.getOriginalFilename());
-            memberDto.setImageType(file.getContentType());
+            if (file != null && !file.isEmpty()) {
+                memberDto.setImage(file.getBytes());
+                memberDto.setImageName(file.getOriginalFilename());
+                memberDto.setImageType(file.getContentType());
+            }
             MemberDto memberDtoResponse = memberServiceI.updateMember(id, memberDto);
             return ResponseEntity.ok(memberDtoResponse);
         } catch (AppException e) {

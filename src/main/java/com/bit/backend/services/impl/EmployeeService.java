@@ -48,7 +48,6 @@ public class EmployeeService implements EmployeeServiceI {
     @Override
     public EmployeeDto addEmployeeEntity(EmployeeDto employeeDto) {
         try {
-            System.out.println("************ In Service *************");
 
             if (employeeDto.getNic() != null && !employeeDto.getNic().isBlank()
                     && employeeRepository.existsByNic(employeeDto.getNic())) {
@@ -93,8 +92,22 @@ public class EmployeeService implements EmployeeServiceI {
                 throw new AppException("This NIC is already registered to another employee.", HttpStatus.CONFLICT);
             }
 
+            EmployeeEntity existingEmployeeEntity = optionalEmployeeEntity.get();
+
             EmployeeEntity newEmployeeEntity = employeeMapper.toEmployeeEntity(employeeDto);
             newEmployeeEntity.setId(id);
+
+            // Deletion is handled exclusively by the dedicated delete endpoint, so this
+            // edit flow must never let a missing isDeleted on the incoming DTO null it out.
+            newEmployeeEntity.setIsDeleted(existingEmployeeEntity.getIsDeleted());
+
+            // Only replace the stored photo when the request actually uploaded a new one.
+            if (newEmployeeEntity.getImage() == null) {
+                newEmployeeEntity.setImage(existingEmployeeEntity.getImage());
+                newEmployeeEntity.setImageName(existingEmployeeEntity.getImageName());
+                newEmployeeEntity.setImageType(existingEmployeeEntity.getImageType());
+            }
+
             EmployeeEntity employeeEntity = employeeRepository.save(newEmployeeEntity);
             EmployeeDto responseEmployeeDto = employeeMapper.toEmployeeDto(employeeEntity);
             return responseEmployeeDto;
