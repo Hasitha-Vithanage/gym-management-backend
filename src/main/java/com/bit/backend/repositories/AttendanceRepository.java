@@ -46,6 +46,11 @@ public interface AttendanceRepository extends JpaRepository<AttendanceEntity, Lo
         "GROUP BY DAY(attendance_date) ORDER BY day")
     List<Map<String, Object>> getDailyMemberCheckIns(@Param("year") int year, @Param("month") int month);
 
+//    @Query(nativeQuery = true, value =
+//            "SELECT COUNT(*) AS visits FROM attendance " +
+//                    "WHERE attendance_type = 'member' AND YEARWEEK(attendance_date, 1) = YEARWEEK(CURDATE(), 1)")
+//    List<Map<String, Object>> getThisWeekMemberCheckIns();
+
     @Query(nativeQuery = true, value =
         "SELECT HOUR(check_in_time) AS hour, COUNT(*) AS visits " +
         "FROM attendance " +
