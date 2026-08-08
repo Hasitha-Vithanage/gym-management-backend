@@ -144,6 +144,15 @@ public class CommonDataService implements CommonDataServiceI {
     }
 
     @Override
+    public List<Map<String, Object>> getMonthlyMemberAttendanceAvg() {
+        try {
+            return attendanceRepository.getMonthlyMemberAttendanceAvg();
+        } catch (Exception e) {
+            throw new AppException("Request failed with error while getting data to stat charts: " + e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
     public List<Map<String, Object>> getMonthlySupplimentSalesCount() {
         try {
             return supplementOrderRepository.getSupplementOrderCountByMonth();

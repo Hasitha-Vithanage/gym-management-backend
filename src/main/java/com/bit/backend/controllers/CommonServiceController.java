@@ -78,6 +78,16 @@ public class CommonServiceController {
         }
     }
 
+    @GetMapping("/member-monthly-attendance-avg")
+    public ResponseEntity<List<Map<String, Object>>> getMonthlyMemberAttendanceAvg() {
+        try {
+            List<Map<String, Object>> commonTaskStats = commonDataServiceI.getMonthlyMemberAttendanceAvg();
+            return ResponseEntity.ok(commonTaskStats);
+        } catch (Exception e) {
+            throw new AppException("Request Fail With Error:"+ e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/suppliment-orders-count-per-month")
     public ResponseEntity<List<Map<String, Object>>> getMonthlySupplimentSalesCount() {
         try {

@@ -28,6 +28,15 @@ public interface AttendanceRepository extends JpaRepository<AttendanceEntity, Lo
             "WHERE attendance_type = 'member' group by DATE_FORMAT(attendance_date, '%Y-%m') order by  month")
     List<Map<String, Object>> getMonthlyMemberAttendance();
 
+//    @Query(nativeQuery = true, value =
+//            "SELECT month, AVG(daily_present) AS avg_present_per_day FROM (" +
+//                    "  SELECT DATE_FORMAT(attendance_date, '%Y-%m') AS month, attendance_date, " +
+//                    "         SUM(CASE WHEN attendance_status = 'present' THEN 1 ELSE 0 END) AS daily_present " +
+//                    "  FROM attendance WHERE attendance_type = 'member' " +
+//                    "  GROUP BY DATE_FORMAT(attendance_date, '%Y-%m'), attendance_date" +
+//                    ") AS daily_counts GROUP BY month ORDER BY month")
+//    List<Map<String, Object>> getMonthlyMemberAttendanceAvg();
+
     @Query(nativeQuery = true, value =
         "SELECT DAY(attendance_date) AS day, COUNT(*) AS visits " +
         "FROM attendance " +
