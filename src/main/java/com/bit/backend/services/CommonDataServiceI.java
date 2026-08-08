@@ -15,7 +15,7 @@ public interface CommonDataServiceI {
     CommonDataListDto saveGroupUserData(int id, CommonDataListDto commonDataListDto);
     List<Map<String, Object>> getMonthlyEmployeeAttendance();
     List<Map<String, Object>> getMonthlyMemberAttendance();
-    List<Map<String, Object>> getMonthlyMemberAttendanceAvg();
+//    List<Map<String, Object>> getMonthlyMemberAttendanceAvg();
     List<Map<String, Object>> getMonthlySupplimentSalesCount();
     List<Map<String, Object>> getMonthlySupplimentSalesIncome();
 }
