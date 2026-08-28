@@ -25,4 +25,15 @@ public interface MealPlanTemplateRepository extends JpaRepository<MealPlanTempla
     List<MealPlanTemplateEntity> findActiveByGoalAndBmi(
             @Param("goal") String goal,
             @Param("bmiCategory") String bmiCategory);
+
+
+//    @Query("SELECT DISTINCT t FROM MealPlanTemplateEntity t " +
+//            "JOIN t.suitableGoals g " +
+//            "JOIN t.suitableBmiCategories b " +
+//            "WHERE t.isDeleted = false AND g = :goal AND b = :bmiCategory AND NOT EXISTS (SELECT t2 FROM MealPlanTemplateEntity t2 JOIN t2.allergies a WHERE t2 = t AND " +
+//            "a IN :memberAllergiess)")
+//    List<MealPlanTemplateEntity> findActiveByGoalAndBmi(
+//            @Param("goal") String goal,
+//            @Param("bmiCategory") String bmiCategory,
+//            @Param("memberAllergiess") List<String> memberAllergiess);
 }

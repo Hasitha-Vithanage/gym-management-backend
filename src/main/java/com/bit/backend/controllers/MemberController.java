@@ -26,11 +26,13 @@ public class MemberController {
 
     @PostMapping(value = { "/member" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<MemberDto> addMember(@RequestPart("memberForm") MemberDto memberDto,
-                                                   @RequestPart("image") MultipartFile file) {
+                                                   @RequestPart(value = "image", required = false) MultipartFile file) {
         try {
-            memberDto.setImage(file.getBytes());
-            memberDto.setImageName(file.getOriginalFilename());
-            memberDto.setImageType(file.getContentType());
+            if (file != null && !file.isEmpty()) {
+                memberDto.setImage(file.getBytes());
+                memberDto.setImageName(file.getOriginalFilename());
+                memberDto.setImageType(file.getContentType());
+            }
             MemberDto memberDtoResponse = memberServiceI.addMemberEntity(memberDto);
             return ResponseEntity.created(URI.create("/member/" + memberDtoResponse.getId()))
                     .body(memberDtoResponse);
